@@ -127,7 +127,7 @@ class Model:
 
 
 def run_predictions():
-    symbol = 'CADUSD'
+    symbol = 'USDCAD'
     #stock = get_data.get_json(symbol)
 
     stock = live_data.latest_data_60(symbol)
