@@ -210,15 +210,15 @@ def random_forest_classifier(df, asset):
     all_preds.extend(y_pred.tolist())
     print('###########################')
 
-    predictions_df.to_csv('predictions_df.csv')
+    #predictions_df.to_csv('predictions_df.csv')
     #print('classes---> ',clf.classes_)
 
 
     # After processing all splits, compute overall metrics
     
-    joblib.dump(clf, 'models/random_forest_model_up_CADUSD_60.pkl')
-    joblib.dump(pca, 'models/pca_transformation_up_CADUSD_60.pkl')
-    joblib.dump(scaler, 'models/scaler_CADUSD.pkl')
+    joblib.dump(clf, 'models/random_forest_model_up_EURUSD_60.pkl')
+    joblib.dump(pca, 'models/pca_transformation_up_EURUSD_60.pkl')
+    joblib.dump(scaler, 'models/scaler_EURUSD.pkl')
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
