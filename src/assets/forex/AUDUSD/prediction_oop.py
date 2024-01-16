@@ -203,14 +203,19 @@ def run_predictions():
    #     print(f' {date} is an already existing bar')
    # else:
    #     print(f'New Bar Created at {date}')
-
     
 
-    
-    
-    
-    res1 = url_connection.hset(
-    date,
+
+
+    # Add the symbol to the Set
+    url_connection.sadd('symbols', symbol)
+
+    # Add the timestamp to the Hash for the symbol
+    url_connection.hset(symbol, date, f'{symbol}:{date}')
+
+    # Add the data to the Hash for the symbol and timestamp
+    url_connection.hset(
+    f'{symbol}:{date}',
     mapping={
         'security': symbol,
         'timeframe': '60m',
@@ -222,13 +227,15 @@ def run_predictions():
         'lower_barrier': last_lower_barrier,
         'hard_prediction': last_hard_prediction,
         'time': date
-    },
-)
+        },
+    )
+
     
 
-
-    res4 = url_connection.hgetall(date)
-    print('redis:',res4)
+    
+    
+    
+    
 
     
 schedule.every(1).minutes.do(run_predictions)
