@@ -129,7 +129,7 @@ class Model:
 def run_predictions(symbol):
     
     #stock = get_data.get_json(symbol)
-
+    symbol ='EURUSD'
     stock = live_data.latest_data_60(symbol)
     #stock = pd.read_csv('data/SPY_new.csv')
     
@@ -164,7 +164,7 @@ def run_predictions(symbol):
     label_instance_time = label_instance_time.triple_barriers()
     
 
-    print(label_instance_time)
+   # print(label_instance_time)
     
     model =Model(symbol,label_instance_time)
     print(model.predict_values())
@@ -235,14 +235,18 @@ def run_predictions(symbol):
     
 
 if __name__ in "__main__":
-    symbol= 'EURUSD'
-    run_predictions(symbol)
+    #symbol= 'EURUSD'
+    #run_predictions(symbol)
     
     
     
     
 
 
+    schedule.every(1).minutes.do(run_predictions)
 
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
