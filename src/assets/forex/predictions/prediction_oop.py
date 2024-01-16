@@ -126,8 +126,8 @@ class Model:
 #if __name__ == "__main__":
 
 
-def run_predictions():
-    symbol = 'AUDUSD'
+def run_predictions(symbol):
+    
     #stock = get_data.get_json(symbol)
 
     stock = live_data.latest_data_60(symbol)
@@ -189,6 +189,8 @@ def run_predictions():
     last_upper_barrier = round(upper_barriers.iloc[-1], 4)
     last_close = closes.iloc[-1]
     date = closes.index[-1]
+
+    unix = closes.index[-1]
     date = date.strftime('%H:%M:%S')
 
     print(f'last close price:{last_close}\n last_upper_barrier: {last_upper_barrier} \n last_lower_barrier: {last_lower_barrier} \n predict_up: {up_prob} \n predict_down:{dwn_prob} \n neutral_prob:{neutral_prob} \n hard_prediction:{last_hard_prediction}' )
@@ -211,7 +213,7 @@ def run_predictions():
     url_connection.sadd('symbols', symbol)
 
     # Add the timestamp to the Hash for the symbol
-    url_connection.hset(symbol, date, f'{symbol}:{date}')
+    url_connection.hset(symbol, unix, f'{symbol}:{unix}')
 
     # Add the data to the Hash for the symbol and timestamp
     url_connection.hset(

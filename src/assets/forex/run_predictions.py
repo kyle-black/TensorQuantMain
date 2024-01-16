@@ -1,14 +1,17 @@
 import schedule
 
 
-from AUDUSD.prediction_oop import run_predictions as USDAUD_P
+from predictions import run_predictions
 
 
 
-def job():
-    USDAUD_P()
+def job(symbol):
+    run_predictions()
 
-schedule.every(10).minutes.do(job)
+
+
+symbol = 'USDAUD'
+schedule.every(10).minutes.do(job(symbol))
 
 while True:
     schedule.run_pending()
