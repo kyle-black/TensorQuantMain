@@ -11,7 +11,7 @@ def job(symbol):
 
 
 symbol = 'EURUSD'
-schedule.every(10).minutes.do(job(symbol))
+schedule.every(1).minutes.do(job(symbol))
 
 while True:
     schedule.run_pending()
