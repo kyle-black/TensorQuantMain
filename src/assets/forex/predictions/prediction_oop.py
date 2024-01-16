@@ -234,6 +234,9 @@ def run_predictions(symbol):
 
     
 
+if __name__ in "__main__":
+    symbol= 'EURUSD'
+    run_predictions(symbol)
     
     
     

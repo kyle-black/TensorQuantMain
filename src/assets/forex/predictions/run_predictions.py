@@ -5,8 +5,8 @@ from prediction_oop import run_predictions
 
 
 
-def job(symbol):
-    run_predictions(symbol)
+#def job(symbol):
+#run_predictions(symbol)
 
 
 
@@ -19,4 +19,5 @@ def job(symbol):
 
 if __name__ in "__main__":
     symbol= 'EURUSD'
-    job(symbol)
+    run_predictions(symbol)
+    #job(symbol)
