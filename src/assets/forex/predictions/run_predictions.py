@@ -6,7 +6,7 @@ from prediction_oop import run_predictions
 
 
 def job(symbol):
-    run_predictions()
+    run_predictions(symbol)
 
 
 
