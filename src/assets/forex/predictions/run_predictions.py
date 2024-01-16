@@ -10,7 +10,7 @@ def job(symbol):
 
 
 
-symbol = 'USDEUR'
+symbol = 'EURUSD'
 schedule.every(10).minutes.do(job(symbol))
 
 while True:
