@@ -1,7 +1,7 @@
 import schedule
 
 
-from predictions import run_predictions
+from predictions.prediction_oop import run_predictions
 
 
 
