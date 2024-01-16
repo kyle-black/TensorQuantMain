@@ -240,13 +240,13 @@ if __name__ in "__main__":
     
     
     
-    
+    run_predictions('EURUSD')
 
 
-    schedule.every(1).minutes.do(run_predictions('EURUSD'))
+   # schedule.every(1).minutes.do(run_predictions('EURUSD'))
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+   # while True:
+   #     schedule.run_pending()
+   #     time.sleep(1)
 
 
