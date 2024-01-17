@@ -23,7 +23,8 @@ import live_data
 #from redis_connect import redis_connection
 import time
 import schedule
-import financial_bars   
+import financial_bars  
+from prediction_fit import make_predictions 
 
 class CreateBars:
     def __init__(self, raw_bars, asset):
@@ -114,7 +115,7 @@ class Model:
 
 
     def predict_values(self):
-        self.predictions, self.probas =prediction_fit.make_predictions(self.symbol,self.bars_df)
+        self.predictions, self.probas =make_predictions(self.symbol,self.bars_df)
        # self.predictions_dwn, self.probas_dwn =prediction_fit.make_predictions_dwn(self.symbol,self.bars_df)
         return self.predictions, self.probas, self.bars_df['upper_barrier'], self.bars_df['lower_barrier'], self.bars_df['Close']
 
