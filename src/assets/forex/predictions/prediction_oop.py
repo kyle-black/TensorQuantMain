@@ -23,7 +23,7 @@ import live_data
 #from redis_connect import redis_connection
 import time
 import schedule
-import financial_bars  
+#import financial_bars  
 from prediction_fit import make_predictions 
 
 class CreateBars:

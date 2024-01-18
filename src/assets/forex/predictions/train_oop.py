@@ -149,7 +149,7 @@ class Model:
 
 if __name__ == "__main__":
     
-    asset ='AUDUSD'
+    asset ='EURUSD'
     
     stock = pd.read_csv(f'data/new_fx_data/{asset}_60.csv')
     stock.dropna(inplace=True)
