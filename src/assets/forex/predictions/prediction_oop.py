@@ -176,7 +176,7 @@ def run_predictions(symbol):
     model =Model(symbol,label_instance_time)
     print(model.predict_values())
 
-   # output= model.predict_values()
+    output= model.predict_values()
     
 
 
