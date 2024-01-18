@@ -39,6 +39,8 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     #feature_cols = ['Close','High','Low','Open','Volume','Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
     #                'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI','SpreadOC','SpreadLH','SMI']
     print('clf:', clf)
+
+    new_data = new_data[-100:]
     
     feature_cols =['Open', 'High', 'Low', 'Close', 'Volume', 'Daily_Returns',
        'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'SpreadOC',
