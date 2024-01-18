@@ -177,7 +177,7 @@ def run_predictions(symbol):
     print(model.predict_values())
 
    # output= model.predict_values()
-'''    
+    
 
 
     ################################# Parse Model output
@@ -239,7 +239,7 @@ def run_predictions(symbol):
         },
     )
 
-'''
+
 
 if __name__ in "__main__":
     #symbol= 'EURUSD'
