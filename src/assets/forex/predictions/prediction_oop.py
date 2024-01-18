@@ -65,21 +65,25 @@ class FeatureMaker:
         return results
 
     def fac_diff(self):
-        f_results = self.feature_add()
+        pass
+    #    f_results = self.feature_add()
        # df =features.fractional_diff(f_results)
-        d_values = features.find_min_d_for_df(f_results)
-        return d_values
+     #   d_values = features.find_min_d_for_df(f_results)
+    #   return d_values
     
     def elbow_(self):
-        result = self.feature_add()
-        return elbow_plot.plot_pca(result)
+        pass
+      
+      #  result = self.feature_add()
+       # return elbow_plot.plot_pca(result)
 
 class Graphing:
     def __init__(self, bars_df):
-        self.bars_df =bars_df
-        self.figure = financial_bars.create_figure()
+        pass
+        #self.bars_df =bars_df
+        #self.figure = financial_bars.create_figure()
 
-        return self.figure.show()
+        #return self.figure.show()
 
 
 
@@ -132,6 +136,8 @@ def run_predictions(symbol):
     #stock = get_data.get_json(symbol)
     symbol ='EURUSD'
     stock = live_data.latest_data_60(symbol)
+
+    print('stock:',stock)
     #stock = pd.read_csv('data/SPY_new.csv')
     
     #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')
@@ -149,7 +155,7 @@ def run_predictions(symbol):
     #print(dollar_bars_df)
     
     feature_bars =feature_instance_time.feature_add()
-    feature_instance_time.elbow_()
+    #feature_instance_time.elbow_()
 
    
 
