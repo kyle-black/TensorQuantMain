@@ -171,7 +171,7 @@ def run_predictions(symbol):
     label_instance_time = label_instance_time.triple_barriers()
     
 
-   # print(label_instance_time)
+    print(label_instance_time)
 ''' 
     model =Model(symbol,label_instance_time)
     print(model.predict_values())
