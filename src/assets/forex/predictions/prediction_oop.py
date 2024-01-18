@@ -172,12 +172,12 @@ def run_predictions(symbol):
     
 
     print(label_instance_time)
-''' 
+ 
     model =Model(symbol,label_instance_time)
     print(model.predict_values())
 
-    output= model.predict_values()
-    
+   # output= model.predict_values()
+'''    
 
 
     ################################# Parse Model output
