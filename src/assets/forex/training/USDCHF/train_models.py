@@ -204,10 +204,14 @@ def random_forest_classifier(df, asset):
 
 
     # After processing all splits, compute overall metrics
+
+    joblib.dump(clf, '../predictions/models/random_forest_model_up_USDCHF_60.pkl')
+    joblib.dump(pca, '../predictions/models/pca_transformation_up_USDCHF_60.pkl')
+    joblib.dump(scaler, '../predictions/models/scaler_USDCHF.pkl')
     
-    joblib.dump(clf, 'models/random_forest_model_up_USDCNH_60.pkl')
-    joblib.dump(pca, 'models/pca_transformation_up_USDCNH_60.pkl')
-    joblib.dump(scaler, 'models/scaler_USDCNH.pkl')
+    #joblib.dump(clf, 'models/random_forest_model_up_USDCNH_60.pkl')
+    #joblib.dump(pca, 'models/pca_transformation_up_USDCNH_60.pkl')
+    #joblib.dump(scaler, 'models/scaler_USDCNH.pkl')
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
