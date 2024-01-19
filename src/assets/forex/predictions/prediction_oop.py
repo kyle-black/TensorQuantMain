@@ -221,11 +221,11 @@ def run_predictions(symbol):
     # Get the current time in Unix timestamp format
     current_unix_time = int(time.time())
 
-    current_unix_time = datetime.fromtimestamp(current_unix_time)
+    #current_unix_time = datetime.fromtimestamp(current_unix_time)
 
     #current_time = current_unix_time.strftime('%Y-%m-%d %H:%M:%S')
 
-    print(current_unix_time)
+    #print(current_unix_time)
 
    # if redis_connection.exists(date):
    #     print(f' {date} is an already existing bar')
