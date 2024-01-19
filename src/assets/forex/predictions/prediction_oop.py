@@ -272,6 +272,10 @@ if __name__ in "__main__":
     
     
     run_predictions('AUDUSD')
+    time.sleep(1)
+    run_predictions('GBPUSD')
+
+
 
 
    # schedule.every(1).minutes.do(run_predictions('EURUSD'))
