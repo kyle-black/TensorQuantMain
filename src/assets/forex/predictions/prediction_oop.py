@@ -198,6 +198,8 @@ def run_predictions(symbol):
     date = closes.index[-1]
 
     unix = closes.index[-1]
+
+    print('unix:', unix)
     date = date.strftime('%H:%M:%S')
 
     print(f'last close price:{last_close}\n last_upper_barrier: {last_upper_barrier} \n last_lower_barrier: {last_lower_barrier} \n predict_up: {up_prob} \n predict_down:{dwn_prob} \n neutral_prob:{neutral_prob} \n hard_prediction:{last_hard_prediction}' )
