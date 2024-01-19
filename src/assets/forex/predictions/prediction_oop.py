@@ -197,9 +197,15 @@ def run_predictions(symbol):
     last_close = closes.iloc[-1]
     date = closes.index[-1]
 
-    unix = closes.index[-1]
+    dt = closes.index[-1]
 
-    print('unix:', unix)
+    dt = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
+
+    # Convert the datetime object to a Unix timestamp
+    unix_timestamp = int(dt.timestamp())
+
+    #print('unix:', unix)
+    
     date = date.strftime('%H:%M:%S')
 
     print(f'last close price:{last_close}\n last_upper_barrier: {last_upper_barrier} \n last_lower_barrier: {last_lower_barrier} \n predict_up: {up_prob} \n predict_down:{dwn_prob} \n neutral_prob:{neutral_prob} \n hard_prediction:{last_hard_prediction}' )
@@ -221,14 +227,14 @@ def run_predictions(symbol):
     # Add the symbol to the Set
     url_connection.sadd('symbols', symbol)
 
-    unix_int = int(unix.timestamp())  
+    #unix_int = int(unix.timest)  
 
     # Add the timestamp to the Hash for the symbol
-    url_connection.hset(symbol, unix_int, f'{symbol}:{unix_int}')
+    url_connection.hset(symbol, unix_timestamp, f'{symbol}:{unix_timestamp}')
 
     # Add the data to the Hash for the symbol and timestamp
     url_connection.hset(
-    f'{symbol}:{unix}',
+    f'{symbol}:{unix_timestamp}',
     mapping={
         
         'security': symbol,
