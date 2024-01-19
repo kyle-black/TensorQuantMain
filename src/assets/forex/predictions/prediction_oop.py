@@ -222,7 +222,7 @@ def run_predictions(symbol):
 
     current_unix_time = datetime.fromtimestamp(current_unix_time)
 
-    current_time = current_unix_time.strftime('%Y-%m-%d %H:%M:%S')
+    #current_time = current_unix_time.strftime('%Y-%m-%d %H:%M:%S')
 
     print(current_unix_time)
 
@@ -247,7 +247,7 @@ def run_predictions(symbol):
     f'{symbol}:{unix_timestamp}',
     mapping={
         'last_update_unix': current_unix_time,
-        'last_update':current_time,
+        
 
         'security': symbol,
         'timeframe': '60m',
