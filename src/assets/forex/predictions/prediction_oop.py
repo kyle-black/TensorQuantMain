@@ -206,7 +206,7 @@ def run_predictions(symbol):
 
     #print('unix:', unix)
     
-    date = date.strftime('%H:%M:%S')
+    date = date.strftime('%Y-%m-%d %H:%M:%S')
 
     print(f'last close price:{last_close}\n last_upper_barrier: {last_upper_barrier} \n last_lower_barrier: {last_lower_barrier} \n predict_up: {up_prob} \n predict_down:{dwn_prob} \n neutral_prob:{neutral_prob} \n hard_prediction:{last_hard_prediction}' )
 
@@ -215,6 +215,14 @@ def run_predictions(symbol):
     output_dict[date] = {'close': last_close, 'up_prob':up_prob,'dwn_prob':dwn_prob, 'neutral_prob':neutral_prob, 'upper_barrier':last_upper_barrier, 'lower_barrier':last_lower_barrier, 'hard_prediction':last_hard_prediction}
 
     print(output_dict)
+
+
+    # Get the current time in Unix timestamp format
+    current_unix_time = int(time.time())
+
+    current_time = current_unix_time.strftime('%Y-%m-%d %H:%M:%S')
+
+    print(current_unix_time)
 
    # if redis_connection.exists(date):
    #     print(f' {date} is an already existing bar')
@@ -236,7 +244,9 @@ def run_predictions(symbol):
     url_connection.hset(
     f'{symbol}:{unix_timestamp}',
     mapping={
-        
+        'last_update_unix': current_unix_time,
+        'last_update':current_time,
+
         'security': symbol,
         'timeframe': '60m',
         'close': last_close,
