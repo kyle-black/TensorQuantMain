@@ -199,7 +199,7 @@ def run_predictions(symbol):
 
     dt = closes.index[-1]
 
-    dt = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
+   # dt = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
 
     # Convert the datetime object to a Unix timestamp
     unix_timestamp = int(dt.timestamp())
