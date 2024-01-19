@@ -205,9 +205,9 @@ def random_forest_classifier(df, asset):
 
     # After processing all splits, compute overall metrics
 
-    joblib.dump(clf, '../predictions/models/random_forest_model_up_USDCHF_60.pkl')
-    joblib.dump(pca, '../predictions/models/pca_transformation_up_USDCHF_60.pkl')
-    joblib.dump(scaler, '../predictions/models/scaler_USDCHF.pkl')
+    joblib.dump(clf, '../../predictions/models/random_forest_model_up_USDCHF_60.pkl')
+    joblib.dump(pca, '../../predictions/models/pca_transformation_up_USDCHF_60.pkl')
+    joblib.dump(scaler, '../../predictions/models/scaler_USDCHF.pkl')
     
     #joblib.dump(clf, 'models/random_forest_model_up_USDCNH_60.pkl')
     #joblib.dump(pca, 'models/pca_transformation_up_USDCNH_60.pkl')
