@@ -201,9 +201,15 @@ def random_forest_classifier(df, asset):
 
     #predictions_df.to_csv('predictions_df.csv')
     #print('classes---> ',clf.classes_)
-    joblib.dump(clf, '../predictions/models/random_forest_model_up_USDHKD_60.pkl')
-    joblib.dump(pca, '../predictions/models/pca_transformation_up_USDHKD_60.pkl')
-    joblib.dump(scaler, '../predictions/models/scaler_USDHKD.pkl')
+
+    joblib.dump(clf, '../../predictions/models/USDHKD_models/random_forest_model_up_USDHKD_60.pkl')
+    joblib.dump(pca, '../../predictions/models/USDHKD_models/pca_transformation_up_USDHKD_60.pkl')
+    joblib.dump(scaler, '../../predictions/models/USDHKD_models/scaler_USDHKD.pkl')
+
+
+    #joblib.dump(clf, '../predictions/models/random_forest_model_up_USDHKD_60.pkl')
+    #joblib.dump(pca, '../predictions/models/pca_transformation_up_USDHKD_60.pkl')
+    #joblib.dump(scaler, '../predictions/models/scaler_USDHKD.pkl')
 
 
     # After processing all splits, compute overall metrics
