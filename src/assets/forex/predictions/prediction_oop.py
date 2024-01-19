@@ -219,8 +219,10 @@ def run_predictions(symbol):
     # Add the symbol to the Set
     url_connection.sadd('symbols', symbol)
 
+    unix_int = int(unix.timestamp())  
+
     # Add the timestamp to the Hash for the symbol
-    url_connection.hset(symbol, unix, f'{symbol}:{unix}')
+    url_connection.hset(symbol, unix_int, f'{symbol}:{unix_int}')
 
     # Add the data to the Hash for the symbol and timestamp
     url_connection.hset(
