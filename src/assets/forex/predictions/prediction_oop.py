@@ -207,6 +207,7 @@ def run_predictions(symbol):
     #print('unix:', unix)
     
     date = date.strftime('%Y-%m-%d %H:%M:%S')
+    date_str = date.strftime('%Y-%m-%d %H:%M:%S')
 
     print(f'last close price:{last_close}\n last_upper_barrier: {last_upper_barrier} \n last_lower_barrier: {last_lower_barrier} \n predict_up: {up_prob} \n predict_down:{dwn_prob} \n neutral_prob:{neutral_prob} \n hard_prediction:{last_hard_prediction}' )
 
@@ -258,7 +259,7 @@ def run_predictions(symbol):
         'upper_barrier': last_upper_barrier,
         'lower_barrier': last_lower_barrier,
         'hard_prediction': last_hard_prediction,
-        'time': date
+        'time': date_str
         },
     )
 
