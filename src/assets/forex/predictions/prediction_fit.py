@@ -31,9 +31,9 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     #scaler = joblib.load(f'models/scaler_EURUSD.pkl')
 
 
-    clf = joblib.load(f'models/random_forest_model_up_{symbol}_60.pkl')
-    pca = joblib.load(f'models/pca_transformation_up_{symbol}_60.pkl')
-    scaler = joblib.load(f'models/scaler_{symbol}.pkl')
+    clf = joblib.load(f'models/{symbol}_models/random_forest_model_up_{symbol}_60.pkl')
+    pca = joblib.load(f'models/{symbol}_models/pca_transformation_up_{symbol}_60.pkl')
+    scaler = joblib.load(f'models/{symbol}_models/scaler_{symbol}.pkl')
     
     # Prepare the new data
     #feature_cols = ['Close','High','Low','Open','Volume','Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',

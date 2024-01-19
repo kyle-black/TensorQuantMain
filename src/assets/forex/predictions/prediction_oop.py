@@ -134,7 +134,7 @@ class Model:
 def run_predictions(symbol):
     
     #stock = get_data.get_json(symbol)
-    symbol ='EURUSD'
+    #symbol ='EURUSD'
     stock = live_data.latest_data_60(symbol)
 
     print('stock:',stock)
@@ -247,7 +247,7 @@ if __name__ in "__main__":
     
     
     
-    run_predictions('EURUSD')
+    run_predictions('AUDUSD')
 
 
    # schedule.every(1).minutes.do(run_predictions('EURUSD'))
