@@ -202,9 +202,9 @@ def random_forest_classifier(df, asset):
     #predictions_df.to_csv('predictions_df.csv')
     #print('classes---> ',clf.classes_)
 
-    joblib.dump(clf, '../../predictions/models/USDAUD_models/random_forest_model_up_USDAUD_60.pkl')
-    joblib.dump(pca, '../../predictions/models/USDAUD_models/pca_transformation_up_USDAUD_60.pkl')
-    joblib.dump(scaler, '../../predictions/models/USDAUD_models/scaler_USDAUD.pkl')
+    joblib.dump(clf, '../../predictions/models/AUDUSD_models/random_forest_model_up_AUDUSD_60.pkl')
+    joblib.dump(pca, '../../predictions/models/AUDUSD_models/pca_transformation_up_AUDUSD_60.pkl')
+    joblib.dump(scaler, '../../predictions/models/AUDUSD_models/scaler_AUDUSD.pkl')
 
 
     #joblib.dump(clf, '../predictions/models/random_forest_model_up_USDHKD_60.pkl')
