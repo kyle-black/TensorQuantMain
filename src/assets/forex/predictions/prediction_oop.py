@@ -226,8 +226,9 @@ def run_predictions(symbol):
 
     # Add the data to the Hash for the symbol and timestamp
     url_connection.hset(
-    f'{symbol}:{date}',
+    f'{symbol}:{unix}',
     mapping={
+        
         'security': symbol,
         'timeframe': '60m',
         'close': last_close,
