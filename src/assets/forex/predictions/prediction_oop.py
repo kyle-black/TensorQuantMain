@@ -266,8 +266,7 @@ def run_predictions(symbol):
 
 
 if __name__ in "__main__":
-    #symbol= 'EURUSD'
-    #run_predictions(symbol)
+    
     
     
     
@@ -275,6 +274,18 @@ if __name__ in "__main__":
     time.sleep(1)
     #run_predictions('GBPUSD')
     run_predictions('USDCHF')
+    time.sleep(1)
+    
+    run_predictions('USDCNH')
+    time.sleep(1)
+    
+    run_predictions('USDHKD')
+
+    time.sleep(1)
+    run_predictions('USDJPY')
+    time.sleep(1)
+    run_predictions('USDCAD')
+
 
 
 
