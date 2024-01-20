@@ -67,7 +67,7 @@ def latest_data_60(security):
 
     tv = TvDatafeed(username, password)
 
-    nifty_index_data = tv.get_hist(symbol=security ,exchange='OANDA',interval=Interval.in_1_hour,n_bars=10000)
+    nifty_index_data = tv.get_hist(symbol=security ,exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
     df= nifty_index_data
 
