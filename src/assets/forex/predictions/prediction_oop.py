@@ -279,19 +279,19 @@ if __name__ in "__main__":
     
     def run_assets():
         run_predictions('AUDUSD')
-        time.sleep(1)
+        #time.sleep(1)
     #run_predictions('GBPUSD')
-       # run_predictions('USDCHF')
+        run_predictions('USDCHF')
        # time.sleep(1)
     
         run_predictions('USDCNH')
-        time.sleep(1)
+        #time.sleep(1)
     
         run_predictions('USDHKD')
 
-        time.sleep(1)
+        #time.sleep(1)
         run_predictions('USDJPY')
-        time.sleep(1)
+        #time.sleep(1)
         run_predictions('USDCAD')
 
 
