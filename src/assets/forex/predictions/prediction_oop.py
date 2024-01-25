@@ -280,8 +280,7 @@ if __name__ in "__main__":
    
 
     def run_assets():
-        #symbols = ['USDCHF', 'USDCNH', 'USDHKD', 'USDJPY', 'USDCAD']
-        symbols = ['USDHKD']
+        symbols = ['AUDUSD']
         threads = []
 
     # Create a new thread for each symbol
