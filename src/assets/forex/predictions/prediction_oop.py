@@ -274,22 +274,34 @@ def run_predictions(symbol):
 
 
 if __name__ in "__main__":
-    #symbol= 'EURUSD'
-    #run_predictions(symbol)
     
     
     
-    run_predictions('AUDUSD')
-    time.sleep(1)
-    run_predictions('GBPUSD')
+    def run_assets():
+        run_predictions('AUDUSD')
+        time.sleep(1)
+    #run_predictions('GBPUSD')
+        run_predictions('USDCHF')
+        time.sleep(1)
+    
+        run_predictions('USDCNH')
+        time.sleep(1)
+    
+        run_predictions('USDHKD')
+
+        time.sleep(1)
+        run_predictions('USDJPY')
+        time.sleep(1)
+        run_predictions('USDCAD')
 
 
 
 
-   # schedule.every(1).minutes.do(run_predictions('EURUSD'))
 
-   # while True:
-   #     schedule.run_pending()
-   #     time.sleep(1)
+    schedule.every(5).minutes.do(run_assets())
+
+    while True:
+         schedule.run_pending()
+         time.sleep(1)
 
 
