@@ -281,8 +281,8 @@ if __name__ in "__main__":
         run_predictions('AUDUSD')
         time.sleep(1)
     #run_predictions('GBPUSD')
-        run_predictions('USDCHF')
-        time.sleep(1)
+       # run_predictions('USDCHF')
+       # time.sleep(1)
     
         run_predictions('USDCNH')
         time.sleep(1)
