@@ -24,7 +24,8 @@ import live_data
 import time
 import schedule
 #import financial_bars  
-from prediction_fit import make_predictions 
+from prediction_fit import make_predictions
+import threading
 
 class CreateBars:
     def __init__(self, raw_bars, asset):
@@ -276,32 +277,24 @@ def run_predictions(symbol):
 if __name__ in "__main__":
     
     
-    
+   
+
     def run_assets():
-        run_predictions('AUDUSD')
-        #time.sleep(1)
-    #run_predictions('GBPUSD')
-        run_predictions('USDCHF')
-       # time.sleep(1)
-    
-        run_predictions('USDCNH')
-        #time.sleep(1)
-    
-        run_predictions('USDHKD')
+        symbols = ['AUDUSD', 'USDCHF', 'USDCNH', 'USDHKD', 'USDJPY', 'USDCAD']
+        threads = []
 
-        #time.sleep(1)
-        run_predictions('USDJPY')
-        #time.sleep(1)
-        run_predictions('USDCAD')
+    # Create a new thread for each symbol
+        for symbol in symbols:
+            thread = threading.Thread(target=run_predictions, args=(symbol,))
+            threads.append(thread)
+            thread.start()
 
+    # Wait for all threads to finish
+        for thread in threads:
+            thread.join()
 
-
-
-
-    schedule.every(5).minutes.do(run_assets())
+    schedule.every(5).minutes.do(run_assets)
 
     while True:
-         schedule.run_pending()
-         time.sleep(1)
-
-
+        schedule.run_pending()
+        time.sleep(1)
