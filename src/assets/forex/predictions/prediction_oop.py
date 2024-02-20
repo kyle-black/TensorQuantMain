@@ -279,7 +279,7 @@ def run_predictions(symbol):
     url_connection.xadd(
     f"security:{symbol}",
     {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
-     'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str},
+     'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 )
 
 
