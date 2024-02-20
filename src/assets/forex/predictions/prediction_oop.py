@@ -138,7 +138,7 @@ def run_predictions(symbol):
     #symbol ='EURUSD'
     stock = live_data.latest_data_60(symbol)
 
-    print('stock:',stock)
+   # print('stock:',stock)
     #stock = pd.read_csv('data/SPY_new.csv')
     
     #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')
