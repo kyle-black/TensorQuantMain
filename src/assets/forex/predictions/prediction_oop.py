@@ -251,7 +251,7 @@ def run_predictions(symbol):
 
     #unix_int = int(unix.timest)  
 
-    '''
+    
     # Add the timestamp to the Hash for the symbol
     url_connection.hset(symbol, unix_timestamp, f'{symbol}:{unix_timestamp}')
 
@@ -275,7 +275,7 @@ def run_predictions(symbol):
         'time': date_str
         },
     )
-    '''
+    
     url_connection.xadd(
     f"security:{symbol}",
     {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
