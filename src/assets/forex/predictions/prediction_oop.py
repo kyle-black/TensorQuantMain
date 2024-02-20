@@ -276,12 +276,21 @@ def run_predictions(symbol):
         },
     )
     
-    url_connection.xadd(
-    f"security:{symbol}",
-    {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
-     'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
-)
+   # url_connection.xadd(
+   # f"security:{symbol}",
+    #{'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
+    # 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
+#)
+    stream_name = f"security:{symbol}"
+    entry = {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 
+# Add entry to the stream
+    url_connection.xadd(stream_name, entry)
+
+# Retrieve and print all entries from the stream
+    entries = url_connection.xrange(stream_name)
+    for entry in entries:
+        print('Redis update:',entry)
 
 
 if __name__ in "__main__":
