@@ -122,7 +122,7 @@ class Model:
     def predict_values(self):
         self.predictions, self.probas =make_predictions(self.symbol,self.bars_df)
        # self.predictions_dwn, self.probas_dwn =prediction_fit.make_predictions_dwn(self.symbol,self.bars_df)
-        return self.predictions, self.probas, self.bars_df['upper_barrier'], self.bars_df['lower_barrier'], self.bars_df['Close']
+        return self.predictions, self.probas, self.bars_df['upper_barrier'], self.bars_df['lower_barrier'], self.bars_df['Close'], self.bars_df['Open'], self.bars_df['High'], self.bars_df['Low']
 
     
 
@@ -192,6 +192,16 @@ def run_predictions(symbol):
     upper_barriers = output[2]
     lower_barriers = output[3]
     closes = output[4]
+    opens = output[5]
+    highs = output[6]
+    lows = output[7]
+
+
+    last_close = closes.index[-1]
+    last_open = opens.index[-1]
+    last_high = highs.index[-1]
+    last_low = lows.index[-1]
+    
 
     last_lower_barrier = round(lower_barriers.iloc[-1], 4)
     last_upper_barrier = round(upper_barriers.iloc[-1], 4)
@@ -268,7 +278,7 @@ def run_predictions(symbol):
     '''
     url_connection.xadd(
     f"security:{symbol}",
-    {"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
+    {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
      'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str},
 )
 
@@ -280,7 +290,7 @@ if __name__ in "__main__":
    
 
     def run_assets():
-        symbols = ['AUDUSD']
+        symbols = ['USDCAD']
         threads = []
 
     # Create a new thread for each symbol
