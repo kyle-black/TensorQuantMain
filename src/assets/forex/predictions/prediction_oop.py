@@ -253,10 +253,10 @@ def run_predictions(symbol):
 
     
     # Add the timestamp to the Hash for the symbol
-    url_connection.hset(symbol, unix_timestamp, f'{symbol}:{unix_timestamp}')
+    #rl_connection.hset(symbol, unix_timestamp, f'{symbol}:{unix_timestamp}')
 
     # Add the data to the Hash for the symbol and timestamp
-    
+    '''
     url_connection.hset(
     f'{symbol}:{unix_timestamp}',
     mapping={
@@ -275,18 +275,25 @@ def run_predictions(symbol):
         'time': date_str
         },
     )
-    
+    '''
    # url_connection.xadd(
    # f"security:{symbol}",
     #{'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
     # 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 #)
-    last_open =0.0
-    last_high =0.0
-    last_low =0.0
-    
+   # last_open =0.0
+    #last_high =0.0
+    #last_low =0.0
+
+
+
     stream_name = f"security:{symbol}"
-    entry = {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
+    entry = {"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
+
+
+
+   # stream_name = f"security:{symbol}"
+   # entry = {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 
 # Add entry to the stream
     url_connection.xadd(stream_name, entry)
