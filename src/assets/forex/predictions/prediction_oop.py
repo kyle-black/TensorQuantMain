@@ -172,7 +172,7 @@ def run_predictions(symbol):
     label_instance_time = label_instance_time.triple_barriers()
     
 
-    print(label_instance_time)
+   # print(label_instance_time)
  
     model =Model(symbol,label_instance_time)
     print(model.predict_values())
@@ -281,6 +281,10 @@ def run_predictions(symbol):
     #{'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
     # 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 #)
+    last_open =0.0
+    last_high =0.0
+    last_low =0.0
+    
     stream_name = f"security:{symbol}"
     entry = {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
 
