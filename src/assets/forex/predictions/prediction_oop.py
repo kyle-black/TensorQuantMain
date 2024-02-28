@@ -310,7 +310,7 @@ if __name__ in "__main__":
    
 
     def run_assets():
-        symbols = ['AUDUSD']
+        symbols = ['AUDUSD','EURUSD']
         threads = []
 
     # Create a new thread for each symbol
@@ -323,7 +323,7 @@ if __name__ in "__main__":
         for thread in threads:
             thread.join()
 
-    schedule.every(1).minutes.do(run_assets)
+    schedule.every(5).minutes.do(run_assets)
 
     while True:
         schedule.run_pending()
