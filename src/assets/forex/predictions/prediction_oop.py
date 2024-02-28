@@ -303,14 +303,14 @@ def run_predictions(symbol):
     for entry in entries:
         print('Redis update:',entry)
 
-
+'''
 if __name__ in "__main__":
     
     
    
 
     def run_assets():
-        symbols = ['AUDUSD','EURUSD']
+        symbols = ['EURUSD']
         threads = []
 
     # Create a new thread for each symbol
@@ -328,3 +328,4 @@ if __name__ in "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
+'''
