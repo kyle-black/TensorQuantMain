@@ -17,5 +17,5 @@ s3 = session.client('s3',
                     config=Config(signature_version='s3v4'))
 
 # Upload the model file to your S3 bucket
-with open("/models/AUDUSD_models/random_forest_model_up_AUDUSD_60.pkl", "rb") as data:
+with open("../models/AUDUSD_models/random_forest_model_up_AUDUSD_60.pkl", "rb") as data:
     s3.upload_fileobj(data, 'mybucket', 'random_forest_model_up_AUDUSD_60.pkl')
