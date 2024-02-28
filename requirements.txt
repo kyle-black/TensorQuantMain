@@ -16,3 +16,6 @@ redis
 schedule
 
 boto3
+
+git+https://github.com/rongardF/tvdatafeed.git
+
