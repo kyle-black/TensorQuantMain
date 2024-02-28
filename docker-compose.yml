@@ -1,0 +1,16 @@
+version: '3'
+services:
+  app1:
+    build: .
+    command: python src/assets/forex/predictions/prediction_oop.py
+    volumes:
+      - .:/app
+    ports:
+      - "4000:80"
+  app2:
+    build: .
+    command: python src/assets/other_app/app.py
+    volumes:
+      - .:/app
+    ports:
+      - "4001:80"

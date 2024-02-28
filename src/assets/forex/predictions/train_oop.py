@@ -88,8 +88,10 @@ class FeatureMaker:
         return d_values
     
     def elbow_(self):
-        result = self.feature_add()
-        return elbow_plot.plot_pca(result)
+       pass
+       
+       # result = self.feature_add()
+       # return elbow_plot.plot_pca(result)
 
     
 
@@ -150,8 +152,10 @@ class Model:
 if __name__ == "__main__":
     
     asset ='EURUSD'
+
+    stock_path = f'src/assets/forex/predictions/new_fx_data/{asset}_60.csv'
     
-    stock = pd.read_csv(f'data/new_fx_data/{asset}_60.csv')
+    stock = pd.read_csv(stock_path)
     stock.dropna(inplace=True)
 
    
@@ -176,7 +180,7 @@ if __name__ == "__main__":
     feature_instance_ = FeatureMaker(dollar_bars_df, 48, asset)
     
     feature_bars =feature_instance_.feature_add()
-    feature_instance_.elbow_()
+    #feature_instance_.elbow_()
     
     
     label_instance_ =Labeling(feature_bars, asset)

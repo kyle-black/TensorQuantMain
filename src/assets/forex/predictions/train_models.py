@@ -112,6 +112,7 @@ def random_forest_classifier(df, asset):
     X_test = test_data[feature_cols]
     y_test = test_data[target_col]
 
+
     # Get the names of the columns with datetime dtype
    
 # Now you can fit the scaler
@@ -128,7 +129,7 @@ def random_forest_classifier(df, asset):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=42, n_estimators=10000)
+    clf =RandomForestClassifier( random_state=42, n_estimators=10)
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
     clf.fit(X_train, y_train, sample_weight=weight_data)
@@ -204,10 +205,10 @@ def random_forest_classifier(df, asset):
 
 
     # After processing all splits, compute overall metrics
-    
-    joblib.dump(clf, f'models/random_forest_model_up_{asset}_60.pkl')
-    joblib.dump(pca, f'models/pca_transformation_up_{asset}_60.pkl')
-    joblib.dump(scaler, f'models/scaler_{asset}.pkl')
+    path_ = 'src/assets/forex/predictions/models/{asset}_60.pkl'
+    joblib.dump(clf, path_)
+    joblib.dump(pca, f'src/assets/forex/predictions/models/pca_transformation_up_{asset}_60.pkl')
+    joblib.dump(scaler, f'src/assets/forex/predictions/models/scaler_{asset}.pkl')
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
