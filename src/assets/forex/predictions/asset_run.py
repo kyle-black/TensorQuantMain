@@ -7,7 +7,7 @@ import time
 def asset_(asset_list):
 
     for asset in asset_list:
-        prediction_oop.run_predictions()
+        prediction_oop.run_predictions(asset)
         print('Asset:', asset)
         time.sleep(1)
 
