@@ -9,6 +9,33 @@ from sklearn.metrics import brier_score_loss
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import joblib
+import boto3
+from botocore.client import Config
+import os
+
+
+
+def s3_connection():
+    # Define your S3 URL and credentials
+    s3_url = 'https://tensorquantmodelstwo.nyc3.digitaloceanspaces.com'
+    access_key = 'DO00R8Y2RD2BNY3J2B44'
+    secret_key = 'VYzjlGfUV0VTta9TLh+Mp9kHc3c+VB3ISRFsWuL+69g'
+
+    # Create a session using your credentials
+    session = boto3.session.Session()
+
+    # Create an S3 client using your session
+    s3 = session.client('s3',
+                        endpoint_url=s3_url,
+                        aws_access_key_id=access_key,
+                        aws_secret_access_key=secret_key,
+                        config=Config(signature_version='s3v4'))
+
+    # Define your bucket
+    bucket = 'completedmodels'
+
+    return s3, bucket
+
 
 
 
@@ -26,18 +53,31 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     """
 
     # Load the trained model, PCA, and scaler
-    #clf = joblib.load(f'models/random_forest_model_up_{symbol}.pkl')
-    #pca = joblib.load(f'models/pca_transformation_up_{symbol}.pkl')
-    #scaler = joblib.load(f'models/scaler_EURUSD.pkl')
-
-
-    clf = joblib.load(f'models/{symbol}_models/random_forest_model_up_{symbol}_60.pkl')
-    pca = joblib.load(f'models/{symbol}_models/pca_transformation_up_{symbol}_60.pkl')
-    scaler = joblib.load(f'models/{symbol}_models/scaler_{symbol}.pkl')
+    scaler_ = f'{symbol}_models/scaler_{symbol}.pkl'
+    pca_ = f'{symbol}_models/pca_transformation_up_{symbol}_60.pkl'
+    clf_= f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'
     
-    # Prepare the new data
-    #feature_cols = ['Close','High','Low','Open','Volume','Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
-    #                'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI','SpreadOC','SpreadLH','SMI']
+    s3, bucket = s3_connection()
+    #CLF
+    with open(clf_, 'wb') as data:
+            s3.download_fileobj(bucket, clf_, data)
+
+            clf = joblib.load(clf_)
+
+    #PCA
+    with open(pca_, 'wb') as data:
+            s3.download_fileobj(bucket, pca_, data)
+
+            pca = joblib.load(pca_)
+
+    #SCALER
+    with open(scaler_, 'wb') as data:
+            s3.download_fileobj(bucket, scaler_, data)
+
+            scaler = joblib.load(scaler_)
+
+
+  
     print('clf:', clf)
 
     new_data = new_data[-100:]

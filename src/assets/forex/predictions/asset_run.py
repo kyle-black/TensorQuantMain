@@ -12,6 +12,6 @@ def asset_(asset_list):
        # time.sleep(1)
 
 if __name__ in "__main__":
-    asset_list = 'GBPUSD'
+    asset_list = ['AUDUSD']
     
     asset_(asset_list)
