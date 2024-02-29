@@ -19,6 +19,7 @@ def latest_data_5(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
+    print(f'{security} 5m data pulled!',df)
    
     return df
 
@@ -40,7 +41,9 @@ def latest_data_15(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    
+
+    print(f'{security} 15m data pulled!',df)
+ #   print('data pulled!',df)
     return df
 
 
@@ -58,7 +61,8 @@ def latest_data_30(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-   
+    print(f'{security} 30m data pulled!',df)
+#    print('data pulled!',df)
     return df
 
 def latest_data_60(security):
@@ -74,4 +78,11 @@ def latest_data_60(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
+    print(f'{security} 60m data pulled!',df)
+    #print('data pulled!',df)
     return df
+
+'''
+if __name__ in '__main__':
+    print(latest_data_60('EURUSD'))
+'''
