@@ -445,5 +445,3 @@ def random_forest_ts(df):
         predictions_df.to_csv('predictions.csv', index=False)
     
 '''     
-if __name__ in "__main__":
-     print(s3_connection())
