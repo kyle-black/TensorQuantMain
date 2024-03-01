@@ -84,4 +84,4 @@ def latest_data_60(security):
 
 
 #if __name__ in '__main__':
-#    print(latest_data_60('EURUSD'))
+#    print(latest_data_60('USDCAD'))
