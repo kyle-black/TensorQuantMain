@@ -82,7 +82,6 @@ def latest_data_60(security):
     #print('data pulled!',df)
     return df
 
-'''
-if __name__ in '__main__':
-    print(latest_data_60('EURUSD'))
-'''
+
+#if __name__ in '__main__':
+#    print(latest_data_60('EURUSD'))

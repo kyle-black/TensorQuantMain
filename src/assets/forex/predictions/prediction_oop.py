@@ -146,6 +146,7 @@ def run_predictions(symbol):
     dollar_bars_df = bar_creator.dollar_bars()
    
     print('Dollar bars:',dollar_bars_df)
+    '''
     feature_instance_time = FeatureMaker(dollar_bars_df, 48)
     
     #print(dollar_bars_df)
@@ -236,7 +237,7 @@ def run_predictions(symbol):
     #rl_connection.hset(symbol, unix_timestamp, f'{symbol}:{unix_timestamp}')
 
     # Add the data to the Hash for the symbol and timestamp
-    '''
+    
     url_connection.hset(
     f'{symbol}:{unix_timestamp}',
     mapping={
@@ -255,7 +256,7 @@ def run_predictions(symbol):
         'time': date_str
         },
     )
-    '''
+
    # url_connection.xadd(
    # f"security:{symbol}",
     #{'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob,
@@ -283,7 +284,7 @@ def run_predictions(symbol):
     for entry in entries:
         print('Redis update:',entry)
 
-
+    '''
 if __name__ in "__main__":
     
     
