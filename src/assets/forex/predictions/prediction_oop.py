@@ -289,7 +289,10 @@ if __name__ in "__main__":
     
     
    
-
+    
+    print(run_predictions('USDCAD'))
+    
+    '''
     def run_assets():
        # symbols = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
         symbols = [ 'USDCAD']
@@ -310,3 +313,4 @@ if __name__ in "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
+    '''
