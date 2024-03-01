@@ -231,7 +231,7 @@ def run_predictions(symbol):
     print('redis:',res4)
 
     stream_name = f"security:{symbol}"
-    entry = {"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
+    entry = {"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date}
 
 
 
