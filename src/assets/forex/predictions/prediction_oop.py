@@ -146,7 +146,7 @@ def run_predictions(symbol):
     dollar_bars_df = bar_creator.dollar_bars()
    
     print('Dollar bars:',dollar_bars_df)
-    '''
+    
     feature_instance_time = FeatureMaker(dollar_bars_df, 48)
     
     #print(dollar_bars_df)
@@ -284,7 +284,7 @@ def run_predictions(symbol):
     for entry in entries:
         print('Redis update:',entry)
 
-    '''
+
 if __name__ in "__main__":
     
     
