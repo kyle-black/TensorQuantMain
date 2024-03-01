@@ -129,7 +129,6 @@ class Model:
 
 
 
-#if __name__ == "__main__":
 
 
 def run_predictions(symbol):
@@ -138,11 +137,7 @@ def run_predictions(symbol):
     #symbol ='EURUSD'
     stock = live_data.latest_data_60(symbol)
 
-   # print('stock:',stock)
-    #stock = pd.read_csv('data/SPY_new.csv')
-    
-    #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')
-    #print(type(stock['Date'][0]))
+   
     stock = stock.iloc[::]
     bar_creator = CreateBars(stock, symbol)
     
@@ -150,7 +145,7 @@ def run_predictions(symbol):
     
     dollar_bars_df = bar_creator.dollar_bars()
    
-    
+    print('Dollar bars:',dollar_bars_df)
     feature_instance_time = FeatureMaker(dollar_bars_df, 48)
     
     #print(dollar_bars_df)
@@ -166,7 +161,6 @@ def run_predictions(symbol):
        'Log_Returns', 'SpreadOC', 'SpreadLH', 'MACD', 'Signal_Line_MACD',
        'RSI','SMI']]
     
-    #feature_bars = feature_bars.drop('Date',axis=1)
     
     label_instance_time =Labeling(feature_bars)
     label_instance_time = label_instance_time.triple_barriers()
@@ -210,9 +204,6 @@ def run_predictions(symbol):
 
     dt = closes.index[-1]
 
-   # dt = datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
-
-    # Convert the datetime object to a Unix timestamp
     unix_timestamp = int(dt.timestamp())
 
     #print('unix:', unix)
@@ -232,17 +223,6 @@ def run_predictions(symbol):
     # Get the current time in Unix timestamp format
     current_unix_time = int(time.time())
 
-    #current_unix_time = datetime.fromtimestamp(current_unix_time)
-
-    #current_time = current_unix_time.strftime('%Y-%m-%d %H:%M:%S')
-
-    #print(current_unix_time)
-
-   # if redis_connection.exists(date):
-   #     print(f' {date} is an already existing bar')
-   # else:
-   #     print(f'New Bar Created at {date}')
-    
 
 
 
@@ -303,14 +283,14 @@ def run_predictions(symbol):
     for entry in entries:
         print('Redis update:',entry)
 
-'''
+
 if __name__ in "__main__":
     
     
    
 
     def run_assets():
-        symbols = ['EURUSD']
+        symbols = ['AUDUSD']
         threads = []
 
     # Create a new thread for each symbol
@@ -328,4 +308,3 @@ if __name__ in "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
-'''

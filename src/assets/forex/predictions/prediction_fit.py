@@ -24,17 +24,52 @@ def s3_connection():
     # Create a session using your credentials
     session = boto3.session.Session()
 
+
+    #session = boto3.Session( aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     # Create an S3 client using your session
+    
     s3 = session.client('s3',
                         endpoint_url=s3_url,
                         aws_access_key_id=access_key,
                         aws_secret_access_key=secret_key,
                         config=Config(signature_version='s3v4'))
 
+    
+   
     # Define your bucket
+    
     bucket = 'completedmodels'
+   # directory = 'completedmodels'
+    #response = s3.list_objects(Bucket=bucket)
 
-    return s3, bucket
+
+    #print(response)
+    
+    
+    
+    '''
+    for item in response['Contents']:
+        file_name = item['Key']
+        with open(file_name, 'wb') as data:
+            print(file_name)
+            s3.download_fileobj(bucket, file_name, data)
+
+    
+   # for item in response['Contents']:
+   #      print(item)
+    
+    for item in response['Contents']:
+        file_name = item['Key']
+
+        #print('file_name:', file_name)
+        with open(file_name, 'wb') as data:
+
+            print(file_name)
+            s3.download_fileobj(bucket, file_name, data)
+    
+    
+    return s3,bucket 
+    '''
 
 
 
@@ -53,28 +88,20 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     """
 
     # Load the trained model, PCA, and scaler
-    scaler_ = f'{symbol}_models/scaler_{symbol}.pkl'
-    pca_ = f'{symbol}_models/pca_transformation_up_{symbol}_60.pkl'
-    clf_= f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'
     
-    s3, bucket = s3_connection()
-    #CLF
-    with open(clf_, 'wb') as data:
-            s3.download_fileobj(bucket, clf_, data)
+    
+   
 
-            clf = joblib.load(clf_)
+    
 
-    #PCA
-    with open(pca_, 'wb') as data:
-            s3.download_fileobj(bucket, pca_, data)
 
-            pca = joblib.load(pca_)
 
-    #SCALER
-    with open(scaler_, 'wb') as data:
-            s3.download_fileobj(bucket, scaler_, data)
+    clf = joblib.load(f'models/{symbol}/random_forest_model_dwn_{symbol}.pkl')
+    pca = joblib.load(f'models/{symbol}/pca_transformation_dwn_{symbol}.pkl')
+    scaler = joblib.load(f'models/{symbol}/scaler_{symbol}.pkl')
+    
 
-            scaler = joblib.load(scaler_)
+    
 
 
   
@@ -113,9 +140,9 @@ def make_predictions_dwn(symbol,new_data: pd.DataFrame) -> pd.Series:
     """
 
     # Load the trained model, PCA, and scaler
-  #  clf = joblib.load(f'models/{symbol}/random_forest_model_dwn_{symbol}.pkl')
-  #  pca = joblib.load(f'models/{symbol}/pca_transformation_dwn_{symbol}.pkl')
-  #  scaler = joblib.load(f'models/{symbol}/scaler_{symbol}.pkl')
+    clf = joblib.load(f'models/{symbol}/random_forest_model_dwn_{symbol}.pkl')
+    pca = joblib.load(f'models/{symbol}/pca_transformation_dwn_{symbol}.pkl')
+    scaler = joblib.load(f'models/{symbol}/scaler_{symbol}.pkl')
     
 
     clf = joblib.load(f'random_forest_model_up_{symbol}_60.pkl')
@@ -418,4 +445,5 @@ def random_forest_ts(df):
         predictions_df.to_csv('predictions.csv', index=False)
     
 '''     
-    
+if __name__ in "__main__":
+     print(s3_connection())
