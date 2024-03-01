@@ -126,8 +126,8 @@ class Model:
 #if __name__ == "__main__":
 
 
-def run_predictions():
-    symbol = 'USDCNH'
+def run_predictions(symbol):
+    #symbol = 'USDCNH'
     #stock = get_data.get_json(symbol)
 
     stock = live_data.latest_data_60(symbol)
@@ -249,13 +249,17 @@ def run_predictions():
 
 
 if __name__ == "__main__":
-    run_predictions()
-    schedule.every(1).minutes.do(run_predictions)
+    
+    
+    def runner(symbol):
+        
+        run_predictions(symbol)
+        schedule.every(1).minutes.do(run_predictions(symbol))
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
-
+    runner('USDCAD')
 
 
