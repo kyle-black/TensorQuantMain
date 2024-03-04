@@ -1,18 +1,16 @@
-import sys
 import os
+import sys
 
 current_directory = os.getcwd()
-
 print(current_directory)
-'''
-forex_pairs = ['AUDUSD', 'GBPUSD', 'USDCHF', 'USDHKD', 'EURUSD', 'USDCAD', 'USDCNH', 'USDJPY']
+
+forex_pairs = ['AUDUSD']
 
 # Add each forex pair's directory to the Python path
 for pair in forex_pairs:
-    sys.path.append(f'/path/to/{pair}')
+    sys.path.append(os.path.join(current_directory, pair))
 
 # Import the prediction_oop module from each forex pair's directory and run the runner function
 for pair in forex_pairs:
     module = __import__(pair + '.prediction_oop', fromlist=[pair])
     module.runner(pair)
-'''
