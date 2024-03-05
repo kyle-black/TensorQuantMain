@@ -6,10 +6,10 @@ print(current_directory)
 
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
-forex_pairs = ['GBPUSD']
+forex_pairs = ['NZDUSD']
 
 #### Tested: 'AUDUSD','EURUSD', 'GBPUSD'
-#### not working: 'EURUSD'
+#### not working: 'EURUSD' 'GBPUSD'
 
 
 # Add each forex pair's directory to the Python path
