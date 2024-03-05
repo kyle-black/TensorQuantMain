@@ -4,7 +4,7 @@ import sys
 current_directory = os.getcwd()
 print(current_directory)
 
-forex_pairs = ['AUDUSD']
+forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
 
 # Add each forex pair's directory to the Python path
 for pair in forex_pairs:
