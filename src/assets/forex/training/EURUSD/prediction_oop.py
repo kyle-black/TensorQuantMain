@@ -151,7 +151,6 @@ def run_predictions(symbol):
     feature_instance_time.elbow_()
 
    
-
     
     feature_bars =feature_bars[['Date', 'Open', 'High', 'Low', 'Close', 'Volume',
        'Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',

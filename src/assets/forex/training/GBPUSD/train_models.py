@@ -37,6 +37,45 @@ from sklearn.ensemble import AdaBoostClassifier
     # You might want to return something from this function, like t
   
 
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, brier_score_loss
+import pandas as pd
+# assuming crossvalidation and bootstrap are custom modules
+import crossvalidation
+#import bootstrap
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+import joblib
+import numpy as np
+#import tensorflow as tf
+
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import brier_score_loss
+#from sklearn.externals import joblib
+# Import necessary keras modules
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import AdaBoostClassifier
+#import neuralnet
+#from tensorflow.keras.utils import to_categorical
+
+
+#from keras.models import Sequential
+#from keras.layers import Dense, Dropout
+#from keras.scikit_learn import KerasClassifier
+#from scikeras.wrappers import KerasClassifier
+#from keras.utils import to_categorical
+
+
+    # You might want to return something from this function, like t
+  
+
 def random_forest_classifier(df, asset):
     
     
@@ -139,7 +178,7 @@ def random_forest_classifier(df, asset):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=42, n_estimators=10000)
+    clf =RandomForestClassifier( random_state=42, n_estimators=1000)
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
     clf.fit(X_train, y_train, sample_weight=weight_data)
