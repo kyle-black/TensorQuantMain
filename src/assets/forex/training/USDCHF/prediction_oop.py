@@ -126,8 +126,8 @@ class Model:
 #if __name__ == "__main__":
 
 
-def run_predictions():
-    symbol = 'USDCNH'
+def run_predictions(symbol):
+    #symbol = 'USDCNH'
     #stock = get_data.get_json(symbol)
 
     stock = live_data.latest_data_60(symbol)
@@ -230,13 +230,35 @@ def run_predictions():
     res4 = url_connection.hgetall(date)
     print('redis:',res4)
 
+    stream_name = f"security:{symbol}"
+    entry = {"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date}
+
+
+
+   # stream_name = f"security:{symbol}"
+   # entry = {'open':last_open,'high':last_high,'low':last_low,"close": last_close, "up_prob": up_prob, "dwn_prob": dwn_prob, "neutral_prob": neutral_prob, 'upper_barrier': last_upper_barrier, 'lower_barrier':last_lower_barrier,'hard_prediction':last_hard_prediction,'time':date_str}
+
+# Add entry to the stream
+    url_connection.xadd(stream_name, entry)
+
+# Retrieve and print all entries from the stream
+    entries = url_connection.xrange(stream_name)
+    for entry in entries:
+        print('Redis update:',entry)
+
+
+
+#if __name__ == "__main__":
     
-schedule.every(1).minutes.do(run_predictions)
+    
+def runner(symbol):
+        run_predictions(symbol)
+        schedule.every(60).minutes.do(lambda: run_predictions(symbol))
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
-
+#runner('AUDUSD')
 
 
