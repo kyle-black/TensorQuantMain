@@ -85,7 +85,7 @@ def random_forest_classifier(df, asset):
 
     # Data Preprocessing
     start_date = pd.to_datetime('2003-02-02')
-    end_date = pd.to_datetime('2022-01-02')
+    end_date = pd.to_datetime('2016-01-02')
     threshold = 0.7 
     
     df = df.drop(columns=['touch_lower', 'touch_upper'])
@@ -252,24 +252,17 @@ def random_forest_classifier(df, asset):
     #predictions_df.to_csv('predictions_df.csv')
     #print('classes---> ',clf.classes_)
 
-    joblib.dump(clf, '../../predictions/models/GBPUSD_models/random_forest_model_up_AUDUSD_60.pkl')
-    joblib.dump(pca, '../../predictions/models/GBPUSD_models/pca_transformation_up_AUDUSD_60.pkl')
-    joblib.dump(scaler, '../../predictions/models/GBPUSD_models/scaler_AUDUSD.pkl')
-
-
-    #joblib.dump(clf, '../predictions/models/random_forest_model_up_USDHKD_60.pkl')
-    #joblib.dump(pca, '../predictions/models/pca_transformation_up_USDHKD_60.pkl')
-    #joblib.dump(scaler, '../predictions/models/scaler_USDHKD.pkl')
-
 
     # After processing all splits, compute overall metrics
     
-   # joblib.dump(clf, 'models/random_forest_model_up_USDHKD_60.pkl')
-   # joblib.dump(pca, 'models/pca_transformation_up_USDHKD_60.pkl')
-   # joblib.dump(scaler, 'models/scaler_USDHKD.pkl')
+    joblib.dump(clf, 'GBPUSD_models/random_forest_model_up_GBPUSD_60.pkl')
+    joblib.dump(pca, 'GBPUSD_models/pca_transformation_up_GBPUSD_60.pkl')
+    joblib.dump(scaler, 'GBPUSD_models/scaler_GBPUSD.pkl')
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
+
+
 
 
 
