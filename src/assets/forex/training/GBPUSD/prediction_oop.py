@@ -253,11 +253,11 @@ def run_predictions(symbol):
     
 def runner(symbol):
         run_predictions(symbol)
-        schedule.every(1).minutes.do(lambda: run_predictions(symbol))
+      #  schedule.every(1).minutes.do(lambda: run_predictions(symbol))
 
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+       # while True:
+       #     schedule.run_pending()
+       #     time.sleep(1)
 
 #runner('AUDUSD')
 
