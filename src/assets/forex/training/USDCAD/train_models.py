@@ -128,7 +128,7 @@ def random_forest_classifier(df, asset):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=42, n_estimators=10000)
+    clf =RandomForestClassifier( random_state=42, n_estimators=1000)
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
     clf.fit(X_train, y_train, sample_weight=weight_data)
@@ -205,9 +205,9 @@ def random_forest_classifier(df, asset):
 
     # After processing all splits, compute overall metrics
     
-    joblib.dump(clf, '../predictions/models/random_forest_model_up_CADUSD_60.pkl')
-    joblib.dump(pca, '../predictions/models/pca_transformation_up_CADUSD_60.pkl')
-    joblib.dump(scaler, '../predictions/models/scaler_CADUSD.pkl')
+    joblib.dump(clf, 'USDCAD_models/random_forest_model_up_USDCAD_60.pkl')
+    joblib.dump(pca, 'USDCAD_models/pca_transformation_up_USDCAD_60.pkl')
+    joblib.dump(scaler, 'USDCAD_models/scaler_USDCAD.pkl')
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
