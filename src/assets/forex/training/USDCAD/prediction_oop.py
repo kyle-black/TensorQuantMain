@@ -165,12 +165,13 @@ def run_predictions(symbol):
     
 
     print(label_instance_time)
-    
+    print("Creating model...")
     model =Model(symbol,label_instance_time)
-    print(model.predict_values())
+    print("Predicting values...")
+    #print(model.predict_values())
 
     output= model.predict_values()
-    
+    print('Predicting values:', output)
 
 
     ################################# Parse Model output
@@ -253,7 +254,7 @@ def run_predictions(symbol):
     
 def runner(symbol):
         run_predictions(symbol)
-        schedule.every(60).minutes.do(lambda: run_predictions(symbol))
+        schedule.every(1).minutes.do(lambda: run_predictions(symbol))
 
         while True:
             schedule.run_pending()
