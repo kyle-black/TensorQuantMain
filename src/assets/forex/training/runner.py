@@ -13,8 +13,8 @@ forex_pairs = ['AUDUSD','USDCAD']
 
 
 # Add each forex pair's directory to the Python path
-for pair in forex_pairs:
-    sys.path.append(os.path.join(current_directory, pair))
+#for pair in forex_pairs:
+#    sys.path.append(os.path.join(current_directory, pair))
 
 # Import the prediction_oop module from each forex pair's directory and run the runner function
 for pair in forex_pairs:
