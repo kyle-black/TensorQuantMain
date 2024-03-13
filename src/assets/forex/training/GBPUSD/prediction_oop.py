@@ -1,3 +1,8 @@
+import sys
+import os
+#### Change the file path to the current directory
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import pandas as pd
 import numpy as np
 import bar_creation as bc
