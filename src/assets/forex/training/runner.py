@@ -7,7 +7,7 @@ print(current_directory)
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
 #forex_pairs = ['AUDUSD','EURUSD', 'USDCAD','GBPUSD']
-forex_pairs = ['AUDUSD', 'USDCAD', 'USDJPY']
+forex_pairs = ['AUDUSD']
 #### Tested: 'AUDUSD','EURUSD', 'GBPUSD'
 #### not working: 'EURUSD' 'GBPUSD'
 
