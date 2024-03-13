@@ -3,11 +3,11 @@ import sys
 
 current_directory = os.getcwd()
 print(current_directory)
-
+'''
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
 #forex_pairs = ['AUDUSD','USDJPY', 'NZDUSD', 'USDCAD', 'USDCHF']
-forex_pairs = ['AUDUSD','EURUSD', 'USDCAD','GBPUSD']
-
+#forex_pairs = ['AUDUSD','EURUSD', 'USDCAD','GBPUSD']
+forex_pairs = ['EURUSD']
 #### Tested: 'AUDUSD','EURUSD', 'GBPUSD'
 #### not working: 'EURUSD' 'GBPUSD'
 
@@ -20,3 +20,4 @@ for pair in forex_pairs:
 for pair in forex_pairs:
     module = __import__(pair + '.prediction_oop', fromlist=[pair])
     module.runner(pair)
+'''

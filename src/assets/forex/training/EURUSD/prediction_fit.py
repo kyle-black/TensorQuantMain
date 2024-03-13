@@ -25,22 +25,12 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     - pd.Series: Predictions for the new data.
     """
 
-    # Load the trained model, PCA, and scaler
-    #clf = joblib.load(f'models/random_forest_model_up_{symbol}.pkl')
-    #pca = joblib.load(f'models/pca_transformation_up_{symbol}.pkl')
-    #scaler = joblib.load(f'models/scaler_EURUSD.pkl')
     clf = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
     pca = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/pca_transformation_up_{symbol}_60.pkl'))
     scaler = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/scaler_{symbol}.pkl'))
 
 
-   # clf = joblib.load(f'models/random_forest_model_up_EURUSD_60.pkl')
-    #pca = joblib.load(f'models/pca_transformation_up_EURUSD_60.pkl')
-    #scaler = joblib.load(f'models/scaler_EURUSD.pkl')
-    
-    # Prepare the new data
-    #feature_cols = ['Close','High','Low','Open','Volume','Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
-    #                'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI','SpreadOC','SpreadLH','SMI']
+   
     
     
     feature_cols =['Open', 'High', 'Low', 'Close', 'Volume', 'Daily_Returns',
