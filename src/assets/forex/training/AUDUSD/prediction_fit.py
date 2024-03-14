@@ -31,8 +31,8 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
    # pca = joblib.load(f'../{symbol}_models/pca_transformation_up_{symbol}.pkl')
    # scaler = joblib.load(f'../{symbol}_models/scaler_{symbol}.pkl')
 
-    print('updated file path for CAD:', os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
-'''
+    print('updated file path for AUD:', os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
+
     clf = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
     pca = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/pca_transformation_up_{symbol}_60.pkl'))
     scaler = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/scaler_{symbol}.pkl'))
@@ -57,7 +57,7 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     probas = clf.predict_proba(X_new)
     
     return predictions, probas
-'''
+
 
 
 def make_predictions_dwn(symbol,new_data: pd.DataFrame) -> pd.Series:
