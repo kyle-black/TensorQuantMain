@@ -20,11 +20,13 @@ for pair in forex_pairs:
     
     module = __import__(pair + '.prediction_oop', fromlist=[pair])
    # module.runner(pair)
+    module.runner(pair)
     os.chdir(original_directory)
     print('second part:',os.getcwd())
 # Import the prediction_oop module from each forex pair's directory and run the runner function
 
-
+'''
 for pair in forex_pairs:
     module = __import__(pair + '.prediction_oop', fromlist=[pair])
     module.runner(pair)
+'''
