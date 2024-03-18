@@ -30,7 +30,7 @@ def make_predictions(symbol, new_data: pd.DataFrame) -> pd.Series:
     #clf = joblib.load(f'../{symbol}_models/random_forest_model_up_{symbol}.pkl')
     #pca = joblib.load(f'../{symbol}_models/pca_transformation_up_{symbol}.pkl')
     #scaler = joblib.load(f'../{symbol}_models/scaler_{symbol}.pkl')
-    print('updated file path for CAD:', os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
+    #print('updated file path for CAD:', os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
    
 
     clf = joblib.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'{symbol}_models/random_forest_model_up_{symbol}_60.pkl'))
