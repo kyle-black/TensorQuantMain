@@ -22,4 +22,4 @@ EXPOSE 80
 
 
 # Run prediction_oop.py when the container launches
-CMD ["python", "src/assets/forex/training/AUDUSD/prediction_oop.py"]
+CMD ["python", "src/assets/forex/training/AUDUSD/prediction_oop.py","src/assets/forex/training/USDCAD/prediction_oop.py"]

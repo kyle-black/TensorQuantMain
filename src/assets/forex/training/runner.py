@@ -1,3 +1,4 @@
+'''
 import os
 import sys
 
@@ -25,8 +26,24 @@ for pair in forex_pairs:
     print('second part:',os.getcwd())
 # Import the prediction_oop module from each forex pair's directory and run the runner function
 
-'''
+
 for pair in forex_pairs:
     module = __import__(pair + '.prediction_oop', fromlist=[pair])
     module.runner(pair)
 '''
+
+import subprocess
+
+
+# List of scripts to run
+scripts = [
+    "AUDUSD/prediction_oop.py",
+    "USDCAD/prediction_oop.py",
+]
+
+# Run each script in a separate subprocess
+processes = [subprocess.Popen(["python", script]) for script in scripts]
+
+# Wait for all processes to finish
+for process in processes:
+    process.wait()
