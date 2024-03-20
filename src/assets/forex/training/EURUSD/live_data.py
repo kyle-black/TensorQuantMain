@@ -78,12 +78,16 @@ def latest_data_60(security):
 
     nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
+
     df= nifty_index_data
 
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-   # json_str = df.to_string(orient='split')
-    url_connection.set(f'{security}_60m', nifty_index_data)
+    json_str = df.to_string(orient='split')
+    entries = url_connection.set(f'{security}_60m', json_str)
+
+    for entry in entries:
+        print('Redis update:',entry)
 
     return df
