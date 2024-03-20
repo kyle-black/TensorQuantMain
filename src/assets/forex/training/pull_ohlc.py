@@ -35,7 +35,7 @@ def latest_data_5(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    json_str = df.to_string(orient='split')
+    json_str = df.to_json(orient='split')
     url_connection.set(f'{security}_5m', json_str)
 
    
@@ -59,7 +59,7 @@ def latest_data_15(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    json_str = df.to_string(orient='split')
+    json_str = df.to_json(orient='split')
     url_connection.set(f'{security}_15m', json_str)
     
     return df
@@ -79,7 +79,7 @@ def latest_data_30(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    json_str = df.to_string(orient='split')
+    json_str = df.to_json(orient='split')
     url_connection.set(f'{security}_30m', json_str)
    
     return df
