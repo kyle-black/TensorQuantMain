@@ -139,7 +139,7 @@ def run_predictions(symbol):
     
     #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')
     #print(type(stock['Date'][0]))
-    '''
+    
     stock = stock.iloc[::]
     bar_creator = CreateBars(stock, symbol)
     
@@ -250,7 +250,7 @@ def run_predictions(symbol):
     for entry in entries:
         print('Redis update:',entry)
 
-'''
+
 
 
 if __name__ == "__main__":
