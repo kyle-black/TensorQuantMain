@@ -2,6 +2,8 @@ from tvDatafeed import TvDatafeed, Interval
 import pandas as pd
 import datetime
 import json
+import schedule
+import time
 #from redis_connect import url_connection
 
 
@@ -111,6 +113,23 @@ def latest_data_60(security):
 
 
 if __name__ == "__main__":
+
+    def job():
+        latest_data_60('EURUSD')
+        latest_data_60('AUDUSD')
+
+# Schedule the job every hour
+    schedule.every().hour.at(":00").do(job)
+
+# Main loop
+    while True:
+    # Run pending scheduled jobs
+        schedule.run_pending()
+        time.sleep(1)
+
+
+    '''
+
     latest_data_5('EURUSD')
     latest_data_15('EURUSD')
     latest_data_30('EURUSD')
@@ -135,5 +154,6 @@ if __name__ == "__main__":
     latest_data_15('USDCAD')
     latest_data_30('USDCAD')
     latest_data_60('USDCAD')
+    '''
     
     
