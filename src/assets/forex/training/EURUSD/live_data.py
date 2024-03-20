@@ -84,7 +84,9 @@ def latest_data_60(security):
     df =df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    json_str = df.to_string(orient='split')
+    #json_str = df.to_string(orient='split')
+    json_str = df.to_json(orient='split')
+    
     entries = url_connection.set(f'{security}_60m', json_str)
 
     for entry in entries:
