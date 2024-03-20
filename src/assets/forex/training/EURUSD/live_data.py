@@ -87,9 +87,9 @@ def latest_data_60(security):
     #json_str = df.to_string(orient='split')
     json_str = df.to_json(orient='split')
     
-    entries = url_connection.set(f'{security}_60m', json_str)
+    url_connection.set(f'{security}_60m', json_str)
 
-    for entry in entries:
-        print('Redis update:',entry)
+   # for entry in entries:
+   #     print('Redis update:',entry)
 
     return df
