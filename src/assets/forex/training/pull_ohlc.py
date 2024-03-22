@@ -99,16 +99,8 @@ def latest_data_60(security, window_length):
     df = df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    # Get the last date in the DataFrame
-    last_date = df['datetime']
-
-    # Add 48 hours to the last date
-    new_date = last_date + pd.Timedelta(hours=window_length)
-
-    # Add the new date to the DataFrame
-    
-    df['EndDate'] = new_date
-    #df = df.append({'EndDate': new_date}, ignore_index=True)
+    # Add the timedelta to every date in the DataFrame
+    df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
 
     json_str = df.to_json(orient='split')
     
