@@ -108,7 +108,7 @@ def latest_data_60(security, window_length):
     
     url_connection.set(f'{security}_60m', json_str)
 
-    return df
+    return df, nifty_index_data
 
 
 
