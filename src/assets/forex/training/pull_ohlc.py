@@ -145,15 +145,15 @@ if __name__ == "__main__":
         print(latest_data_60('EURUSD', window_length ))
         latest_data_60('AUDUSD', window_length)
 
-    job_60()
-# Schedule the job every hour
-   # schedule.every().hour.at(":00").do(job_60)
+    #job_60()
+    #Schedule the job every hour
+    schedule.every().hour.at(":00").do(job_60)
 
 # Main loop
-   # while True:
+    while True:
     # Run pending scheduled jobs
-    #    schedule.run_pending()
-     #   time.sleep(1)
+        schedule.run_pending()
+        time.sleep(1)
 
 
     '''
