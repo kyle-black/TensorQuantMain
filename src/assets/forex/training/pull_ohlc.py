@@ -102,7 +102,7 @@ def latest_data_60(security, window_length):
     # Add the timedelta to every date in the DataFrame
     df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
 
-    print('Input DF:', df)
+   # print('Input DF:', df)
 
     json_str = df.to_json(orient='split')
     
@@ -115,17 +115,18 @@ def latest_data_60(security, window_length):
 if __name__ == "__main__":
     window_length = 48
     def job_60():
-        latest_data_60('EURUSD', window_length )
+        print(latest_data_60('EURUSD', window_length ))
         latest_data_60('AUDUSD', window_length)
 
+    job_60()
 # Schedule the job every hour
-    schedule.every().hour.at(":00").do(job_60)
+   # schedule.every().hour.at(":00").do(job_60)
 
 # Main loop
-    while True:
+   # while True:
     # Run pending scheduled jobs
-        schedule.run_pending()
-        time.sleep(1)
+    #    schedule.run_pending()
+     #   time.sleep(1)
 
 
     '''
