@@ -19,71 +19,94 @@ url_connection = redis.from_url(REDIS_URL)
 
 
 
-
-def latest_data_5(security):
+def latest_data_5(security, window_length):
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
 
     tv = TvDatafeed(username, password)
 
-   
-    
-    
+    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
-    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_5_minute,n_bars=1000)
+    df = nifty_index_data
 
-    df= nifty_index_data
-
-    df =df.reset_index()
+    df = df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
+    # Add the timedelta to every date in the DataFrame
+    df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
+    
+    df['Date'] = df['Date'].dt.tz_localize('UTC')
+    df['EndDate'] = df['EndDate'].dt.tz_localize('UTC')
+
+    df['Date_unix'] = df['Date'].apply(lambda x: x.timestamp())
+    df['EndDate_unix'] = df['EndDate'].apply(lambda x: x.timestamp())
+
     json_str = df.to_json(orient='split')
+    
     url_connection.set(f'{security}_5m', json_str)
 
-   
     return df
 
 
-def latest_data_15(security):
+
+
+
+def latest_data_15(security, window_length):
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
 
     tv = TvDatafeed(username, password)
 
-  
-    
-    
+    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
-    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_15_minute,n_bars=1000)
+    df = nifty_index_data
 
-    df= nifty_index_data
-
-    df =df.reset_index()
+    df = df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    json_str = df.to_json(orient='split')
-    url_connection.set(f'{security}_15m', json_str)
+    # Add the timedelta to every date in the DataFrame
+    df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
     
+    df['Date'] = df['Date'].dt.tz_localize('UTC')
+    df['EndDate'] = df['EndDate'].dt.tz_localize('UTC')
+
+    df['Date_unix'] = df['Date'].apply(lambda x: x.timestamp())
+    df['EndDate_unix'] = df['EndDate'].apply(lambda x: x.timestamp())
+
+    json_str = df.to_json(orient='split')
+    
+    url_connection.set(f'{security}_5m', json_str)
+
     return df
 
 
-def latest_data_30(security):
+
+def latest_data_30(security, window_length):
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
 
     tv = TvDatafeed(username, password)
 
-   
-    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_30_minute,n_bars=1000)
+    nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
-    df= nifty_index_data
+    df = nifty_index_data
 
-    df =df.reset_index()
+    df = df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
+    # Add the timedelta to every date in the DataFrame
+    df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
+    
+    df['Date'] = df['Date'].dt.tz_localize('UTC')
+    df['EndDate'] = df['EndDate'].dt.tz_localize('UTC')
+
+    df['Date_unix'] = df['Date'].apply(lambda x: x.timestamp())
+    df['EndDate_unix'] = df['EndDate'].apply(lambda x: x.timestamp())
+
     json_str = df.to_json(orient='split')
+    
     url_connection.set(f'{security}_30m', json_str)
-   
+
     return df
 
 def latest_data_60(security, window_length):
@@ -112,7 +135,7 @@ def latest_data_60(security, window_length):
     
     url_connection.set(f'{security}_60m', json_str)
 
-    return df, nifty_index_data
+    return df
 
 
 
