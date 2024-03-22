@@ -133,8 +133,9 @@ class Model:
 def run_predictions(symbol):
     #symbol = 'USDCNH'
     #stock = get_data.get_json(symbol)
-
-    stock = live_data.latest_data_60(symbol)
+    window_length = 48
+    
+    stock = live_data.latest_data_60(symbol, window_length)
     #stock = pd.read_csv('data/SPY_new.csv')
     
     #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')

@@ -86,7 +86,7 @@ def latest_data_30(security):
    
     return df
 
-def latest_data_60(security):
+def latest_data_60(security, window_length):
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
 
@@ -94,19 +94,23 @@ def latest_data_60(security):
 
     nifty_index_data = tv.get_hist(symbol=f'{security}',exchange='OANDA',interval=Interval.in_1_hour,n_bars=1000)
 
+    df = nifty_index_data
 
-    df= nifty_index_data
-
-    df =df.reset_index()
+    df = df.reset_index()
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
-    #json_str = df.to_string(orient='split')
+    # Get the last date in the DataFrame
+    last_date = df['Date'].iloc[-1]
+
+    # Add 48 hours to the last date
+    new_date = last_date + pd.Timedelta(hours=window_length)
+
+    # Add the new date to the DataFrame
+    df = df.append({'EndDate': new_date}, ignore_index=True)
+
     json_str = df.to_json(orient='split')
     
     url_connection.set(f'{security}_60m', json_str)
-
-   # for entry in entries:
-   #     print('Redis update:',entry)
 
     return df
 
@@ -114,12 +118,12 @@ def latest_data_60(security):
 
 if __name__ == "__main__":
 
-    def job():
+    def job_60():
         latest_data_60('EURUSD')
         latest_data_60('AUDUSD')
 
 # Schedule the job every hour
-    schedule.every().hour.at(":00").do(job)
+    schedule.every().hour.at(":00").do(job_60)
 
 # Main loop
     while True:
