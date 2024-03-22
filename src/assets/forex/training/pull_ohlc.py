@@ -117,10 +117,10 @@ def latest_data_60(security, window_length):
 
 
 if __name__ == "__main__":
-
+    window_length = 48
     def job_60():
-        latest_data_60('EURUSD')
-        latest_data_60('AUDUSD')
+        latest_data_60('EURUSD', window_length )
+        latest_data_60('AUDUSD', window_length)
 
 # Schedule the job every hour
     schedule.every().hour.at(":00").do(job_60)

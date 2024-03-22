@@ -135,7 +135,7 @@ def run_predictions(symbol):
     #stock = get_data.get_json(symbol)
     window_length = 48
     
-    stock = live_data.latest_data_60(symbol, window_length)
+    stock = live_data.latest_data_60(symbol)
     #stock = pd.read_csv('data/SPY_new.csv')
     
     #stock['Date'] = stock['Date'].dt.strftime('%Y-%m-%d')
