@@ -102,14 +102,11 @@ def latest_data_60(security, window_length):
     # Add the timedelta to every date in the DataFrame
     df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
     
-    df['Date_unix'] = df['Date'].dt.tz_convert('UTC').dt.to_pydatetime().tolist()
-    df['Date_unix'] = df['Date_unix'].apply(lambda x: x.timestamp())
+    df['Date'] = df['Date'].dt.tz_localize('UTC')
+    df['EndDate'] = df['EndDate'].dt.tz_localize('UTC')
 
-    df['EndDate_unix'] = df['EndDate'].dt.tz_convert('UTC').dt.to_pydatetime().tolist()
-    df['EndDate_unix'] = df['EndDate_unix'].apply(lambda x: x.timestamp())
-
-
-   # print('Input DF:', df)
+    df['Date_unix'] = df['Date'].apply(lambda x: x.timestamp())
+    df['EndDate_unix'] = df['EndDate'].apply(lambda x: x.timestamp())
 
     json_str = df.to_json(orient='split')
     
