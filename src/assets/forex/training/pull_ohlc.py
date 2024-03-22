@@ -106,7 +106,9 @@ def latest_data_60(security, window_length):
     new_date = last_date + pd.Timedelta(hours=window_length)
 
     # Add the new date to the DataFrame
-    df = df.append({'EndDate': new_date}, ignore_index=True)
+    
+    df['EndDate'] = new_date
+    #df = df.append({'EndDate': new_date}, ignore_index=True)
 
     json_str = df.to_json(orient='split')
     
