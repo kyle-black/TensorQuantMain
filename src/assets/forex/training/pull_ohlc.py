@@ -102,6 +102,8 @@ def latest_data_60(security, window_length):
     # Add the timedelta to every date in the DataFrame
     df['EndDate'] = df['Date'] + pd.Timedelta(hours=window_length)
 
+    print('Input DF:', df)
+
     json_str = df.to_json(orient='split')
     
     url_connection.set(f'{security}_60m', json_str)
