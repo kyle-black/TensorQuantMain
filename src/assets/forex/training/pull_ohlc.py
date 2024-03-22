@@ -100,7 +100,7 @@ def latest_data_60(security, window_length):
     df.rename(columns = {'datetime':'Date','open': 'Open', 'high':'High', 'low':'Low', 'close':'Close','volume':'Volume'}, inplace=True)
 
     # Get the last date in the DataFrame
-    last_date = df['Date'].iloc[-1]
+    last_date = df['Date']
 
     # Add 48 hours to the last date
     new_date = last_date + pd.Timedelta(hours=window_length)
