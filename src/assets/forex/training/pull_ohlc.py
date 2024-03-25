@@ -141,12 +141,38 @@ def latest_data_60(security, window_length):
 
 if __name__ == "__main__":
     window_length = 48
+
+    def job_5():
+        latest_data_5('EURUSD', window_length)
+        latest_data_5('AUDUSD', window_length)
+
+    def job_15():
+        latest_data_15('EURUSD', window_length)
+        latest_data_15('AUDUSD', window_length)
+
+
+    def job_30():
+        latest_data_30('EURUSD', window_length)
+        latest_data_30('AUDUSD', window_length)
     def job_60():
-        print(latest_data_60('EURUSD', window_length ))
+        latest_data_60('EURUSD', window_length )
         latest_data_60('AUDUSD', window_length)
 
     #job_60()
+        
+    #Schedule the minute jobs
+    
+    
+    schedule.every().minute.at(":05").do(job_5)
+    
+    schedule.every().minute.at(":15").do(job_15)
+
+    schedule.every().minute.at(":30").do(job_30)
+    
+    
     #Schedule the job every hour
+    
+    
     schedule.every().hour.at(":00").do(job_60)
 
 # Main loop
