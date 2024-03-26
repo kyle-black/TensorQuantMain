@@ -39,7 +39,7 @@ import subprocess
 scripts = [
    "/app/AUDUSD/prediction_oop.py",
    "/app/EURUSD/prediction_oop.py",
-   "/app/pull_ohlc.py"
+  # "/app/pull_ohlc.py"
    
     
 ]
