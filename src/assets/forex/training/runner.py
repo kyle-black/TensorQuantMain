@@ -37,9 +37,9 @@ import subprocess
 
 # List of scripts to run
 scripts = [
-   "/app/AUDUSD/prediction_oop.py",
-   "/app/EURUSD/prediction_oop.py",
-  # "/app/pull_ohlc.py"
+   "AUDUSD/prediction_oop.py",
+   "EURUSD/prediction_oop.py",
+    "pull_ohlc.py"
    
     
 ]
