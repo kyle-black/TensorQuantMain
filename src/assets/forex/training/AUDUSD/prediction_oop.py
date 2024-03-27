@@ -258,7 +258,8 @@ if __name__ == "__main__":
     
         def runner(symbol):
                 run_predictions(symbol)
-                schedule.every(1).minutes.do(lambda: run_predictions(symbol))
+                schedule.every().hour.at(":01").do(lambda: run_predictions(symbol))
+                #schedule.every(1).minutes.do(lambda: run_predictions(symbol))
 
                 while True:
                         schedule.run_pending()
