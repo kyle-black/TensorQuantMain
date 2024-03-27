@@ -33,8 +33,12 @@ for pair in forex_pairs:
 '''
 
 import subprocess
+import os
 
+# Print the current working directory
+print("Current working directory:", os.getcwd())
 
+'''
 # List of scripts to run
 scripts = [
    "AUDUSD/prediction_oop.py",
@@ -50,3 +54,4 @@ processes = [subprocess.Popen(["python", script]) for script in scripts]
 # Wait for all processes to finish
 for process in processes:
     process.wait()
+'''
