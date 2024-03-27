@@ -38,12 +38,12 @@ import os
 # Print the current working directory
 print("Current working directory:", os.getcwd())
 
-'''
+
 # List of scripts to run
 scripts = [
-   "AUDUSD/prediction_oop.py",
-   "EURUSD/prediction_oop.py",
-    "pull_ohlc.py"
+   "src/assets/forex/training/AUDUSD/prediction_oop.py",
+   "src/assets/forex/training/EURUSD/prediction_oop.py",
+    "src/assets/forex/training/pull_ohlc.py"
    
     
 ]
@@ -54,4 +54,3 @@ processes = [subprocess.Popen(["python", script]) for script in scripts]
 # Wait for all processes to finish
 for process in processes:
     process.wait()
-'''
