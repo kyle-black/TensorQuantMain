@@ -145,18 +145,22 @@ if __name__ == "__main__":
     def job_5():
         latest_data_5('EURUSD', window_length)
         latest_data_5('AUDUSD', window_length)
+        latest_data_5('USDCAD', window_length)
 
     def job_15():
         latest_data_15('EURUSD', window_length)
         latest_data_15('AUDUSD', window_length)
+        latest_data_15('USDCAD', window_length)
 
 
     def job_30():
         latest_data_30('EURUSD', window_length)
         latest_data_30('AUDUSD', window_length)
+        latest_data_30('USDCAD', window_length)
     def job_60():
         latest_data_60('EURUSD', window_length )
         latest_data_60('AUDUSD', window_length)
+        latest_data_60('USDCAD', window_length)
 
     #job_60()
         

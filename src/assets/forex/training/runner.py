@@ -43,6 +43,8 @@ print("Current working directory:", os.getcwd())
 scripts = [
    "src/assets/forex/training/AUDUSD/prediction_oop.py",
    "src/assets/forex/training/EURUSD/prediction_oop.py",
+   "src/assets/forex/training/USDCAD/prediction_oop.py",
+   
     "src/assets/forex/training/pull_ohlc.py"
    
     
