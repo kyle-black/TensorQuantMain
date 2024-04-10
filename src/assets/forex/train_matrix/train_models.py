@@ -32,6 +32,7 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from keras.layers import Dropout
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
 
@@ -1037,9 +1038,14 @@ def neural_network_classifier(df, asset, epochs=100):
     y_test = lb.transform(y_test)
 
     # Define the model
+    # Define the model
     model = Sequential()
-    model.add(Dense(32, input_dim=X_train.shape[1], activation='relu'))  # Input layer
-    model.add(Dense(16, activation='relu'))  # Hidden layer
+    model.add(Dense(64, input_dim=X_train.shape[1], activation='relu'))  # Input layer
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(32, activation='relu'))  # Hidden layer 1
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(16, activation='relu'))  # Hidden layer 2
+    model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
 
     # Compile the model
