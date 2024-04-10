@@ -40,6 +40,12 @@ from keras.layers import Dense, Dropout
 from keras.utils import to_categorical
 from keras.optimizers import Adam
 import tensorflow as tf
+import os 
+
+os.environ['PYTHONHASHSEED']=str(0)
+random.seed(0)
+np.random.seed(0)
+tf.random.set_seed(0)
 
     # You might want to return something from this function, like t
   
@@ -942,8 +948,7 @@ def neural_network_cnn(df, asset):
 
 def neural_network_classifier(df, asset, epochs=200):
 
-    np.random.seed(0)
-    tf.random.set_seed(0)
+   
     
     
     if asset is not None:
