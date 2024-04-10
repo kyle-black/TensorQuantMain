@@ -36,7 +36,7 @@ from tensorflow.keras.utils import to_categorical
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
-from keras.scikit_learn import KerasClassifier
+
 from scikeras.wrappers import KerasClassifier
 from keras.utils import to_categorical
 
