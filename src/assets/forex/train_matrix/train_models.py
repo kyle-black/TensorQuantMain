@@ -947,7 +947,7 @@ def neural_network_cnn(df, asset):
 
 
 
-def neural_network_classifier(df, asset, epochs=200):
+def neural_network_classifier(df, asset, epochs=100):
 
    
     
@@ -1045,6 +1045,9 @@ def neural_network_classifier(df, asset, epochs=200):
 
     # Define the model
     # Define the model
+    '''
+    #Model 1
+
     model = Sequential()
     model.add(Dense(64, input_dim=X_train.shape[1], activation='relu'))  # Input layer
     model.add(Dropout(0.5))  # Dropout layer
@@ -1053,6 +1056,20 @@ def neural_network_classifier(df, asset, epochs=200):
     model.add(Dense(16, activation='relu'))  # Hidden layer 2
     model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
+    '''
+
+    model = Sequential()
+    model.add(Dense(128, input_dim=X_train.shape[1], activation='relu'))  # Input layer
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(64, activation='relu'))  # Hidden layer 1
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(32, activation='relu'))  # Hidden layer 2
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(16, activation='relu'))  # Hidden layer 3
+    model.add(Dropout(0.5))  # Dropout layer
+    model.add(Dense(3, activation='softmax'))  # Output layer
+    
+
 
     # Compile the model
     model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['categorical_accuracy'])
