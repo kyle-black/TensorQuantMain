@@ -942,7 +942,7 @@ def neural_network_cnn(df, asset):
 
 
 
-def neural_network_classifier(df, asset, epochs=10):
+def neural_network_classifier(df, asset, epochs=100):
     
     
     if asset is not None:
