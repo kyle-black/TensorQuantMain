@@ -1046,7 +1046,7 @@ def neural_network_classifier(df, asset, epochs=100):
     model.add(Dense(3, activation='softmax'))  # Output layer
 
     # Compile the model
-    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['categorical_accuracy'])
 
     # Fit the model
     model.fit(X_train, y_train, epochs=epochs, verbose=1)
