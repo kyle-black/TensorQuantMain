@@ -1053,7 +1053,7 @@ def neural_network_classifier(df, asset, epochs=10):
     print('Test Accuracy: %.2f' % (accuracy*100))
 
     # Predict probabilities
-    probas = model.predict_proba(X_test)
+    probas = model.predict(X_test)
 
     # Convert probabilities to class labels
     y_pred = lb.inverse_transform(probas)
