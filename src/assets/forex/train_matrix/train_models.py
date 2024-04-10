@@ -940,7 +940,7 @@ def neural_network_cnn(df, asset):
 
 
 
-def neural_network_classifier(df, asset, epochs=100):
+def neural_network_classifier(df, asset, epochs=200):
 
     np.random.seed(0)
     tf.random.set_seed(0)
