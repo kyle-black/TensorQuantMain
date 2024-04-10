@@ -221,7 +221,7 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
 
     print('dataframeindex:', df.index)
     # Compute rolling daily volatility
-    rolling_window = 72 # Example window size, you can adjust this
+    rolling_window = 140 # Example window size, you can adjust this
     daily_volatility = df[close].pct_change().rolling(window=rolling_window).std()
 
     barriers = pd.DataFrame(index=df.index)

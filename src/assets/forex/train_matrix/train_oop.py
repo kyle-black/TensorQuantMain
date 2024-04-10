@@ -148,7 +148,7 @@ class Model:
 
 
 if __name__ == "__main__":
-    
+    '''
     asset ='EURUSD_60'
     
     stock = pd.read_csv('matrix.csv')
@@ -191,9 +191,9 @@ if __name__ == "__main__":
     
     
     print(label_instance_)
-    
-   
-    
+    '''
+    label_instance_ = pd.read_csv('sanity_check.csv')
+    asset ='EURUSD_60'
     
 
     model =Model(label_instance_, asset)
