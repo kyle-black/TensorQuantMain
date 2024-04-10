@@ -1096,6 +1096,9 @@ def neural_network_classifier(df, asset, epochs=10):
    # max_proba_indices= np.where(max_proba_indices==1,2,max_proba_indices)
    # predicted_classes = clf.classes_[max_proba_indices]
    # y_pred = predicted_classes
+    # Convert probabilities to class labels
+    y_pred = np.argmax(probas, axis=1)
+    y_test = np.argmax(y_test, axis=1)
 
     
 
