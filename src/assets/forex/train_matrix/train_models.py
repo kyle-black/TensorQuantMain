@@ -39,7 +39,7 @@ from keras.layers import Dense, Dropout
 
 from keras.utils import to_categorical
 from keras.optimizers import Adam
-
+import tensorflow as tf
 
     # You might want to return something from this function, like t
   
