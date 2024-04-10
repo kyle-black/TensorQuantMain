@@ -177,7 +177,7 @@ if __name__ == "__main__":
     print(dollar_bars_df.columns)
     
     
-    feature_instance_ = FeatureMaker(dollar_bars_df, 48, asset)
+    feature_instance_ = FeatureMaker(dollar_bars_df, 120, asset)
     
     feature_bars =feature_instance_.feature_add()
     print(feature_bars.columns)
