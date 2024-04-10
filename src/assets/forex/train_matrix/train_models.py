@@ -41,6 +41,7 @@ from keras.utils import to_categorical
 from keras.optimizers import Adam
 import tensorflow as tf
 import os 
+import random
 
 os.environ['PYTHONHASHSEED']=str(0)
 random.seed(0)
