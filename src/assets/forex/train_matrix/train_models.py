@@ -31,14 +31,14 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 #import neuralnet
-#from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.utils import to_categorical
 
 
-#from keras.models import Sequential
-#from keras.layers import Dense, Dropout
-#from keras.scikit_learn import KerasClassifier
-#from scikeras.wrappers import KerasClassifier
-#from keras.utils import to_categorical
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.scikit_learn import KerasClassifier
+from scikeras.wrappers import KerasClassifier
+from keras.utils import to_categorical
 
 
     # You might want to return something from this function, like t
@@ -939,7 +939,7 @@ def neural_network_cnn(df, asset):
         print(actual, prediction, dwn, neutral,up)
 
 
-'''
+
 def neural_network_classifier(df, asset, epochs=100):
     
     
@@ -1178,4 +1178,3 @@ def neural_network_classifier(df, asset, epochs=100):
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
-'''
