@@ -11,7 +11,7 @@ from scipy.stats import norm
 from statsmodels.tsa.stattools import adfuller
 import barriers
 import features
-from train_models import random_forest_classifier,neural_network_classifier, neural_network_c, neural_network_cnn #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
+from train_models import random_forest_classifier #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
 from weights import return_attribution
 
 from autocorrelation import compute_and_plot_acf
@@ -125,8 +125,8 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        #output =random_forest_classifier(self.bars_df, self.asset)
-        output = neural_network_classifier(self.bars_df,self.asset)
+        output =random_forest_classifier(self.bars_df, self.asset)
+        #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
         return output
     
@@ -149,7 +149,7 @@ class Model:
 
 if __name__ == "__main__":
     
-    asset ='GBPUSD_60'
+    asset ='EURUSD_60'
     
     stock = pd.read_csv('matrix.csv')
     stock.dropna(inplace=True)

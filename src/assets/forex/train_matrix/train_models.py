@@ -25,14 +25,11 @@ from sklearn.metrics import brier_score_loss
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import AdaBoostClassifier
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.optimizers import Adam
+
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from keras.layers import Dropout
+
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
 
@@ -153,7 +150,7 @@ def random_forest_classifier(df, asset):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=20, n_estimators=5000)
+    clf =RandomForestClassifier( random_state=20, n_estimators=10000, class_weight='balanced')
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
     clf.fit(X_train, y_train, sample_weight=weight_data)
@@ -942,7 +939,7 @@ def neural_network_cnn(df, asset):
         print(actual, prediction, dwn, neutral,up)
 
 
-
+'''
 def neural_network_classifier(df, asset, epochs=100):
     
     
@@ -1181,3 +1178,4 @@ def neural_network_classifier(df, asset, epochs=100):
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
+'''
