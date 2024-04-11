@@ -154,7 +154,7 @@ def random_forest_classifier(df, asset, lookback):
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
 
-    X_train.to_csv('X_train.csv')
+   # X_train.to_csv('X_train.csv')
     
     X_test = pca.transform(X_test)
 
