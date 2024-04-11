@@ -206,7 +206,7 @@ if __name__ == "__main__":
     asset ='EURUSD_60'
     
 
-    model =Model(label_instance_, asset)
+    model =Model(label_instance_, asset, lookback=72)
     
     print(model.train_model())
     
