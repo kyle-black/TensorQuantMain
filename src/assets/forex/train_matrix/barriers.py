@@ -221,7 +221,7 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
 
     print('dataframeindex:', df.index)
     # Compute rolling daily volatility
-    rolling_window = 48 # Example window size, you can adjust this
+    rolling_window = 72 # Example window size, you can adjust this
     daily_volatility = df[close].pct_change().rolling(window=rolling_window).std()
 
     barriers = pd.DataFrame(index=df.index)
@@ -257,7 +257,7 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
             barriers.at[timestamp, 'label'] = 0 
 
     df_merged = df.join(barriers, how='left')
-    df_merged.to_csv('sanity_check.csv')
+    df_merged.to_csv('sanity_check_72.csv')
     return df_merged
 
 def apply_triple_barrier_P(df, pt_sl, num_days_active):

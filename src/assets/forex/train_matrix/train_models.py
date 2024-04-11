@@ -1045,7 +1045,7 @@ def neural_network_classifier(df, asset, epochs=100):
 
     # Define the model
     # Define the model
-    '''
+    
     #Model 1
 
     model = Sequential()
@@ -1057,7 +1057,7 @@ def neural_network_classifier(df, asset, epochs=100):
     model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
     '''
-
+    Model 2
     model = Sequential()
     model.add(Dense(128, input_dim=X_train.shape[1], activation='relu'))  # Input layer
     model.add(Dropout(0.5))  # Dropout layer
@@ -1069,7 +1069,7 @@ def neural_network_classifier(df, asset, epochs=100):
     model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
     
-
+    '''
 
     # Compile the model
     model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['categorical_accuracy'])
