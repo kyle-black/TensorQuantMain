@@ -31,22 +31,22 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
 #import neuralnet
-from tensorflow.keras.utils import to_categorical
+#from tensorflow.keras.utils import to_categorical
 
 
-from keras.models import Sequential
-from keras.layers import Dense, Dropout
+#from keras.models import Sequential
+#from keras.layers import Dense, Dropout
 
-from keras.utils import to_categorical
-from keras.optimizers import Adam
-import tensorflow as tf
+#from keras.utils import to_categorical
+#from keras.optimizers import Adam
+#import tensorflow as tf
 import os 
 import random
 
-os.environ['PYTHONHASHSEED']=str(0)
-random.seed(0)
-np.random.seed(0)
-tf.random.set_seed(0)
+#os.environ['PYTHONHASHSEED']=str(0)
+#random.seed(0)
+#np.random.seed(0)
+#tf.random.set_seed(0)
 
     # You might want to return something from this function, like t
   
