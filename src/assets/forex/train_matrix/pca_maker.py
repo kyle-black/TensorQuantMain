@@ -1,5 +1,6 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import pandas as pd
 
 
 
@@ -8,6 +9,11 @@ def pca_(df,lookback):
    # feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
     #                    'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI','SpreadOC','SpreadLH']
     
+    target_df = df.copy()
+
+    target_df = target_df[['upper_barrier','lower_barrier','t1','touch_upper','touch_lower','label']]
+
+
     feature_cols =['Open', 'High', 'Low', 'Close', 'USDCNH_60_Open', 'USDCNH_60_High',
        'USDCNH_60_Low', 'USDCNH_60_Close', 'USDCNH_60_Volume',
        'USDCNH_60_Volume_MA', 'NATGAS_60_Open', 'NATGAS_60_High',
@@ -46,8 +52,20 @@ def pca_(df,lookback):
 
     # Fit PCA without specifying the number of components
     pca = PCA(n_components=20)
-    df =pca.fit(X_standardized)
+    pca.fit(X_standardized)
+
+    X_pca = pca.transform(X_standardized)
+
+    # Convert the transformed data into a DataFrame
+   # df_pca = pd.DataFrame(data = X_pca)
+
+
+     # Convert the transformed data into a DataFrame
+    df_pca = pd.DataFrame(data = X_pca, index=df.index[lookback:])
+
+    # Combine the PCA DataFrame with the original DataFrame
+    df_combined = pd.concat([target_df[lookback:], df_pca], axis=1)
     
 
     
-    return df
+    return df_combined
