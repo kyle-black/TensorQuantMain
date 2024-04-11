@@ -11,7 +11,7 @@ from scipy.stats import norm
 from statsmodels.tsa.stattools import adfuller
 import barriers
 import features
-from train_models import random_forest_classifier #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
+#from train_models import random_forest_classifier #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
 from weights import return_attribution
 #from train_models import neural_network_classifier
 
@@ -112,10 +112,7 @@ class Labeling:
         weights = return_attribution(self.triple_result)
         return weights
     
-    def add_pca(self):
-        self.triple_result = self.triple_barriers()
-        pca_df = pca_(self.triple_result, 72)
-        return pca_df
+    
 
 
     
@@ -130,14 +127,14 @@ class Model:
         self.asset = asset
         #self.weights =weights
 
-    def train_model(self):
+    #def train_model(self):
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =random_forest_classifier(self.bars_df, self.asset)
+       # output =random_forest_classifier(self.bars_df, self.asset)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
-        return output
+       # return output
     
    
 
@@ -157,7 +154,7 @@ class Model:
 
 
 if __name__ == "__main__":
-    ''''
+    '''
     asset ='EURUSD_60'
 
     lookback =72
@@ -198,8 +195,8 @@ if __name__ == "__main__":
     
     
     label_instance_ =Labeling(feature_bars, asset)
-    #label_instance_ = label_instance_.triple_barriers()
-    label_instance_ = label_instance_.add_pca()
+    label_instance_ = label_instance_.triple_barriers()
+   # label_instance_ = label_instance_.add_pca()
     
     label_instance_.to_csv('labelinstance.csv')
     print(label_instance_)

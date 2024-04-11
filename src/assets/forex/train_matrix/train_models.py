@@ -51,7 +51,7 @@ tf.random.set_seed(0)
     # You might want to return something from this function, like t
   
 
-def random_forest_classifier(df, asset):
+def random_forest_classifier(df, asset, lookback):
     
     
     if asset is not None:
@@ -65,7 +65,7 @@ def random_forest_classifier(df, asset):
     
     df = df.drop(columns=['touch_lower', 'touch_upper'])
     df = df.dropna(how='all')
-    df = df[60:]
+    df = df[lookback:]
     
     # Splitting data
 
@@ -82,7 +82,7 @@ def random_forest_classifier(df, asset):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop(['weekday', 'hour', 'upper_barrier', 'lower_barrier', 't1'], axis =1)
+    df =df.drop([ 'upper_barrier', 'lower_barrier', 't1'], axis =1)
 
     #df = df.drop(['datetime'])
    # print('dropcols:',dropcols)
@@ -153,6 +153,9 @@ def random_forest_classifier(df, asset):
     # Apply PCA
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
+
+    X_train.to_csv('X_train.csv')
+    
     X_test = pca.transform(X_test)
 
     # Initialize GridSearchCV
