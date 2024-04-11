@@ -131,7 +131,7 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =random_forest_classifier(self.bars_df, self.asset)
+        output =random_forest_classifier(self.bars_df, self.asset, lookback =72)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
         return output
@@ -206,7 +206,7 @@ if __name__ == "__main__":
     asset ='EURUSD_60'
     
 
-    model =Model(label_instance_, asset, lookback=72)
+    model =Model(label_instance_, asset)
     
     print(model.train_model())
     
