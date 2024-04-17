@@ -93,3 +93,8 @@ def latest_data_60(security):
    #     print('Redis update:',entry)
 
     return df
+
+
+
+if __name__ in "__main__":
+    print(latest_data_60('EURUSD'))

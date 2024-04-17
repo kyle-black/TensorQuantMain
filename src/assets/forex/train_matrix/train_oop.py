@@ -11,7 +11,7 @@ from scipy.stats import norm
 from statsmodels.tsa.stattools import adfuller
 import barriers
 import features
-#from train_models import random_forest_classifier #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
+from train_models import random_forest_classifier #, support_vector_classifier #, adaboost_classifier, random_forest_ts #, random_forest_anomaly_detector
 from weights import return_attribution
 #from train_models import neural_network_classifier
 
@@ -43,7 +43,7 @@ class CreateBars:
         # Check if time_bar_df has been created, if not, create it
         if self.time_bar_df is None:
             self.time_bars()
-        return bc.get_dollar_bars(self.time_bar_df, 7000, self.asset)
+        return bc.get_dollar_bars(self.time_bar_df, 200000, self.asset)
     
     
 class Analysis:
@@ -201,7 +201,7 @@ if __name__ == "__main__":
     label_instance_.to_csv('labelinstance.csv')
     print(label_instance_)
     print(label_instance_.columns)
-    '''
+    
     label_instance_ = pd.read_csv('labelinstance.csv')
     asset ='EURUSD_60'
     
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     model =Model(label_instance_, asset)
     
     print(model.train_model())
-    '''
+    
     
     
 

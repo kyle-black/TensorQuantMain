@@ -35,4 +35,8 @@ def get_json(symbol):
 #print(x)
 
 
+if __name__ in "__main__":
+    print(get_json('EURUSD'))
+
+
 
