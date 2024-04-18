@@ -189,6 +189,14 @@ if __name__ == "__main__":
     feature_bars =feature_instance_.feature_add()
     print(feature_bars.columns)
 
+
+    analysis_df = Analysis(dollar_bars_df)
+
+    analysis_df.std_dev()
+    analysis_df.jaque_bera()
+    analysis_df.AD_fuller()
+    analysis_df.acf()
+
     feature_bars.to_csv('feature_bars.csv')
     
     feature_instance_.elbow_()

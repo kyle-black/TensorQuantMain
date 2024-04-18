@@ -12,8 +12,10 @@ def pca_(df,lookback):
     target_df = df.copy()
 
     target_df = target_df[['upper_barrier','lower_barrier','t1','touch_upper','touch_lower','label']]
+    
 
-
+    feature_cols = target_df.drop(['upper_barrier','lower_barrier','t1','touch_upper','touch_lower','label'], axis=1)
+    '''
     feature_cols =['Open', 'High', 'Low', 'Close', 'USDCNH_60_Open', 'USDCNH_60_High',
        'USDCNH_60_Low', 'USDCNH_60_Close', 'USDCNH_60_Volume',
        'USDCNH_60_Volume_MA', 'NATGAS_60_Open', 'NATGAS_60_High',
@@ -42,6 +44,7 @@ def pca_(df,lookback):
        'USDHKD_60_Volume', 'USDHKD_60_Volume_MA', 'day_of_year', 'sine_date','Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
        'Log_Returns', 'SpreadOC', 'SpreadLH', 'MACD', 'Signal_Line_MACD',
        'RSI', 'SMI']
+      '''
        
     #new_df = df.drop(feature_cols)
     X = df[feature_cols]
