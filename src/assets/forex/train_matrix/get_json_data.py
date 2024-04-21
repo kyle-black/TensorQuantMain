@@ -2,6 +2,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 def get_json_from_url(symbol_list):
     start_date = datetime.strptime('2010-01-01', '%Y-%m-%d')
@@ -46,12 +47,16 @@ def get_json_from_url(symbol_list):
                 execution_counter = 0
 
 
+def main(symbol_list):
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        executor.map(get_json_from_url, symbol_list)
 
 
 
 if __name__ == "__main__":
-    get_json_from_url(symbol_list=['EURUSD','GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
+   #get_json_from_url(symbol_list=['EURUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
 
 
-
+    symbol_list = ['EURUSD']
+    main(symbol_list)
   
