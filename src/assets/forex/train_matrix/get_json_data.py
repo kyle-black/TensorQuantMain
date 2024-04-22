@@ -57,6 +57,6 @@ if __name__ == "__main__":
    #get_json_from_url(symbol_list=['EURUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
 
 
-    symbol_list = ['EURUSD']
+    symbol_list = ['EURUSD','GBPUSD']
     main(symbol_list)
   
