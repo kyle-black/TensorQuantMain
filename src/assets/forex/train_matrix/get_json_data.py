@@ -13,7 +13,7 @@ def get_json_from_url(symbol):
     end_date = start_date + timedelta(days=10)
     final_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
 
-    execution_counter = 0
+    global execution_counter
 
     #for symbol in symbol_list:
     while start_date <= final_date:
