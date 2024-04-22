@@ -3,6 +3,10 @@ import json
 from datetime import datetime, timedelta
 import time
 from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Value
+
+
+execution_counter = Value('i', 0)
 
 def get_json_from_url(symbol):
     start_date = datetime.strptime('2010-01-01', '%Y-%m-%d')
@@ -39,12 +43,15 @@ def get_json_from_url(symbol):
         end_date += timedelta(days=10)
 
         # Increment execution counter
-        execution_counter += 1
+        # Increment execution counter
+        with execution_counter.get_lock():
+            execution_counter.value += 1
 
-        # If execution counter hits 240, pause for 60 seconds and reset counter
-        if execution_counter >= 240:
-            time.sleep(60)
-            execution_counter = 0
+            # If execution counter hits 240, pause for 60 seconds and reset counter
+            if execution_counter.value >= 240:
+                time.sleep(60)
+                execution_counter.value = 0
+
 
 
 def main(symbol_list):
