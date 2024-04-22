@@ -48,7 +48,7 @@ def get_json_from_url(symbol_list):
 
 
 def main(symbol_list):
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=20) as executor:
         executor.map(get_json_from_url, symbol_list)
 
 
