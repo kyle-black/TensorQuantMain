@@ -14,4 +14,4 @@ df = df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low
 print(df)
 
 #df = pd.read_json('updated_data/EURUSD.json')
-df.to_csv('updated_data/EURUSD.json')
+df.to_csv('updated_data/EURUSD.csv')
