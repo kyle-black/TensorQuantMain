@@ -165,19 +165,19 @@ if __name__ == "__main__":
     stock.dropna(inplace=True)
 
 
-    print(stock.info(memory_usage='deep'))
+   # print(stock.info(memory_usage='deep'))
    
   
     
     
-    '''
+    
     bar_creator = CreateBars(stock, asset)
    
     
     
     time_bars_df = bar_creator.time_bars()
 
-    print(time_bars_df)
+    print(time_bars_df.tail())
     
     dollar_bars_df = bar_creator.dollar_bars()
 
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     model =Model(label_instance_, asset)
     
     print(model.train_model())
-    '''
+    
     
     
     
