@@ -173,7 +173,7 @@ if __name__ == "__main__":
     
     time_bars_df = bar_creator.time_bars()
 
-    print(time_bars_df)
+   # print(time_bars_df)
 
     dollar_bars_df = bar_creator.dollar_bars()
 
