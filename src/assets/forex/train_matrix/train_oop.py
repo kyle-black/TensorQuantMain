@@ -160,13 +160,17 @@ if __name__ == "__main__":
     lookback =72
     
     stock = pd.read_csv('updated_data/EURUSD.csv')
+
+
     stock.dropna(inplace=True)
 
+
+    print(stock.info(memory_usage='deep'))
    
   
     
     
-    
+    '''
     bar_creator = CreateBars(stock, asset)
    
     
@@ -219,7 +223,7 @@ if __name__ == "__main__":
     model =Model(label_instance_, asset)
     
     print(model.train_model())
-    
+    '''
     
     
     
