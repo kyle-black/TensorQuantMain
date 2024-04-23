@@ -9,7 +9,7 @@ from multiprocessing import Value
 execution_counter = Value('i', 0)
 
 def get_json_from_url(symbol):
-    start_date = datetime.strptime('2019-01-01', '%Y-%m-%d')
+    start_date = datetime.strptime('2010-01-01', '%Y-%m-%d')
     end_date = start_date + timedelta(days=10)
     final_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
 
@@ -49,7 +49,7 @@ def get_json_from_url(symbol):
 
             # If execution counter hits 240, pause for 60 seconds and reset counter
             if execution_counter.value >= 240:
-                time.sleep(60)
+                time.sleep(10)
                 execution_counter.value = 0
 
 
@@ -64,6 +64,6 @@ if __name__ == "__main__":
    #get_json_from_url(symbol_list=['EURUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
 
 
-    symbol_list = ['EURUSD','GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
+    symbol_list = ['EURUSD','GBPUSD']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
     main(symbol_list)
   
