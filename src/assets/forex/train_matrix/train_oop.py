@@ -182,8 +182,10 @@ if __name__ == "__main__":
     #dollar_bars_df.to_csv('dollar_bars.csv')
 
     print(dollar_bars_df.columns)
+
+    dollar_bars_df.to_csv('dollar_bars.csv')
     
-    
+    '''
     feature_instance_ = FeatureMaker(dollar_bars_df, 72, asset)
     
     feature_bars =feature_instance_.feature_add()
@@ -217,6 +219,7 @@ if __name__ == "__main__":
     model =Model(label_instance_, asset)
     
     print(model.train_model())
+    '''
     
     
     
