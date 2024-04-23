@@ -10,6 +10,8 @@ df['date'] = df['date'].apply(lambda x: x.timestamp())
 df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low', 'close':'Close', 'volume':'Volume'}, inplace=True)
 
 #print(df)
+# Set 'Date' as the index
+df.set_index('Date', inplace=True)
 
 print(df)
 
