@@ -7,7 +7,7 @@ df = pd.read_json('updated_data/EURUSD.json')
 df['date'] = pd.to_datetime(df['date'])
 df['date'] = df['date'].apply(lambda x: x.timestamp())
 # Rename columns
-df = df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low', 'close':'Close', 'volume':'Volume'}, inplace=True)
+df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low', 'close':'Close', 'volume':'Volume'}, inplace=True)
 
 #print(df)
 
