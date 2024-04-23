@@ -163,6 +163,7 @@ if __name__ == "__main__":
 
 
     stock.dropna(inplace=True)
+    stock = stock.loc[~stock.index.duplicated(keep='first')]
 
 
    # print(stock.info(memory_usage='deep'))
