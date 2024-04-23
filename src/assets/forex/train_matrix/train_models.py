@@ -59,8 +59,8 @@ def random_forest_classifier(df, asset, lookback):
     
 
     # Data Preprocessing
-    start_date = pd.to_datetime('2003-02-02')
-    end_date = pd.to_datetime('2016-01-02')
+    start_date = pd.to_datetime('2010-01-01')
+    end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
     
     df = df.drop(columns=['touch_lower', 'touch_upper'])
@@ -160,7 +160,7 @@ def random_forest_classifier(df, asset, lookback):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=20, n_estimators=10000, class_weight='balanced')
+    clf =RandomForestClassifier( random_state=20, n_estimators=1000, class_weight='balanced')
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
     clf.fit(X_train, y_train, sample_weight=weight_data)

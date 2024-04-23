@@ -43,7 +43,7 @@ class CreateBars:
         # Check if time_bar_df has been created, if not, create it
         if self.time_bar_df is None:
             self.time_bars()
-        return bc.get_dollar_bars(self.time_bar_df, 200000, self.asset)
+        return bc.get_dollar_bars(self.time_bar_df, 1000, self.asset)
     
     
 class Analysis:
@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
     lookback =72
     
-    stock = pd.read_csv('matrix.csv')
+    stock = pd.read_csv('updated_data/EURUSD.csv')
     stock.dropna(inplace=True)
 
    
