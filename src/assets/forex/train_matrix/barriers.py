@@ -211,8 +211,8 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
 
 
 
-    df = df.loc[~df.index.duplicated(keep='first')]
-    df.Date = df.index.astype('int')
+    df = df.loc[~df.Date.duplicated(keep='first')]
+    df.Date = df.Date.astype('int')
 
     print(df.Date)
     
