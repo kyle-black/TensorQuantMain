@@ -86,7 +86,7 @@ def random_forest_classifier(df, asset, lookback):
 
     #df = df.drop(['datetime'])
    # print('dropcols:',dropcols)
-    df = df.drop(['Date', 'datetime'],axis=1)
+    df = df.drop(['Date'],axis=1)
     #feature_cols = df.drop(dropcols, axis=1)
     
     feature_cols = df.drop('label',axis=1).columns
@@ -107,7 +107,7 @@ def random_forest_classifier(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 20
+    n_components = 6
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
