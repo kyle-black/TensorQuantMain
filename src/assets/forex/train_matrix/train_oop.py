@@ -173,8 +173,8 @@ if __name__ == "__main__":
     
     time_bars_df = bar_creator.time_bars()
 
-   # print(time_bars_df)
-
+    print(time_bars_df)
+    '''
     dollar_bars_df = bar_creator.dollar_bars()
 
     print(dollar_bars_df)
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     print(dollar_bars_df.columns)
 
     dollar_bars_df.to_csv('dollar_bars.csv')
-    
+    '''
     '''
     feature_instance_ = FeatureMaker(dollar_bars_df, 72, asset)
     
