@@ -12,7 +12,7 @@ def time_bars(raw_data, asset):
     
 
     df =raw_data
-    df['Daily_Returns'] = df[f'{asset}_Close'].pct_change()
+    df['Daily_Returns'] = df['Close'].pct_change()
     df = df[:]
 
     
