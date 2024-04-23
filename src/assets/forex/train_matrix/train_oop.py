@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
     feature_bars.to_csv('feature_bars.csv')
     
-    feature_instance_.elbow_()
+   # feature_instance_.elbow_()
     
     
     label_instance_ =Labeling(feature_bars, asset)

@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.stattools import acf
-from statsmodels.graphics.tsaplots import plot_acf
+#from statsmodels.graphics.tsaplots import plot_acf
 
 def compute_and_plot_acf(series, nlags=40):
     """
@@ -23,6 +23,7 @@ def compute_and_plot_acf(series, nlags=40):
     acf_values = acf(series, nlags=nlags, fft=True)  # Using FFT to compute the ACF
     
     # Plot ACF values
+    '''
     plt.figure(figsize=(10, 5))
     plot_acf(series, lags=nlags)
     plt.title("Autocorrelation Function")
@@ -31,7 +32,7 @@ def compute_and_plot_acf(series, nlags=40):
     plt.tight_layout()
     plt.show()
     plt.savefig('path_to_save_plot.png')
-    
+    '''
     return acf_values
 
 # Example
