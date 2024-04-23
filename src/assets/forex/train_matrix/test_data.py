@@ -1,7 +1,17 @@
 import pandas as pd
 
 
-j = pd.read_json('updated_data/EURUSD.json')
+df = pd.read_json('updated_data/EURUSD.json')
 
 
-print(j)
+df['date'] = pd.to_datetime(df['date'])
+df['date'] = df['date'].apply(lambda x: x.timestamp())
+# Rename columns
+df = df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low', 'close':'Close', 'volume':'Volume'}, inplace=True)
+
+#print(df)
+
+print(df)
+
+#df = pd.read_json('updated_data/EURUSD.json')
+df.to_csv('updated_data/EURUSD.json')
