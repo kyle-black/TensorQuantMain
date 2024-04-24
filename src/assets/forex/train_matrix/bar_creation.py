@@ -77,7 +77,7 @@ def get_volume_bars(ohlc_df, lookback_period, asset):
     volume_bars_df = ohlc_df.loc[idx].copy()
 
     return volume_bars_df
-
+'''
 def get_dollar_bars(time_bars, dollar_threshold):
     time_bars = time_bars.to_dict('records')
 
@@ -154,7 +154,7 @@ def get_dollar_bars(time_bars, dollar_threshold, asset):
         if dollar_volume + running_volume >= dollar_threshold:
 
             # Set the timestamp for the dollar bar
-            bar_timestamp = next_timestamp_dt + timedelta(minutes=1)
+            bar_timestamp = next_timestamp_dt #+ timedelta(minutes=1)
 
             
 
@@ -201,7 +201,7 @@ def parse_dollarbars(bar, asset):
 
     filtered_dict = {key: value for key, value in bar.items() if asset not in key}
     return filtered_dict
-        
+'''       
 
 
 def get_dollar_bars_P(time_bars, dollar_threshold):
@@ -259,7 +259,7 @@ def get_dollar_bars_P(time_bars, dollar_threshold):
     dollar_bars_df['Daily_Returns'] = dollar_bars_df['Close'].pct_change()
 
     return dollar_bars_df
-'''
+
 
 
 def get_dollar_bars_P(time_bars, dollar_threshold, asset):
@@ -402,3 +402,4 @@ def dollar_bars(ohlc_df, dollar_threshold):
     dollar_bars_df = ohlc_df.loc[idx].copy()
 
     return dollar_bars_df
+'''
