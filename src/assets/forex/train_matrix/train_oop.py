@@ -57,7 +57,7 @@ class Analysis:
             std_dev_value = np.std(self.bars_df['Daily_Returns'][1:])
             return std_dev_value
         else:
-            raise ValueError("Provided data is not a valid DataFrame or doesn't have a 'Close' column.")
+            raise ValueError("Provided data is not a valid DataFrame or doesn't have a 'Daily Returns' column.")
         
     def jaque_bera(self):   # Test for normality
         jb_stat, p_value, _, _ = jarque_bera(self.bars_df['Daily_Returns'][1:])

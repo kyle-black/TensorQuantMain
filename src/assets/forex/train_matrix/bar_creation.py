@@ -58,6 +58,7 @@ def get_volume_bars(df, volume_threshold):
 
     # Convert the list of bars to a DataFrame
     volume_bars_df = pd.DataFrame(volume_bars).set_index('Date')
+    volume_bars_df['Daily_Returns'] = volume_bars_df['Close'].pct_change()
 
     return volume_bars_df
 
@@ -199,6 +200,8 @@ def get_dollar_bars(time_bars, dollar_threshold, asset):
     # Return the list of dollar bars
 
     dollar_bars = pd.DataFrame.from_dict(dollar_bars)
+
+
     #####################################################  Add percent change column to dollar bar DF. 
 
     dollar_bars['Daily_Returns'] = dollar_bars['Close'].pct_change()
