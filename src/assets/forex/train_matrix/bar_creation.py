@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import math
 from datetime import datetime, timedelta
+from sklearn.preprocessing import StandardScaler
 
 
 
@@ -103,8 +104,12 @@ def get_dollar_bars(df, dollar_threshold):
             low_price = row['Low']
 
     dollar_bars_df = pd.DataFrame(dollar_bars).set_index('Date')
+
+    scaler = StandardScaler()
+
+
     dollar_bars_df['Daily_Returns'] = (dollar_bars_df['Close'].pct_change())
-    
+    dollar_bars_df['Daily_Returns'] = scaler.fit_transform(dollar_bars_df['Daily_Returns'])
 
     return pd.DataFrame(dollar_bars_df)
 
