@@ -78,6 +78,33 @@ def get_volume_bars(ohlc_df, lookback_period, asset):
 
     return volume_bars_df
 
+def get_dollar_bars(time_bars, dollar_threshold):
+    time_bars = time_bars.to_dict('records')
+
+    dollar_bars = []
+    running_volume = 0
+    running_high, running_low = 0, math.inf
+    running_open = time_bars[0]['Open']
+    running_close = running_open
+    running_date = time_bars[0]['Date']
+
+    for i in range(len(time_bars)):
+        next_close, next_high, next_low, next_open, next_timestamp, next_volume = [time_bars[i][k] for k in ['Close', 'High', 'Low', 'Open', 'Date', 'Volume']]
+        next_timestamp_dt = datetime.utcfromtimestamp(next_timestamp)
+        midpoint_price = ((next_open) + (next_close))/2
+        dollar_volume = next_volume * midpoint_price
+        running_high, running_low = max(running_high, next_high), min(running_low, next_low)
+        running_volume += dollar_volume
+
+        if running_volume > dollar_threshold:
+            dollar_bars.append({'Open': running_open, 'High': running_high, 'Low': running_low, 'Close': running_close, 'Volume': running_volume, 'Date': running_date})
+            running_volume = 0
+            running_high, running_low = 0, math.inf
+            running_open = next_open
+            running_date = next_timestamp
+
+    return dollar_bars
+'''
 def get_dollar_bars(time_bars, dollar_threshold, asset):
     
     time_bars = time_bars.to_dict('records') 
@@ -176,7 +203,7 @@ def parse_dollarbars(bar, asset):
     return filtered_dict
         
 
-'''
+
 def get_dollar_bars_P(time_bars, dollar_threshold):
     # Convert DataFrame to list of dictionaries if it's not already in that format
     if not isinstance(time_bars, list):

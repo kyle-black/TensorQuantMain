@@ -179,6 +179,8 @@ if __name__ == "__main__":
     time_bars_df = bar_creator.time_bars()
 
     print(time_bars_df.tail())
+
+    time_bars_df.to_csv('checktimebars.csv')
     
     dollar_bars_df = bar_creator.dollar_bars()
 
