@@ -43,7 +43,7 @@ class CreateBars:
         # Check if time_bar_df has been created, if not, create it
         if self.time_bar_df is None:
             self.time_bars()
-        return bc.get_dollar_bars(self.time_bar_df, 1000000)
+        return bc.get_dollar_bars(self.time_bar_df, 5000000)
     
     
 class Analysis:
