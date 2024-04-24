@@ -87,7 +87,7 @@ def get_dollar_bars(df, dollar_threshold):
         low_price = min(low_price, row['Low'])
 
         # Add the dollar value of the current row to the cumulative dollar value
-        cum_dollar += row['Volume'] * row['Close']
+        cum_dollar += row['Volume'] * ((row['High'] + row['Low']) / 2)  
 
         # If the cumulative dollar value is greater than or equal to the dollar threshold, create a new bar
         if cum_dollar >= dollar_threshold:
