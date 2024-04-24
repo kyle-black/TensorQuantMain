@@ -193,7 +193,7 @@ if __name__ == "__main__":
     dollar_bars_df.to_csv('dollar_bars.csv')
     
     
-    feature_instance_ = FeatureMaker(dollar_bars_df, 72, asset)
+    feature_instance_ = FeatureMaker(dollar_bars_df, 72)
     
     feature_bars =feature_instance_.feature_add()
     print(feature_bars.columns)
