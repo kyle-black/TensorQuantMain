@@ -59,7 +59,7 @@ def get_volume_bars(df, volume_threshold):
 
     # Convert the list of bars to a DataFrame
     volume_bars_df = pd.DataFrame(volume_bars).set_index('Date')
-    volume_bars_df['Daily_Returns'] = volume_bars_df['Close'].pct_change()
+    volume_bars_df['Daily_Returns'] = (volume_bars_df['Close'].pct_change() *100)
 
     return volume_bars_df
 
