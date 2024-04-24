@@ -43,7 +43,7 @@ class CreateBars:
         # Check if time_bar_df has been created, if not, create it
         if self.time_bar_df is None:
             self.time_bars()
-        return bc.get_dollar_bars(self.time_bar_df, 1000000, self.asset)
+        return bc.get_dollar_bars(self.time_bar_df, 1000000)
     
     
 class Analysis:
@@ -193,7 +193,7 @@ if __name__ == "__main__":
     dollar_bars_df.to_csv('dollar_bars.csv')
     
     
-    feature_instance_ = FeatureMaker(dollar_bars_df, 72)
+    feature_instance_ = FeatureMaker(dollar_bars_df, 72, self.asset)
     
     feature_bars =feature_instance_.feature_add()
     print(feature_bars.columns)
