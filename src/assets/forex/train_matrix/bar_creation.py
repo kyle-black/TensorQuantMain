@@ -47,7 +47,7 @@ def get_volume_bars(df, volume_threshold):
         if cum_volume >= volume_threshold:
             close_price = row['Close']
             # Convert Unix timestamp to datetime
-            date = pd.to_datetime(i, unit='s')
+            date = pd.to_datetime(row['Date'], unit='s')
             volume_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_volume, 'Date': date})
 
             # Reset variables for the next bar
