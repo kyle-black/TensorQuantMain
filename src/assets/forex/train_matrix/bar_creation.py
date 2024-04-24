@@ -64,7 +64,8 @@ def get_volume_bars(ohlc_df, lookback_period, asset):
     - DataFrame of volume bars.
     """
     # Calculate rolling mean of volume
-    rolling_mean = ohlc_df['Volume'].rolling(window=lookback_period).mean().shift(1)
+   # rolling_mean = ohlc_df['Volume'].rolling(window=lookback_period).mean().shift(1)
+    rolling_mean = 10000
     cum_volume = ohlc_df['Volume'].cumsum()
 
     # The threshold is the running total of rolling means
