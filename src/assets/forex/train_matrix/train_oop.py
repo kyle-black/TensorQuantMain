@@ -36,7 +36,7 @@ class CreateBars:
         # Check if time_bar_df has been created, if not, create it
         if self.time_bar_df is None:
             self.time_bars()
-        return bc.get_volume_bars(self.time_bar_df, 100000, self.asset)
+        return bc.get_volume_bars(self.time_bar_df, 1000, self.asset)
     
 
     def dollar_bars(self):
@@ -184,6 +184,8 @@ if __name__ == "__main__":
     
     volume_bars_df = bar_creator.vol_bars()
     print(volume_bars_df)
+
+    volume_bars_df.to_csv('volume_bars.csv')
     #dollar_bars_df = bar_creator.dollar_bars()
 
     '''
