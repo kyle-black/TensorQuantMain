@@ -17,37 +17,45 @@ def time_bars(raw_data, asset):
 
     
     return df
-
-def get_volume_bars(ohlc_df, volume_threshold):
+def get_volume_bars(df, volume_threshold):
     """
     Create volume bars from OHLC data.
 
     Parameters:
-    - ohlc_df: DataFrame with OHLC and volume data.
+    - df: DataFrame with OHLC and volume data.
     - volume_threshold: Volume threshold to sample bars.
 
     Returns:
     - DataFrame of volume bars.
     """
-    # Calculate cumulative volume
-    cum_volume = ohlc_df['Volume'].cumsum()
+    # Initialize variables
+    cum_volume = 0
+    open_price = df['Open'].iloc[0]
+    high_price = df['High'].iloc[0]
+    low_price = df['Low'].iloc[0]
+    volume_bars = []
 
-    # This will be our running total of thresholds
-    threshold = volume_threshold
+    for i, row in df.iterrows():
+        # Update high and low prices
+        high_price = max(high_price, row['High'])
+        low_price = min(low_price, row['Low'])
 
-    # This function will check if the cumulative volume is greater than our running threshold
-    def check_threshold(vol):
-        nonlocal threshold
-        if vol >= threshold:
-            threshold += volume_threshold
-            return True
-        return False
+        # Add the volume of the current row to the cumulative volume
+        cum_volume += row['Volume']
 
-    # Apply our function to each cumulative volume
-    idx = cum_volume.apply(check_threshold)
+        # If the cumulative volume is greater than or equal to the volume threshold, create a new bar
+        if cum_volume >= volume_threshold:
+            close_price = row['Close']
+            volume_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_volume, 'Date': i})
 
-    # Sample the original dataframe at indices where the threshold is crossed
-    volume_bars_df = ohlc_df.loc[idx].copy()
+            # Reset variables for the next bar
+            cum_volume = 0
+            open_price = row['Open']
+            high_price = row['High']
+            low_price = row['Low']
+
+    # Convert the list of bars to a DataFrame
+    volume_bars_df = pd.DataFrame(volume_bars).set_index('Date')
 
     return volume_bars_df
 
