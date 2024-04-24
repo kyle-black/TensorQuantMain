@@ -182,13 +182,13 @@ if __name__ == "__main__":
 
     time_bars_df.to_csv('checktimebars.csv')
     
-    volume_bars_df = bar_creator.vol_bars()
-    print(volume_bars_df)
+    #volume_bars_df = bar_creator.vol_bars()
+    #print(volume_bars_df)
 
-    volume_bars_df.to_csv('volume_bars.csv')
-    #dollar_bars_df = bar_creator.dollar_bars()
+    #volume_bars_df.to_csv('volume_bars.csv')
+    dollar_bars_df = bar_creator.dollar_bars()
 
-    '''
+    
     print(dollar_bars_df)
 
     #dollar_bars_df.to_csv('dollar_bars.csv')
@@ -196,15 +196,15 @@ if __name__ == "__main__":
     print(dollar_bars_df.columns)
 
     dollar_bars_df.to_csv('dollar_bars.csv')
-    '''
     
-    feature_instance_ = FeatureMaker(volume_bars_df, 72, asset)
+    
+    feature_instance_ = FeatureMaker(dollar_bars_df, 72, asset)
     
     feature_bars =feature_instance_.feature_add()
     print(feature_bars.columns)
 
 
-    analysis_df = Analysis(volume_bars_df)
+    analysis_df = Analysis(dollar_bars_df)
 
     '''
     analysis_df.std_dev()
