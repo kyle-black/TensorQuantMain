@@ -63,6 +63,51 @@ def get_volume_bars(df, volume_threshold):
 
     return volume_bars_df
 
+def get_dollar_bars(df, dollar_threshold):
+    """
+    Create dollar bars from OHLC data.
+
+    Parameters:
+    - df: DataFrame with OHLC and volume data.
+    - dollar_threshold: Dollar threshold to sample bars.
+
+    Returns:
+    - DataFrame of dollar bars.
+    """
+    # Initialize variables
+    cum_dollar = 0
+    open_price = df['Open'].iloc[0]
+    high_price = df['High'].iloc[0]
+    low_price = df['Low'].iloc[0]
+    dollar_bars = []
+
+    for i, row in df.iterrows():
+        # Update high and low prices
+        high_price = max(high_price, row['High'])
+        low_price = min(low_price, row['Low'])
+
+        # Add the dollar value of the current row to the cumulative dollar value
+        cum_dollar += row['Volume'] * row['Close']
+
+        # If the cumulative dollar value is greater than or equal to the dollar threshold, create a new bar
+        if cum_dollar >= dollar_threshold:
+            close_price = row['Close']
+            # Convert Unix timestamp to datetime
+            date = pd.to_datetime(row['Date'], unit='s')
+            dollar_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_dollar, 'Date': date})
+
+             # Reset variables for the next bar
+            cum_dollar = 0
+            open_price = row['Open']
+            high_price = row['High']
+            low_price = row['Low']
+
+    dollar_bars_df = pd.DataFrame(dollar_bars).set_index('Date')
+    dollar_bars_df['Daily_Returns'] = (dollar_bars_df['Close'].pct_change())
+    
+
+    return pd.DataFrame(dollar_bars_df)
+
 '''
 def get_volume_bars(ohlc_df, lookback_period, asset):
     """
@@ -117,7 +162,7 @@ def get_dollar_bars(time_bars, dollar_threshold):
             running_date = next_timestamp
 
     return dollar_bars
-'''
+
 def get_dollar_bars(time_bars, dollar_threshold, asset):
     
     time_bars = time_bars.to_dict('records') 
@@ -417,4 +462,3 @@ def dollar_bars(ohlc_df, dollar_threshold):
     dollar_bars_df = ohlc_df.loc[idx].copy()
 
     return dollar_bars_df
-'''
