@@ -199,10 +199,19 @@ if __name__ == "__main__":
 
     analysis_df = Analysis(dollar_bars_df)
 
+    '''
     analysis_df.std_dev()
     analysis_df.jaque_bera()
     analysis_df.AD_fuller()
     analysis_df.acf()
+    '''
+
+    print('std dev:',analysis_df.std_dev())
+    print('jaque bera:',analysis_df.jaque_bera())
+    print('AD Fuller:', analysis_df.AD_fuller())
+    print('ACF:', analysis_df.acf())
+
+    '''
 
     feature_bars.to_csv('feature_bars.csv')
     
@@ -224,6 +233,7 @@ if __name__ == "__main__":
     model =Model(label_instance_, asset)
     
     print(model.train_model())
+    '''
     
     
     
