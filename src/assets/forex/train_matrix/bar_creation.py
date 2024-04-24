@@ -68,7 +68,7 @@ def get_volume_bars(ohlc_df, lookback_period, asset):
     cum_volume = ohlc_df['Volume'].cumsum()
 
     # The threshold is the running total of rolling means
-    threshold = rolling_mean.cumsum()
+    threshold = rolling_mean
     #threshold = 5000
     # Compare cumulative volume with the rolling threshold
     idx = cum_volume >= threshold
