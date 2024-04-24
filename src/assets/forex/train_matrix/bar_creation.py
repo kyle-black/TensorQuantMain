@@ -17,7 +17,7 @@ def time_bars(raw_data, asset):
 
     
     return df
-'''
+
 def get_volume_bars(ohlc_df, volume_threshold):
     """
     Create volume bars from OHLC data.
@@ -50,8 +50,8 @@ def get_volume_bars(ohlc_df, volume_threshold):
     volume_bars_df = ohlc_df.loc[idx].copy()
 
     return volume_bars_df
-'''
 
+'''
 def get_volume_bars(ohlc_df, lookback_period, asset):
     """
     Create volume bars from OHLC data using adaptive threshold based on rolling mean.
@@ -78,7 +78,7 @@ def get_volume_bars(ohlc_df, lookback_period, asset):
     volume_bars_df = ohlc_df.loc[idx].copy()
 
     return volume_bars_df
-'''
+
 def get_dollar_bars(time_bars, dollar_threshold):
     time_bars = time_bars.to_dict('records')
 
