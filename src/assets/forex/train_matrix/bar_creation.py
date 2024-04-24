@@ -28,7 +28,7 @@ def get_volume_bars(df, volume_threshold):
     Returns:
     - DataFrame of volume bars.
     """
-    # Initialize variables
+    # Initialize variables ###
     cum_volume = 0
     open_price = df['Open'].iloc[0]
     high_price = df['High'].iloc[0]
