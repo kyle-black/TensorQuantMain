@@ -28,7 +28,7 @@ def get_volume_bars(df, volume_threshold):
     Returns:
     - DataFrame of volume bars.
     """
-    # Initialize variables ###
+    # Initialize variables
     cum_volume = 0
     open_price = df['Open'].iloc[0]
     high_price = df['High'].iloc[0]
@@ -46,7 +46,9 @@ def get_volume_bars(df, volume_threshold):
         # If the cumulative volume is greater than or equal to the volume threshold, create a new bar
         if cum_volume >= volume_threshold:
             close_price = row['Close']
-            volume_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_volume, 'Date': i})
+            # Convert Unix timestamp to datetime
+            date = pd.to_datetime(i, unit='s')
+            volume_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_volume, 'Date': date})
 
             # Reset variables for the next bar
             cum_volume = 0
