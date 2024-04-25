@@ -107,7 +107,7 @@ def get_dollar_bars(df, dollar_threshold):
 
     #scaler = StandardScaler()
 
-
+    dollar_bars_df['Date'] = dollar_bars_df.index
     dollar_bars_df['Daily_Returns'] = (dollar_bars_df['Close'].pct_change())
     #dollar_bars_df['Daily_Returns'] = scaler.fit_transform(dollar_bars_df[['Daily_Returns']])
 
