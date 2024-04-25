@@ -82,7 +82,7 @@ def random_forest_classifier(df, asset, lookback):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop([ 'upper_barrier', 'lower_barrier', 't1'], axis =1)
+    df =df.drop([ 'Open', 'High', 'Low', 'Close', 'Volume','upper_barrier', 'lower_barrier', 't1'], axis =1)
 
     #df = df.drop(['datetime'])
    # print('dropcols:',dropcols)
