@@ -107,7 +107,7 @@ def random_forest_classifier(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 6
+    n_components = 3
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
