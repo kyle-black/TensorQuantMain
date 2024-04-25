@@ -95,7 +95,7 @@ def get_dollar_bars(df, dollar_threshold):
             close_price = row['Close']
             # Convert Unix timestamp to datetime
             date = pd.to_datetime(row['Date'], unit='s')
-            dollar_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_dollar, 'Date': date})
+            dollar_bars.append({'Open': open_price, 'High': high_price, 'Low': low_price, 'Close': close_price, 'Volume': cum_dollar, 'Date': row['Date'], 'Datetime':date})
 
              # Reset variables for the next bar
             cum_dollar = 0
