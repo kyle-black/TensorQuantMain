@@ -258,6 +258,7 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
             barriers.at[timestamp, 'label'] = 0 
         '''
     ####### New LOGIC for barrier touching
+        '''
         if (touch_upper < touch_lower) and (touch_upper < t1_date):
             barriers.at[timestamp, 'label'] = 1
 
@@ -265,7 +266,18 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
             barriers.at[timestamp, 'label'] = -1
         
         else:
-            barriers.at[timestamp, 'label'] = 0 
+            barriers.at[timestamp, 'label'] = 0
+        ''' 
+    ###############################################
+    ####### New LOGIC for barrier touching
+        if (touch_upper < touch_lower):
+            barriers.at[timestamp, 'label'] = 1
+
+        elif (touch_lower < touch_upper):
+            barriers.at[timestamp, 'label'] = -1
+        
+ #       else:
+  #          barriers.at[timestamp, 'label'] = 0 
     ###############################################
 
     df_merged = df.join(barriers, how='left')
