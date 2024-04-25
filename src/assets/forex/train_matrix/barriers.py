@@ -231,13 +231,13 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
         price = data[close]
         volatility = daily_volatility.loc[timestamp]
 
-        upper_barrier = price * (1 + pt_sl[0] * (1*volatility))
-        lower_barrier = price * (1 - pt_sl[1] * (1*volatility))
+        upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
+        lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
 
         barriers.at[timestamp, 'upper_barrier'] = upper_barrier
         barriers.at[timestamp, 'lower_barrier'] = lower_barrier
 
-        t1_date = timestamp + pd.Timedelta(hours=num_days_active)
+        t1_date = timestamp + pd.Timedelta(hours=140)
         t1_date = min(t1_date, df.index[-1])
         
         barriers.at[timestamp, 't1'] = t1_date
