@@ -244,8 +244,8 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
 
         df_temp = df.loc[timestamp:].iloc[1:]
 
-        touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
-        touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
+        touch_upper = df_temp[df_temp[high] >= upper_barrier].index.min()
+        touch_lower = df_temp[df_temp[low] <= lower_barrier].index.min()
 
         barriers.at[timestamp, 'touch_upper'] = touch_upper
         barriers.at[timestamp, 'touch_lower'] = touch_lower
