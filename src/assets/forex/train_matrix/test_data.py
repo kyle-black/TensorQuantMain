@@ -13,7 +13,10 @@ df.rename(columns={'date': 'Date', 'open': 'Open','high':'High', 'low':'Low', 'c
 # Set 'Date' as the index
 df.set_index('Date', inplace=True)
 
+df = df[~df.index.duplicated(keep='first')]
+
 print(df)
+
 
 #df = pd.read_json('updated_data/EURUSD.json')
 df.to_csv('updated_data/EURUSD.csv')

@@ -9,7 +9,7 @@ from multiprocessing import Value
 execution_counter = Value('i', 0)
 
 def get_json_from_url(symbol):
-    start_date = datetime.strptime('2010-01-01', '%Y-%m-%d')
+    start_date = datetime.strptime('2020-01-01', '%Y-%m-%d')
     end_date = start_date + timedelta(days=10)
     final_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
 
