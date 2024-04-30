@@ -10,7 +10,8 @@ import features
 import elbow_plot
 from pca_maker import pca_
 from weights import return_attribution
-
+from CUMSUM_filter import gTEvents as gte
+import pandas as pd
 
 
 
@@ -22,16 +23,25 @@ from weights import return_attribution
 class CreateBars:
     """Class to create dollar bars from asset data."""
 
-    def __init__(self, asset, amnt):
+    def __init__(self, asset,gRaw, amnt):
         """Initialize with asset data."""
         self.asset = asset
         self.dollar_bars = None
         self.dollar_amt = amnt
+        self.raw_bars = gRaw
+        self.tEvents = None
+
+    
 
     def create_dollar_bars(self):
         """Create dollar bars from asset data."""
         self.dollar_bars = dbc(self.asset,self.dollar_amt )
         return self.dollar_bars
+    
+    def create_CUMSUM_filter(self, bars):
+        """Create dollar bars from asset data."""
+        self.tEvents = gte(bars, None)
+        return self.tEvents
 
 
 class Analysis:
@@ -140,8 +150,46 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =400000
-    cb = CreateBars(asset, dollar_amount)
+    dollar_amount =50000
+
+    raw= pd.read_csv(f'updated_data/{asset}_1.csv')
+    
+   # print('raw:',raw)
+    raw['Returns'] = raw['Close'].pct_change()
+    
+    cb = CreateBars(asset,raw, dollar_amount)
+    df =cb.create_dollar_bars()
+
+    tEvents = cb.create_CUMSUM_filter(df)
+
+    print('tEvents:',tEvents)
+
+
+    fm = FeatureMaker(df, 72, asset)
+
+
+    df= fm.feature_add()
+  #  print('results:',df)
+
+    #Filtered DF
+
+    
+
+    # Convert 'Date' column to datetime
+   # df['Date'] = pd.to_datetime(df['Date'], unit='s')
+
+    # Convert tEvents to datetime
+    #tEvents = pd.to_datetime(tEvents, unit='s')
+
+    # Filter df by tEvents
+    filtered_df = df[df['Date'].isin(tEvents)]
+
+#filtered_df = df[df['Date'] == tEvents]
+
+    print('filtered_df:',filtered_df)
+    filtered_df.dropna(inplace=True)
+    print('df:',filtered_df)
+    '''
     df =cb.create_dollar_bars()
     print(df)
 
@@ -156,3 +204,4 @@ if __name__ in "__main__":
     print(ad.ks_test())
     ad.plot_histogram()
     print('adfuller:',ad.AD_fuller())
+    '''

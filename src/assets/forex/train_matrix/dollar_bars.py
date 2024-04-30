@@ -6,7 +6,7 @@ import pandas as pd
 
 def dollar_bar_creator(asset,dollar_amt):
 
-    df_ = pd.read_csv(f'updated_data/{asset}.csv')
+    df_ = pd.read_csv(f'updated_data/{asset}_1.csv')
     df_.sort_values('Date', inplace =True)
     
 

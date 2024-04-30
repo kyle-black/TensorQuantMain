@@ -9,10 +9,10 @@ def add_price_features(df, window_length):
     df =df.copy()
 
    # if asset is not None:
-    open = 'Open'
+    #open = 'Open'
     close ='Close'
-    high = 'High'
-    low = 'Low'
+    #high = 'High'
+    #low = 'Low'
     #else: 
     #    open= 'Open'
     #    close='Close' 
@@ -41,8 +41,8 @@ def add_price_features(df, window_length):
 
     #Log Returns
     df['Log_Returns'] = np.log(df[close]/ df[close].shift(window_length))
-    df['SpreadOC'] = df[open] / df[close]
-    df['SpreadLH'] = df[open] / df[high]
+ #   df['SpreadOC'] = df[open] / df[close]
+  #  df['SpreadLH'] = df[open] / df[high]
 
 
     #######################MACD 
@@ -70,6 +70,7 @@ def add_price_features(df, window_length):
     smoothing_period = window_length
 
     # Calculate the raw SMI
+    '''
     high_low_diff = df[high] - df[low]
     close_minus_lowest_low = df[close] - high_low_diff.rolling(window=lookback_period).min()
     highest_high_minus_lowest_low = high_low_diff.rolling(window=lookback_period).max() - high_low_diff.rolling(window=lookback_period).min()
@@ -80,7 +81,9 @@ def add_price_features(df, window_length):
 
     df['SMI'] = double_smooth_smi2
 
+    '''
 
+    '''
     ##### get weekday from dataframe
 
      # Convert 'Date' column to datetime if it's not already
@@ -98,6 +101,7 @@ def add_price_features(df, window_length):
         df['hour'] = df.index.hour
     else:
         raise ValueError("No datetime information found in DataFrame")
+    '''
 
 
 
