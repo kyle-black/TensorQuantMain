@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-df = pd.read_json('updated_data/EURUSD.json')
+df = pd.read_json('updated_data/EURUSD_1.json')
 
 
 df['date'] = pd.to_datetime(df['date'])
@@ -19,4 +19,4 @@ print(df)
 
 
 #df = pd.read_json('updated_data/EURUSD.json')
-df.to_csv('updated_data/EURUSD.csv')
+df.to_csv('updated_data/EURUSD_1.csv')

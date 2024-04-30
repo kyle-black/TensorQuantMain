@@ -9,15 +9,15 @@ from multiprocessing import Value
 execution_counter = Value('i', 0)
 
 def get_json_from_url(symbol):
-    start_date = datetime.strptime('2020-01-01', '%Y-%m-%d')
+    start_date = datetime.strptime('2015-01-01', '%Y-%m-%d')
     end_date = start_date + timedelta(days=10)
-    final_date = datetime.strptime('2023-01-01', '%Y-%m-%d')
+    final_date = datetime.strptime('2020-01-15', '%Y-%m-%d')
 
     global execution_counter
 
     #for symbol in symbol_list:
     while start_date <= final_date:
-        url = f"https://financialmodelingprep.com/api/v3/historical-chart/5min/{symbol}?from={start_date.strftime('%Y-%m-%d')}&to={end_date.strftime('%Y-%m-%d')}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
+        url = f"https://financialmodelingprep.com/api/v3/historical-chart/1min/{symbol}?from={start_date.strftime('%Y-%m-%d')}&to={end_date.strftime('%Y-%m-%d')}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
         response = requests.get(url)
         data = response.json()
 
@@ -25,7 +25,7 @@ def get_json_from_url(symbol):
 
         # Save or append data to JSON file
         try:
-            with open(f'updated_data/{symbol}.json', 'r') as f:
+            with open(f'updated_data/{symbol}_1.json', 'r') as f:
                 if f.read().strip():  # Check if file is not empty
                     f.seek(0)  # Reset file pointer to beginning
                     existing_data = json.load(f)
@@ -35,7 +35,7 @@ def get_json_from_url(symbol):
         except FileNotFoundError:
             combined_data = data
 
-        with open(f'updated_data/{symbol}.json', 'w') as f:
+        with open(f'updated_data/{symbol}_1.json', 'w') as f:
             json.dump(combined_data, f)
 
         # Increment dates by 10 days

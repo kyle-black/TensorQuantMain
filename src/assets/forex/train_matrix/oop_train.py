@@ -1,0 +1,158 @@
+from dollar_bars import dollar_bar_creator as dbc
+
+from statsmodels.stats.stattools import jarque_bera
+from statsmodels.tsa.stattools import adfuller
+from scipy.stats import kstest
+import matplotlib.pyplot as plt
+
+import barriers
+import features
+import elbow_plot
+from pca_maker import pca_
+from weights import return_attribution
+
+
+
+
+
+
+
+
+
+class CreateBars:
+    """Class to create dollar bars from asset data."""
+
+    def __init__(self, asset, amnt):
+        """Initialize with asset data."""
+        self.asset = asset
+        self.dollar_bars = None
+        self.dollar_amt = amnt
+
+    def create_dollar_bars(self):
+        """Create dollar bars from asset data."""
+        self.dollar_bars = dbc(self.asset,self.dollar_amt )
+        return self.dollar_bars
+
+
+class Analysis:
+    def __init__(self, bars_df):
+        # Store the bars dataframe regardless of its type (time, volume, dollar)
+        self.bars_df = bars_df
+
+
+    def jaque_bera(self):   # Test for normality
+        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['Returns'][1:])
+        return jb_stat, p_value, _, _ 
+    
+    def ks_test(self):
+        # Standardize the data (mean 0, standard deviation 1)
+        #n_ = len(self.bars_df['Close'][500000:])
+        standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
+      #  standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
+        #standardized_returns = (self.bars_df['Returns'][1:])
+        # Perform the KS test against a normal distribution
+        ks_stat, p_value = kstest(standardized_returns, 'norm')
+
+        return ks_stat, p_value
+    def AD_fuller(self): # Check for Stationary
+        result = adfuller(self.bars_df['Returns'][1:])
+        return  result
+    def plot_histogram(self):
+        """Plot a histogram of the 'Returns' data."""
+        plt.hist(self.bars_df['Returns'][1:], bins=50, edgecolor='black')
+        plt.title('Histogram of Returns')
+        plt.xlabel('Returns')
+        plt.ylabel('Frequency')
+        plt.savefig('histogram.png')
+
+
+
+class FeatureMaker:
+    def __init__(self, bars_df, window, asset):
+        # Store the bars dataframe regardless of its type (time, volume, dollar)
+        self.bars_df = bars_df
+        self.window =window
+        self.asset= asset
+
+    def feature_add(self):
+
+        results =features.add_price_features(self.bars_df, self.window)
+
+        return results
+
+    def fac_diff(self):
+        f_results = self.feature_add()
+       # df =features.fractional_diff(f_results)
+        d_values = features.find_min_d_for_df(f_results)
+        return d_values
+    
+    def elbow_(self):
+        result = self.feature_add()
+        return elbow_plot.plot_pca(result)
+
+    
+
+
+
+
+class Labeling:
+    def __init__(self, bars_df, asset):
+        self.bars_df = bars_df
+        self.asset =asset        
+
+    def triple_barriers(self):
+        self.triple_result =barriers.apply_triple_barrier(self.bars_df,[1,1,1], 72, self.asset)
+        return self.triple_result
+    
+    def sample_weights(self):
+        self.triple_result = self.triple_barriers()
+        weights = return_attribution(self.triple_result)
+        return weights
+    
+    
+
+
+    
+
+
+    
+
+class Model:
+    def __init__(self, bars_df, asset):
+        self.bars_df = bars_df
+        self.bar_shape = bars_df.shape
+        self.asset = asset
+        #self.weights =weights
+
+    def train_model(self):
+        #output =adaboost_classifier(self.bars_df)
+        #output = support_vector_classifier(self.bars_df)
+       # output =neural_network_cnn(self.bars_df, self.asset)
+        output =random_forest_classifier(self.bars_df, self.asset, lookback =72)
+        #output = neural_network_classifier(self.bars_df,self.asset)
+        #output =random_forest_anomaly_detector(self.bars_df)
+        return output
+
+
+    
+
+
+if __name__ in "__main__":
+    
+    asset = 'EURUSD'
+    dollar_amount =400000
+    cb = CreateBars(asset, dollar_amount)
+    df =cb.create_dollar_bars()
+    print(df)
+
+    df.to_csv('newnewtest.csv')
+
+
+
+    ad = Analysis(df)
+
+    #print(ad.jaque_bera())
+
+    print(ad.ks_test())
+    ad.plot_histogram()
+    print('adfuller:',ad.AD_fuller())
