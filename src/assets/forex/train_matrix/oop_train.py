@@ -12,6 +12,7 @@ from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
+from train_models import random_forest_classifier
 
 
 
@@ -99,6 +100,11 @@ class FeatureMaker:
     def elbow_(self):
         result = self.feature_add()
         return elbow_plot.plot_pca(result)
+    
+    def create_CUMSUM_filter(self):
+        """Create dollar bars from asset data."""
+        self.tEvents = gte(self.bars_df, None)
+        return self.tEvents
 
     
 
@@ -106,12 +112,12 @@ class FeatureMaker:
 
 
 class Labeling:
-    def __init__(self, bars_df, asset):
+    def __init__(self, bars_df, asset,lookback):
         self.bars_df = bars_df
         self.asset =asset        
 
     def triple_barriers(self):
-        self.triple_result =barriers.apply_triple_barrier(self.bars_df,[1,1,1], 72, self.asset)
+        self.triple_result =barriers.new_apply_triple_barrier(self.bars_df,[1,1,1], lookback, self.asset)
         return self.triple_result
     
     def sample_weights(self):
@@ -138,7 +144,7 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =random_forest_classifier(self.bars_df, self.asset, lookback =72)
+        output =random_forest_classifier(self.bars_df, self.asset, lookback)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
         return output
@@ -150,58 +156,107 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =50000
+    dollar_amount =100000
 
-    raw= pd.read_csv(f'updated_data/{asset}_1.csv')
+    lookback = 40
+    
+    raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}.csv')
     
    # print('raw:',raw)
     raw['Returns'] = raw['Close'].pct_change()
+    print(raw)
     
     cb = CreateBars(asset,raw, dollar_amount)
     df =cb.create_dollar_bars()
-
-    tEvents = cb.create_CUMSUM_filter(df)
-
-    print('tEvents:',tEvents)
-
-
-    fm = FeatureMaker(df, 72, asset)
-
-
-    df= fm.feature_add()
-  #  print('results:',df)
-
-    #Filtered DF
-
-    
-
-    # Convert 'Date' column to datetime
-   # df['Date'] = pd.to_datetime(df['Date'], unit='s')
-
-    # Convert tEvents to datetime
-    #tEvents = pd.to_datetime(tEvents, unit='s')
-
-    # Filter df by tEvents
-    filtered_df = df[df['Date'].isin(tEvents)]
-
-#filtered_df = df[df['Date'] == tEvents]
-
-    print('filtered_df:',filtered_df)
-    filtered_df.dropna(inplace=True)
-    print('df:',filtered_df)
-    '''
-    df =cb.create_dollar_bars()
     print(df)
+    '''
+    df.to_csv('dollarbar.csv')
+    
+    ad = Analysis(df)
 
-    df.to_csv('newnewtest.csv')
+    #print(ad.jaque_bera())
+    print(df)
+    print(ad.ks_test())
+    ad.plot_histogram()
+    print('adfuller:',ad.AD_fuller())
+    '''
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    #df = pd.read_csv('dollarbar.csv')
 
+    df['Returns'] = df['Close'].pct_change()
 
 
     ad = Analysis(df)
 
     #print(ad.jaque_bera())
-
+    print(df)
     print(ad.ks_test())
     ad.plot_histogram()
     print('adfuller:',ad.AD_fuller())
-    '''
+    
+    print(df)
+    L = Labeling(df,asset, lookback)
+    df =L.triple_barriers()
+
+    print('labeldf',df)
+    
+
+#    print('tEvents:',tEvents)
+
+    
+    fm = FeatureMaker(df, lookback, asset)
+
+
+    df= fm.feature_add()
+    
+
+    print('df test',df)
+
+    
+    
+   # fm.elbow_()
+   
+
+   # cb = CreateBars(asset,raw, dollar_amount)
+    
+    
+    
+    tEvents = fm.create_CUMSUM_filter()
+  
+
+    # Filter df by tEvents
+    filtered_df = df[df.index.isin(tEvents)]
+
+    #filtered_df = df[df.isin(tEvents)]
+
+
+    #filtered_df =df
+    print('filtered_df:',filtered_df)
+    filtered_df =filtered_df.dropna()
+    print('df:',filtered_df)
+
+    m = Model(filtered_df, asset)
+    print(m.train_model())
+    
+   # df =cb.create_dollar_bars()
+    #print(df)
+
+    #df.to_csv('newnewtest.csv')
+
+
+
+    #ad = Analysis(df)
+
+    #print(ad.jaque_bera())
+
+    #print(ad.ks_test())
+    #ad.plot_histogram()
+    #print('adfuller:',ad.AD_fuller())

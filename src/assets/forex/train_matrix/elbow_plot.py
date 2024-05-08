@@ -5,8 +5,8 @@ from sklearn.preprocessing import StandardScaler
 
 
 def plot_pca(df):
-   feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band',
-                        'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI','SpreadOC','SpreadLH']
+   feature_cols = [ 'Middle_Band', 'Upper_Band', 'Lower_Band',
+                        'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI']
 
 
    X = df[feature_cols]

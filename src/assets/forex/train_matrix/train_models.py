@@ -29,6 +29,8 @@ from sklearn.ensemble import AdaBoostClassifier
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.metrics import log_loss
+from sklearn.dummy import DummyClassifier
 
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
@@ -82,11 +84,11 @@ def random_forest_classifier(df, asset, lookback):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop([ 'Open', 'High', 'Low', 'Close', 'Volume','upper_barrier', 'lower_barrier', 't1'], axis =1)
+    df =df.drop([ 'Unnamed: 0', 'Date', 'upper_barrier', 'lower_barrier'], axis =1)
 
     #df = df.drop(['datetime'])
    # print('dropcols:',dropcols)
-    df = df.drop(['Date'],axis=1)
+   # df = df.drop(['Date'],axis=1)
     #feature_cols = df.drop(dropcols, axis=1)
     
     feature_cols = df.drop('label',axis=1).columns
@@ -107,7 +109,7 @@ def random_forest_classifier(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 6
+    n_components = 4
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
@@ -116,7 +118,7 @@ def random_forest_classifier(df, asset, lookback):
     
     
     param_grid = {
-        'n_estimators': [200,500,1000],
+        'n_estimators': [10000],
         'max_features': [4],
         'max_depth': [10, 20, None],
         'min_samples_split': [2, 5],
@@ -128,11 +130,15 @@ def random_forest_classifier(df, asset, lookback):
    # for train_data, test_data, weight_data in zip(train_datasets[-1], test_datasets[-1], weights[-1]):
         #train = train_datasets
         #test = test_datasets
-        #weight = weights[-1] 
+        #weight = weights[-1]
+
+   
         
     train_data =   train_datasets[-1]
 
     test_data = test_datasets[-1]
+
+   # test_data['Datetime'] = pd.to_datetime(test_data['Date'],unit='s')
 
     weight_data =  weights[-1]
         
@@ -160,26 +166,49 @@ def random_forest_classifier(df, asset, lookback):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=44, n_estimators=1000)
+    clf =RandomForestClassifier( random_state=44, n_estimators=1000,criterion='log_loss')
+    clf.fit(X_train, y_train, sample_weight=weight_data)
+
+
+
+
+    dum = DummyClassifier(strategy='stratified', random_state=0)
+
+    dum.fit(X_train,y_train)
+    dum_score =dum.score(X_test,y_test)
+
+    print('Dumb Score:',dum_score)
+    real_score =clf.score(X_test,y_test)
+    print('Real Score:',real_score)
+
 
     #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
-    clf.fit(X_train, y_train, sample_weight=weight_data)
+    #clf.fit(X_train, y_train, sample_weight=weight_data)
 
     #best_params = grid_search.best_params_
     # print(f"Best parameters found: {best_params}")
 
     #best_rf = grid_search.best_estimator_
-    #grid_search = GridSearchCV(clf, param_grid,refit=True, verbose=3, n_jobs=-1)
-    #clf.fit(X_train, y_train, sample_weight=weight_data)
-
-    # Use the best estimator to predict
-    #best_svm = grid_search.best_estimator_
-    #print('best svm:',best_svm)
     
+
+
+    ##########   Grid Search
+    '''
+    grid_search = GridSearchCV(clf, param_grid,refit=True,scoring='neg_log_loss', verbose=3, n_jobs=-1)
+    grid_search.fit(X_train, y_train, sample_weight=weight_data)
+
+    best_log_loss = -grid_search.best_score_
+    print(f"Best parameters found: {best_log_loss}")
+
+    #grid_search.fit(X_train, y_train)
+
+# Get the best estimator
+    best_clf = grid_search.best_estimator_
+
+# Use the best estimator to predict probabilities
+    '''
     probas = clf.predict_proba(X_test)
-
-   # encoder = OneHotEncoder(sparse=False)
-
+    
     
 
     
@@ -230,6 +259,10 @@ def random_forest_classifier(df, asset, lookback):
     all_actuals.extend(y_test.tolist())
     all_preds.extend(y_pred.tolist())
     print('###########################')
+    #log_loss(y_test, y_pred)
+    l_l = log_loss(y_test, probas)
+    print('logloss', l_l)  
+    '''
     y_test_adjusted = np.where(y_test == 1, 1, 0)
     brier_score = brier_score_loss(y_test_adjusted, probas[:, 2])
 
@@ -252,7 +285,7 @@ def random_forest_classifier(df, asset, lookback):
     random_brier_score = brier_score_loss(y_test_adjusted, random_probas)
 
     print('Brier Score for random probabilities:', random_brier_score)
-
+    '''
 
     #predictions_df.to_csv('predictions_df.csv')
     #print('classes---> ',clf.classes_)
@@ -267,10 +300,17 @@ def random_forest_classifier(df, asset, lookback):
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
 
-    
+   # print(test_data)
+    test_data['predictions'] = y_pred
+    test_data['probs dwn'] = probas[:,0]
+    test_data['probs neutral'] = probas[:,1]
+    test_data['probs up'] = probas[:,2]
 
 
+    test_data.to_csv('test_data.csv')
 
+
+'''
 
 
 def neural_network_c(df, asset):
@@ -329,9 +369,9 @@ def neural_network_c(df, asset):
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
-    '''
 
-    '''
+
+
     
     param_grid = {
         'n_estimators': [200,500,1000],
@@ -1059,7 +1099,7 @@ def neural_network_classifier(df, asset, epochs=100):
     model.add(Dense(16, activation='relu'))  # Hidden layer 2
     model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
-    '''
+    
     Model 2
     model = Sequential()
     model.add(Dense(128, input_dim=X_train.shape[1], activation='relu'))  # Input layer
@@ -1072,7 +1112,7 @@ def neural_network_classifier(df, asset, epochs=100):
     model.add(Dropout(0.5))  # Dropout layer
     model.add(Dense(3, activation='softmax'))  # Output layer
     
-    '''
+    
 
     # Compile the model
     model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['categorical_accuracy'])
@@ -1207,3 +1247,4 @@ def neural_network_classifier(df, asset, epochs=100):
 
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
+'''

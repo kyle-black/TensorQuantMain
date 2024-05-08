@@ -6,7 +6,7 @@ import pandas as pd
 
 def dollar_bar_creator(asset,dollar_amt):
 
-    df_ = pd.read_csv(f'updated_data/{asset}_1.csv')
+    df_ = pd.read_csv(f'updated_data/train_data/pulled/{asset}.csv')
     df_.sort_values('Date', inplace =True)
     
 
@@ -47,6 +47,23 @@ def dollar_bar_creator(asset,dollar_amt):
 
 
     return new_bar_df
+
+
+def security_append(main_df, security_list):
+    for asset_ in security_list:
+        df_ = pd.read_csv(f'updated_data/{asset_}_1.csv')
+        df_.sort_values('Date', inplace=True)
+        df_ = df_.set_index('Date')
+        df_ = df_[['Close', 'Volume']]
+
+        # Join the dataframe with the main dataframe
+        main_df = main_df.join(df_, how='left', rsuffix=f'_{asset_}')
+
+    return main_df
+
+    
+    
+
 
 
 
