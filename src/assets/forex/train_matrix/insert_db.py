@@ -23,7 +23,7 @@ def add_table(security):
     df.set_index('id', inplace=True)
 
     ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
-    engine = create_engine(f'mysql+pymysql://doadmin:{db_pass}@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb', connect_args=ssl_args)
+    engine = create_engine(db_pass, connect_args=ssl_args)
 
     metadata = MetaData()
 
@@ -46,7 +46,7 @@ def add_table(security):
 
 def drop_table(security):
     ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
-    engine = create_engine(f'mysql+pymysql://doadmin:{db_pass}@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb', connect_args=ssl_args)
+    engine = create_engine(db_pass, connect_args=ssl_args)
 
     metadata = MetaData()
 
@@ -60,7 +60,7 @@ def drop_table(security):
 def obtain_data(security):
 
     ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
-    engine = create_engine(f'mysql+pymysql://doadmin:{db_pass}@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb', connect_args=ssl_args)
+    engine = create_engine(db_pass, connect_args=ssl_args)
     # Establish a connection
     with engine.connect() as connection:
         # Execute the query and load the result into a DataFrame
