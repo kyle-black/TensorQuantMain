@@ -6,15 +6,16 @@ import pandas as pd
 
 def dollar_bar_creator(asset,dollar_amt):
 
-    df_ = pd.read_csv(f'updated_data/train_data/pulled/{asset}.csv')
+    df_ = pd.read_csv(f'updated_data/train_data/pulled/{asset}_joined.csv')
     df_.sort_values('Date', inplace =True)
     
-
+    close = f'{asset}_Close'
+    volume = f'{asset}_Volume'
     
     df_ = df_.set_index('Date')
 
 
-    df_ = df_[['Close','Volume']]
+   # df_ = df_[[close,volume]]
 
     #df_ = df_.tail(500000)
 
@@ -26,11 +27,11 @@ def dollar_bar_creator(asset,dollar_amt):
     for i, d in df_.iterrows():
 
 
-        dollar_count+=round((d['Volume'] * d['Close']),2)
+        dollar_count+=round((d[volume] * d[close]),2)
 
 
         if dollar_count >= dollar_amt:
-            bar ={'Date':i,'Close':d['Close']}
+            bar ={'Date':i,'Close':d[close],'AUDUSD':d['AUDUSD_Close'],'USDCAD':d['USDCAD_Close']}
             new_bar.append(bar)
             dollar_count = 0
          

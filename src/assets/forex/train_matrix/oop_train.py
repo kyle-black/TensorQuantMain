@@ -12,7 +12,7 @@ from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
-from train_models import random_forest_classifier
+from train_models import random_forest_classifier, Hist_boosted
 
 
 
@@ -144,7 +144,8 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =random_forest_classifier(self.bars_df, self.asset, lookback)
+       # output =random_forest_classifier(self.bars_df, self.asset, lookback)
+        output= Hist_boosted(self.bars_df, self.asset, lookback)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
         return output
@@ -160,17 +161,17 @@ if __name__ in "__main__":
 
     lookback = 40
     
-    raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}.csv')
+    raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}_joined.csv')
     
    # print('raw:',raw)
-    raw['Returns'] = raw['Close'].pct_change()
+    raw['Returns'] = raw[f'{asset}_Close'].pct_change()
     print(raw)
     
     cb = CreateBars(asset,raw, dollar_amount)
     df =cb.create_dollar_bars()
     print(df)
-    '''
-    df.to_csv('dollarbar.csv')
+    
+    #df.to_csv('dollarbar.csv')
     
     ad = Analysis(df)
 
@@ -178,8 +179,9 @@ if __name__ in "__main__":
     print(df)
     print(ad.ks_test())
     ad.plot_histogram()
+   # ad.elbow_()
     print('adfuller:',ad.AD_fuller())
-    '''
+    
    
    
    
@@ -216,6 +218,7 @@ if __name__ in "__main__":
 
 
     df= fm.feature_add()
+    fm.elbow_()
     
 
     print('df test',df)

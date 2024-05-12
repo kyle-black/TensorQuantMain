@@ -32,6 +32,13 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import log_loss
 from sklearn.dummy import DummyClassifier
 
+
+from sklearn.experimental import enable_hist_gradient_boosting  # noqa
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.model_selection import cross_val_score
+
+from sklearn.pipeline import make_pipeline
+
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
 
@@ -84,7 +91,7 @@ def random_forest_classifier(df, asset, lookback):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop([ 'Unnamed: 0', 'Date', 'upper_barrier', 'lower_barrier'], axis =1)
+    df =df.drop(['Date', 'upper_barrier', 'lower_barrier'], axis =1)
 
     #df = df.drop(['datetime'])
    # print('dropcols:',dropcols)
@@ -1248,3 +1255,50 @@ def neural_network_classifier(df, asset, epochs=100):
     for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
         print(actual, prediction, dwn, neutral,up)
 '''
+def Hist_boosted(df, asset, lookback):
+    if asset is not None:
+        asset = asset
+
+    # Data Preprocessing
+    start_date = pd.to_datetime('2010-01-01')
+    end_date = pd.to_datetime('2023-01-01')
+    threshold = 0.7 
+
+    df = df.drop(columns=['touch_lower', 'touch_upper'])
+    df = df.dropna(how='all')
+    df = df[lookback:]
+
+    print('input dataframe:',df.columns)
+
+    df = df.drop(['Date', 'upper_barrier', 'lower_barrier','Close'], axis =1)
+
+    X = df.drop('label',axis=1)
+    y = df['label']
+
+    # Initialize the classifiers with PCA and StandardScaler
+    clf_hist = make_pipeline(StandardScaler(), PCA(n_components=2), HistGradientBoostingClassifier())
+    clf_rf = make_pipeline(StandardScaler(), PCA(n_components=2), RandomForestClassifier())
+
+    # Define parameter grid for HistGradientBoostingClassifier
+    param_grid = {
+    'histgradientboostingclassifier__max_iter': [10],
+    'histgradientboostingclassifier__learning_rate': [ 0.1],
+    'histgradientboostingclassifier__max_depth': [5],
+    'histgradientboostingclassifier__min_samples_leaf': [50],
+    'histgradientboostingclassifier__l2_regularization': [0.1],
+    'histgradientboostingclassifier__max_bins': [255],
+    'histgradientboostingclassifier__max_leaf_nodes': [None]
+    }
+
+    # Initialize GridSearchCV
+    grid_search = GridSearchCV(clf_hist, param_grid, cv=4, random_state=42)
+
+    # Perform grid search for Histogram Gradient Boosting
+    grid_search.fit(X, y)
+    print("Best parameters for Histogram Gradient Boosting: ", grid_search.best_params_)
+    print("Best score for Histogram Gradient Boosting: ", grid_search.best_score_)
+
+    # Perform 4-fold cross validation for Random Forest
+    scores_rf = cross_val_score(clf_rf, X, y, cv=4)
+    print("Random Forest cross-validation scores: ", scores_rf)
+    print("Average Random Forest cross-validation score: ", scores_rf.mean())
