@@ -157,9 +157,9 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =10000
+    dollar_amount =100000
 
-    lookback = 20
+    lookback = 40
     
     raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}_joined.csv')
     

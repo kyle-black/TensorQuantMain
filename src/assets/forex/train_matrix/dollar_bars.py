@@ -27,14 +27,14 @@ def dollar_bar_creator(asset,dollar_amt):
     for i, d in df_.iterrows():
 
 
-        #dollar_count+=round((d[volume] * d[close]),2)
-        vol_count += d[volume]
+        dollar_count+=round((d[volume] * d[close]),2)
+        #vol_count += d[volume]
 
         if vol_count >= dollar_amt:
             bar ={'Date':i,'Close':d[close],'Volume':d[volume],'AUDUSD':d['AUDUSD_Close'],'USDCAD':d['USDCAD_Close']}
             new_bar.append(bar)
-            vol_count = 0 
-            #dollar_count = 0
+         #   vol_count = 0 
+            dollar_count = 0
          
         
 
