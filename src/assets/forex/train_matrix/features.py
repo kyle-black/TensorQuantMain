@@ -90,6 +90,7 @@ def add_stochastic_oscillator(df, window_length):
 
     df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
     df['%D'] = df['%K'].rolling(window=window_length).mean()
+    return df
 
 
 def calculate_OBV(df):
@@ -98,7 +99,7 @@ def calculate_OBV(df):
     df['direction'][df['daily_return'] == 0] = 0
     df['volume_direction'] = df['Volume'] * df['direction']
     df['OBV'] = df['volume_direction'].cumsum()
-
+    return df
 
 
 
