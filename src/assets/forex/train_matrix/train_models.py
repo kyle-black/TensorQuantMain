@@ -1291,7 +1291,7 @@ def Hist_boosted(df, asset, lookback):
     }
 
     # Initialize GridSearchCV
-    grid_search = GridSearchCV(clf_hist, param_grid, cv=4, random_state=42)
+    grid_search = GridSearchCV(clf_hist, param_grid, cv=4)
 
     # Perform grid search for Histogram Gradient Boosting
     grid_search.fit(X, y)
