@@ -23,8 +23,11 @@ def obtain_data(security):
     # Establish a connection
     with engine.connect() as connection:
         # Execute the query and load the result into a DataFrame
-        df = pd.read_sql_query("""SELECT EURUSD.Date, EURUSD.Close as EURUSD_Close,EURUSD.Volume as EURUSD_Volume
-                FROM EURUSD;""", connection)
+        df = pd.read_sql_query("""SELECT EURUSD.Date, EURUSD.Close as EURUSD_Close,EURUSD.Volume as EURUSD_Volume, AUDUSD.Close as AUDUSD_Close, 
+                USDCAD.Close as USDCAD_Close
+                FROM EURUSD 
+                JOIN AUDUSD ON AUDUSD.Date = EURUSD.Date    
+                JOIN USDCAD ON USDCAD.Date = EURUSD.Date;""", connection)
 
     # Convert the 'date' column to datetime and then to Unix timestamp
     #df['Date'] = pd.to_datetime(df['Date'])
