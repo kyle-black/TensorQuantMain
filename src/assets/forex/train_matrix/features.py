@@ -63,46 +63,13 @@ def add_price_features(df, window_length):
     df['RSI'] = 100 - (100 / (1 + rs))
 
 
-    #df['SMI'] = df[close] - ((df['High'] -df['Low']).rolling(window_length=window_length).median()) 
+    df = add_stochastic_oscillator(df, window_length)
+
+    df = calculate_OBV(df)
 
 
-    lookback_period = window_length
-    smoothing_period = window_length
 
-    # Calculate the raw SMI
-    '''
-    high_low_diff = df[high] - df[low]
-    close_minus_lowest_low = df[close] - high_low_diff.rolling(window=lookback_period).min()
-    highest_high_minus_lowest_low = high_low_diff.rolling(window=lookback_period).max() - high_low_diff.rolling(window=lookback_period).min()
-
-    raw_smi = (close_minus_lowest_low / highest_high_minus_lowest_low) * 100
-    double_smooth_smi1 = raw_smi.ewm(span=smoothing_period, adjust=False).mean()
-    double_smooth_smi2 = double_smooth_smi1.ewm(span=smoothing_period, adjust=False).mean()
-
-    df['SMI'] = double_smooth_smi2
-
-    '''
-
-    '''
-    ##### get weekday from dataframe
-
-     # Convert 'Date' column to datetime if it's not already
-    if 'Date' in df.columns and not pd.api.types.is_datetime64_any_dtype(df['Date']):
-        df['Date'] = pd.to_datetime(df['Date'])
-
-    # [Your existing code...]
-
-    # Extract weekday and hour
-    if 'Date' in df.columns:
-        df['weekday'] = df['Date'].dt.weekday + 1  # +1 to make it 1-7 instead of 0-6
-        df['hour'] = df['Date'].dt.hour
-    elif isinstance(df.index, pd.DatetimeIndex):
-        df['weekday'] = df.index.weekday + 1
-        df['hour'] = df.index.hour
-    else:
-        raise ValueError("No datetime information found in DataFrame")
-    '''
-
+   
 
 
 
@@ -111,6 +78,25 @@ def add_price_features(df, window_length):
 
 
     return df
+
+
+def add_stochastic_oscillator(df, window_length):
+    # Calculate the Stochastic Oscillator
+    low_min  = df['Close'].rolling(window=window_length).min()
+    high_max = df['Close'].rolling(window=window_length).max()
+
+    df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
+    df['%D'] = df['%K'].rolling(window=window_length).mean()
+
+
+def calculate_OBV(df):
+    df['daily_return'] = df['Close'].diff()
+    df['direction'] = np.where(df['daily_return'] > 0, 1, -1)
+    df['direction'][df['daily_return'] == 0] = 0
+    df['volume_direction'] = df['Volume'] * df['direction']
+    df['OBV'] = df['volume_direction'].cumsum()
+
+
 
 
 def get_weights(d, size):
