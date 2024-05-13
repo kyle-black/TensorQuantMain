@@ -159,7 +159,7 @@ if __name__ in "__main__":
     asset = 'EURUSD'
     dollar_amount =10000
 
-    lookback = 40
+    lookback = 20
     
     raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}_joined.csv')
     
