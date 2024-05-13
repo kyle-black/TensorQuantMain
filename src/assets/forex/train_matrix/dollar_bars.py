@@ -44,7 +44,7 @@ def dollar_bar_creator(asset,dollar_amt):
         #print(i,d)
 
     new_bar_df = pd.DataFrame(new_bar)
-    new_bar_df['Returns'] = new_bar_df['Close'].pct_change()
+    new_bar_df['Returns'] = new_bar_df[close].pct_change()
     new_bar_df['Returns_100'] = new_bar_df['Returns'] *100
 
 
