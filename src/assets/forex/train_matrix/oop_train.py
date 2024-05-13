@@ -157,7 +157,7 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =100000
+    dollar_amount =10000
 
     lookback = 40
     
