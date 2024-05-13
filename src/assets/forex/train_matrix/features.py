@@ -10,7 +10,10 @@ def add_price_features(df, window_length):
 
    # if asset is not None:
     #open = 'Open'
+    
     close ='Close'
+
+    
     #high = 'High'
     #low = 'Low'
     #else: 
@@ -82,15 +85,15 @@ def add_price_features(df, window_length):
 
 def add_stochastic_oscillator(df, window_length):
     # Calculate the Stochastic Oscillator
-    low_min  = df['EURUSD_Close'].rolling(window=window_length).min()
-    high_max = df['EURUSD_Close'].rolling(window=window_length).max()
+    low_min  = df['Close'].rolling(window=window_length).min()
+    high_max = df['Close'].rolling(window=window_length).max()
 
-    df['%K'] = (df['EURUSD_Close'] - low_min) / (high_max - low_min) * 100
+    df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
     df['%D'] = df['%K'].rolling(window=window_length).mean()
 
 
 def calculate_OBV(df):
-    df['daily_return'] = df['EURUSD_Close'].diff()
+    df['daily_return'] = df['Close'].diff()
     df['direction'] = np.where(df['daily_return'] > 0, 1, -1)
     df['direction'][df['daily_return'] == 0] = 0
     df['volume_direction'] = df['Volume'] * df['direction']
