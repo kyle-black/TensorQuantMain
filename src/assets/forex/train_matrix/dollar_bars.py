@@ -31,7 +31,7 @@ def dollar_bar_creator(asset,dollar_amt):
 
 
         if dollar_count >= dollar_amt:
-            bar ={'Date':i,'Close':d[close],'AUDUSD':d['AUDUSD_Close'],'USDCAD':d['USDCAD_Close']}
+            bar ={'Date':i,'Close':d[close]} #,'AUDUSD':d['AUDUSD_Close'],'USDCAD':d['USDCAD_Close']}
             new_bar.append(bar)
             dollar_count = 0
          
