@@ -236,17 +236,17 @@ if __name__ in "__main__":
   
 
     # Filter df by tEvents
-    filtered_df = df[df.index.isin(tEvents)]
+   # filtered_df = df[df.index.isin(tEvents)]
 
-    #filtered_df = df[df.isin(tEvents)]
+    filtered_df = df[df.isin(tEvents)]
 
 
     #filtered_df =df
     print('filtered_df:',filtered_df)
     filtered_df =filtered_df.dropna()
-    print('df:',filtered_df)
-
-    m = Model(filtered_df, asset)
+    #print('df:',filtered_df)
+    df = df.dropna()
+    m = Model(df, asset)
     print(m.train_model())
     
    # df =cb.create_dollar_bars()

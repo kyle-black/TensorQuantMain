@@ -30,7 +30,7 @@ def dollar_bar_creator(asset,dollar_amt):
         dollar_count+=round((d[volume] * d[close]),2)
         #vol_count += d[volume]
 
-        if vol_count >= dollar_amt:
+        if dollar_count >= dollar_amt:
             bar ={'Date':i,'Close':d[close],'Volume':d[volume],'AUDUSD':d['AUDUSD_Close'],'USDCAD':d['USDCAD_Close']}
             new_bar.append(bar)
          #   vol_count = 0 
@@ -44,7 +44,7 @@ def dollar_bar_creator(asset,dollar_amt):
         #print(i,d)
 
     new_bar_df = pd.DataFrame(new_bar)
-    new_bar_df['Returns'] = new_bar_df[close].pct_change()
+    new_bar_df['Returns'] = new_bar_df['Close'].pct_change()
     new_bar_df['Returns_100'] = new_bar_df['Returns'] *100
 
 

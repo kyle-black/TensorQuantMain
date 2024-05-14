@@ -39,6 +39,12 @@ from sklearn.model_selection import cross_val_score
 
 from sklearn.pipeline import make_pipeline
 
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+from sklearn.tree import export_graphviz
+import pydotplus
+
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
 
@@ -1270,14 +1276,16 @@ def Hist_boosted(df, asset, lookback):
 
     print('input dataframe:',df.columns)
 
-    df = df.drop(['Date', 'upper_barrier', 'lower_barrier','Close'], axis =1)
+    df = df.drop(['Date', 'upper_barrier', 'lower_barrier','Volume','Returns','Returns_100','Middle_Band', 'Upper_Band',
+       'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', '%K',
+       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV'], axis =1)
 
     X = df.drop('label',axis=1)
     y = df['label']
 
     # Initialize the classifiers with PCA and StandardScaler
-    clf_hist = make_pipeline(StandardScaler(), PCA(n_components=2), HistGradientBoostingClassifier())
-    clf_rf = make_pipeline(StandardScaler(), PCA(n_components=2), RandomForestClassifier())
+    clf_hist = make_pipeline(StandardScaler(), PCA(n_components=3), HistGradientBoostingClassifier())
+    clf_rf = make_pipeline(StandardScaler(), PCA(n_components=3), RandomForestClassifier())
 
     # Define parameter grid for HistGradientBoostingClassifier
     param_grid = {
@@ -1302,3 +1310,26 @@ def Hist_boosted(df, asset, lookback):
     scores_rf = cross_val_score(clf_rf, X, y, cv=4)
     print("Random Forest cross-validation scores: ", scores_rf)
     print("Average Random Forest cross-validation score: ", scores_rf.mean())
+
+
+
+# Fit the RandomForestClassifier
+    clf_rf = RandomForestClassifier()
+    clf_rf.fit(X, y)
+
+# Select one of the trees
+    estimator = clf_rf.estimators_[0]
+
+    # Plot the tree
+        # Export the tree to a .dot file
+    dot_data = export_graphviz(estimator, 
+                            out_file=None, 
+                            feature_names=X.columns, 
+                             
+                            filled=True, 
+                            impurity=True, 
+                            rounded=True)
+
+    # Convert the .dot file to a .png file
+    graph = pydotplus.graph_from_dot_data(dot_data)
+    graph.write_png('tree.png')
