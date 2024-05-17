@@ -4,6 +4,8 @@ from sqlalchemy import Table, Column, Integer, Float, DateTime, MetaData, VARCHA
 from sqlalchemy import BigInteger
 import os
 from sqlalchemy import inspect
+import pymysql
+pymysql.install_as_MySQLdb()
 
 
 
