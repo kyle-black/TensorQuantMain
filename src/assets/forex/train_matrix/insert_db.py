@@ -74,7 +74,7 @@ def obtain_data(security):
     # Establish a connection
     with engine.connect() as connection:
         # Execute the query and load the result into a DataFrame
-        df = pd.read_sql_query("""SELECT E.Close as EURUSD_CLOSE, C.Close as USDCAD_Close FROM EURUSD E JOIN USDCAD C ON C.Date =E.Date;""", connection)
+        df = pd.read_sql_query("""SELECT E.Date as Date, E.Close as EURUSD_CLOSE, C.Close as USDCAD_Close FROM EURUSD E JOIN USDCAD C ON C.Date =E.Date;""", connection)
 
     # Convert the 'date' column to datetime and then to Unix timestamp
     #df['Date'] = pd.to_datetime(df['Date'])
