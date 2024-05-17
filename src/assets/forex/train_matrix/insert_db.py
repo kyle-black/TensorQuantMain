@@ -84,7 +84,7 @@ def obtain_data(security):
    # df.rename(columns={ 'open': 'Open','high':'High', 'low':'Low', 'close':'Close', 'volume':'Volume'}, inplace=True)
 
     # Set 'Date' as the index
-    df.set_index('Date', inplace=True)
+   # df.set_index('Date', inplace=True)
 
     # Remove duplicates
     df = df[~df.index.duplicated(keep='first')]
