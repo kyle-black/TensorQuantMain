@@ -87,7 +87,7 @@ class FeatureMaker:
 
     def feature_add(self):
 
-        results =features.add_price_features(self.bars_df, self.window)
+        results =features.add_price_features(self.bars_df, self.asset, self.window)
 
         return results
 
@@ -157,7 +157,7 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =100000
+    dollar_amount =1000
 
     lookback = 40
     

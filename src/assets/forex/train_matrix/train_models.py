@@ -42,8 +42,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 
-from sklearn.tree import export_graphviz
-import pydotplus
+#from sklearn.tree import export_graphviz
+#import pydotplus
 
 #import neuralnet
 #from tensorflow.keras.utils import to_categorical
@@ -1318,18 +1318,8 @@ def Hist_boosted(df, asset, lookback):
     clf_rf.fit(X, y)
 
 # Select one of the trees
-    estimator = clf_rf.estimators_[0]
+   
 
     # Plot the tree
         # Export the tree to a .dot file
-    dot_data = export_graphviz(estimator, 
-                            out_file=None, 
-                            feature_names=X.columns, 
-                             
-                            filled=True, 
-                            impurity=True, 
-                            rounded=True)
-
-    # Convert the .dot file to a .png file
-    graph = pydotplus.graph_from_dot_data(dot_data)
-    graph.write_png('tree.png')
+    

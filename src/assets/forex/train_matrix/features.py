@@ -5,13 +5,13 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.statespace.tools import diff
 
 
-def add_price_features(df, window_length):
+def add_price_features(df,asset, window_length):
     df =df.copy()
 
    # if asset is not None:
     #open = 'Open'
     
-    close ='Close'
+    close ='{asset}_Close'
 
     
     #high = 'High'
