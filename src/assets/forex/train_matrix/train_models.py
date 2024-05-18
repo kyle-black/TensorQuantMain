@@ -1276,9 +1276,7 @@ def Hist_boosted(df, asset, lookback):
 
     print('input dataframe:',df.columns)
 
-    df = df.drop(['Date', 'upper_barrier', 'lower_barrier','Volume','Returns','Returns_100','Middle_Band', 'Upper_Band',
-       'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', '%K',
-       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV'], axis =1)
+    df = df.drop(['Date', 'upper_barrier', 'lower_barrier'], axis =1)
 
     X = df.drop('label',axis=1)
     y = df['label']

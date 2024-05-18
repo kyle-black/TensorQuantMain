@@ -19,40 +19,20 @@ def table_exists(name, engine):
 
 
 def add_table(security):
+    ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
+    engine = create_engine(db_pass, connect_args=ssl_args)
     # Read the CSV data
-    df = pd.read_csv(f'updated_data/train_data/redo/{security}_R2.csv')
-
-   # df['Datetime'] = pd.to_datetime(df['Date'], unit='s')
-
+    df = pd.read_csv(f'updated_data/train_data/redo/{security}.csv')
+    df['Date'] = pd.to_datetime(df['Date'])
     
-  #  df.insert(0, 'id', range(1, 1 + len(df)))
     df['Asset'] = security
     df['Asset_Type'] = 'forex'
-    # Set 'id' as the index
+    # Set 'Date' as the index
     df.set_index('Date', inplace=True)
 
-   # ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
     engine = create_engine(db_pass)
 
-    metadata = MetaData()
-
-    
-    table = Table(
-        security, metadata,
-      #  Column('id', Integer, primary_key=True),
-        Column('Date', DateTime, primary_key=True),
-        Column('Open', Float),
-        Column('Low', Float),
-        Column('High', Float),
-        Column('Close', Float),
-        Column('Volume', Integer),
-        Column('Asset', VARCHAR(255)),
-        Column('Asset_Type', VARCHAR(255)))
-
-
-    metadata.create_all(engine)
-
-    df.to_sql(f'{security}', con=engine, if_exists='append', index_label='Date')
+    df.to_sql(f'{security}', con=engine, if_exists='replace', index=True, index_label='Date')
 
 def drop_table(security):
     ssl_args = {'ssl': {'ca': 'ca-certificate.crt'}}
@@ -105,16 +85,16 @@ if __name__ in "__main__":
    # engine = create_engine(db_pass)
     
    # security = ['EURUSD','USDCAD','AUDUSD','NZDJPY','GBPJPY','USDCHF','USDHKD','USDJPY']
-    security ='EURUSD'
+    security ='NZDJPY'
     
     
     #for i in security:
 
     print(f'pulling {security}...')
        # if not table_exists(i, engine):
-        #    add_table(i)
-       # drop_table(i)
-    obtain_data(security)
+    add_table(security)
+    #drop_table(security)
+    #obtain_data(security)
 
 
 

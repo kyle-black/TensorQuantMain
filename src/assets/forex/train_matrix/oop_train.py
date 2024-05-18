@@ -236,9 +236,9 @@ if __name__ in "__main__":
   
 
     # Filter df by tEvents
-   # filtered_df = df[df.index.isin(tEvents)]
+    filtered_df = df[df.index.isin(tEvents)]
 
-    filtered_df = df[df.isin(tEvents)]
+  #  filtered_df = df[df.isin(tEvents)]
 
 
     #filtered_df =df
