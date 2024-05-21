@@ -161,7 +161,7 @@ if __name__ in "__main__":
 
     lookback = 40
     
-    raw= pd.read_csv(f'updated_data/train_data/pulled/{asset}_joined.csv')
+    raw= pd.read_csv(f'merged.csv')
     
    # print('raw:',raw)
     raw['Returns'] = raw[f'{asset}_Close'].pct_change()
@@ -193,7 +193,7 @@ if __name__ in "__main__":
    
     #df = pd.read_csv('dollarbar.csv')
 
-    df['Returns'] = df['Close'].pct_change()
+    df['Returns'] = df[f'{asset}_Close'].pct_change()
 
 
     ad = Analysis(df)
@@ -204,6 +204,7 @@ if __name__ in "__main__":
     ad.plot_histogram()
     print('adfuller:',ad.AD_fuller())
     
+'''
     print(df)
     L = Labeling(df,asset, lookback)
     df =L.triple_barriers()
@@ -263,3 +264,4 @@ if __name__ in "__main__":
     #print(ad.ks_test())
     #ad.plot_histogram()
     #print('adfuller:',ad.AD_fuller())
+'''
