@@ -46,7 +46,7 @@ def data_pull():
     engine = create_engine('mysql+mysqlconnector://doadmin:AVNS_oW0kYA-LJsBz5pksVi4@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb')
 
     #####
-    eurusd = pd.read_sql('SELECT Date, Close as Close_EURUSD FROM EURUSD', engine)
+    eurusd = pd.read_sql('SELECT Date, Close as Close_EURUSD,Volume as Volume_EURUSD FROM EURUSD', engine)
     usdchf = pd.read_sql('SELECT Date, Close as Close_USDCHF FROM USDCHF', engine)
     merged = pd.merge(eurusd, usdchf, on='Date', how='left')
     merged['Close_USDCHF'] = merged['Close_USDCHF'].fillna(method='ffill')
@@ -64,15 +64,17 @@ def data_pull():
     merged = pd.merge(merged, audusd, on='Date', how='left')
     merged['Close_AUDUSD'] = merged['Close_AUDUSD'].fillna(method='ffill')
     #######
+    usdjpy = pd.read_sql('SELECT Date, Close as Close_USDJPY FROM USDJPY', engine)
+    merged = pd.merge(merged, usdjpy, on='Date', how='left')
+    merged['Close_USDPY'] = merged['Close_USDJPY'].fillna(method='ffill')
+    ########
 
 
-
-
-    
-    
-    
+    merged.to_csv('merged.csv')
     
     return merged     
+
+
 
 if __name__ == "__main__":
 
