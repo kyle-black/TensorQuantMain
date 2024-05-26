@@ -15,6 +15,7 @@ def plot_pca(df):
 
    X = df[feature_cols]
    X= X[72:]
+   X = X.dropna()
    # Standardize the data
    scaler = StandardScaler()
    X_standardized = scaler.fit_transform(X)
