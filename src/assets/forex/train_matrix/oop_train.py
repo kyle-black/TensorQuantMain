@@ -157,14 +157,14 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =50000
 
     lookback = 40
     
     raw= pd.read_csv(f'merged.csv')
     
    # print('raw:',raw)
-    raw['Returns'] = raw[f'{asset}_Close'].pct_change()
+    raw['Returns'] = raw[f'Close_{asset}'].pct_change()
     print(raw)
     
     cb = CreateBars(asset,raw, dollar_amount)
@@ -193,7 +193,7 @@ if __name__ in "__main__":
    
     #df = pd.read_csv('dollarbar.csv')
 
-    df['Returns'] = df[f'{asset}_Close'].pct_change()
+    #df['Returns'] = df[f'{asset}_Close'].pct_change()
 
 
     ad = Analysis(df)
@@ -204,7 +204,7 @@ if __name__ in "__main__":
     ad.plot_histogram()
     print('adfuller:',ad.AD_fuller())
     
-'''
+
     print(df)
     L = Labeling(df,asset, lookback)
     df =L.triple_barriers()
@@ -239,9 +239,9 @@ if __name__ in "__main__":
     # Filter df by tEvents
     filtered_df = df[df.index.isin(tEvents)]
 
-  #  filtered_df = df[df.isin(tEvents)]
+    filtered_df = df[df.isin(tEvents)]
 
-
+    #filtered_df =df
     #filtered_df =df
     print('filtered_df:',filtered_df)
     filtered_df =filtered_df.dropna()
@@ -264,4 +264,3 @@ if __name__ in "__main__":
     #print(ad.ks_test())
     #ad.plot_histogram()
     #print('adfuller:',ad.AD_fuller())
-'''

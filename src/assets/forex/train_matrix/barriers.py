@@ -201,11 +201,11 @@ def apply_triple_barrier(df, pt_sl, num_days_active, asset):
     """
     
     if asset is not None:
-        close ='Close'
+        close ='Close_EURUSD'
      #   high = 'High'
      #   low = 'Low'
     else: 
-        close='Close' 
+        close='Close_EURUSD' 
       #  high='High'
       #  low ='Low' 
     
