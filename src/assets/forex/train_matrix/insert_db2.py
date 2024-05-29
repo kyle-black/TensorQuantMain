@@ -81,17 +81,21 @@ def data_pull():
 
 def add_merged():
     merged = pd.read_csv('merged.csv')
+    merged['Date'] = pd.to_datetime(merged['Date'])  # Convert 'Date' to datetime
+
     indicator_list = ['15Yr_Fixed','30Yr_Fixed','CPI','GDP','Production_Total_Index','Yields_COD','consumerSentiment','federalFunds','inflation','inflationRate','initialClaims','nominalPotentialGDP','rates_CreditCards','realGDP','realGDPPerCapita', 'retailMoneyFunds', 'retailSales']
 
     engine = create_engine('mysql+mysqlconnector://doadmin:AVNS_oW0kYA-LJsBz5pksVi4@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb')
      
     for i in indicator_list:
         data = pd.read_sql(f'SELECT date as Date, value as {i} FROM {i}', engine)
-        data['Date'] = pd.to_datetime(data['Date'])
+        data['Date'] = pd.to_datetime(data['Date'])  # Convert 'Date' to datetime
         merged = pd.merge_asof(merged, data, on='Date', direction='nearest')
         merged[i] = merged[i].fillna(method='ffill')
 
     merged.to_csv('merged.csv')
+
+    return merged
 
     return merged
     
