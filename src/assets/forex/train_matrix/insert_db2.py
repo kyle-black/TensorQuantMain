@@ -80,7 +80,7 @@ def data_pull():
     return merged  
 
 def add_merged():
-
+    merged = pd.read_csv('merged.csv')
     indicator_list = ['15Yr_Fixed','30Yr_Fixed','CPI','GDP','Production_Total_Index','Yields_COD','consumerSentiment','federalFunds','inflation','inflationRate','initialClaims','nominalPotentialGDP','rates_CreditCards','realGDP','realGDPPerCapita', 'retailMoneyFunds', 'retailSales']
 
     engine = create_engine('mysql+mysqlconnector://doadmin:AVNS_oW0kYA-LJsBz5pksVi4@tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com:25060/defaultdb')
