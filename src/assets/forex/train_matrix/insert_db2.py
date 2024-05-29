@@ -66,9 +66,14 @@ def data_pull():
     #######
     usdjpy = pd.read_sql('SELECT Date, Close as Close_USDJPY FROM USDJPY', engine)
     merged = pd.merge(merged, usdjpy, on='Date', how='left')
-    merged['Close_USDPY'] = merged['Close_USDJPY'].fillna(method='ffill')
+    merged['Close_USDJPY'] = merged['Close_USDJPY'].fillna(method='ffill')
     ########
-
+    durable = pd.read_sql('SELECT date as Date, value as durableGoods FROM durableGoods', engine)
+    durable['Date'] = pd.to_datetime(durable['Date'])
+    merged = pd.merge_asof(merged, durable, on='Date', direction='nearest')
+    merged['durableGoods'] = merged['durableGoods'].fillna(method='ffill')
+    
+    ########
 
     merged.to_csv('merged.csv')
     

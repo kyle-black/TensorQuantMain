@@ -122,7 +122,7 @@ def random_forest_classifier(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 4
+    n_components = 10
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
@@ -1282,8 +1282,8 @@ def Hist_boosted(df, asset, lookback):
     y = df['label']
 
     # Initialize the classifiers with PCA and StandardScaler
-    clf_hist = make_pipeline(StandardScaler(), PCA(n_components=3), HistGradientBoostingClassifier())
-    clf_rf = make_pipeline(StandardScaler(), PCA(n_components=3), RandomForestClassifier())
+    clf_hist = make_pipeline(StandardScaler(), PCA(n_components=10), HistGradientBoostingClassifier())
+    clf_rf = make_pipeline(StandardScaler(), PCA(n_components=10), RandomForestClassifier())
 
     # Define parameter grid for HistGradientBoostingClassifier
     param_grid = {

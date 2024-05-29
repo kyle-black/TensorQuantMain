@@ -66,10 +66,10 @@ def add_price_features(df,asset, window_length):
     df['RSI'] = 100 - (100 / (1 + rs))
 
 
-    df = add_stochastic_oscillator(df, window_length)
+   # df = add_stochastic_oscillator(df, window_length)
 
-    df = calculate_OBV(df)
-    df = add_ichimoku(df)
+   # df = calculate_OBV(df)
+   # df = add_ichimoku(df)
 
 
 

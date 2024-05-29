@@ -36,7 +36,7 @@ class CreateBars:
 
     def create_dollar_bars(self):
         """Create dollar bars from asset data."""
-        self.dollar_bars = dbc(self.asset,self.dollar_amt )
+        self.dollar_bars = dbc(self.asset,self.raw_bars,self.dollar_amt )
         return self.dollar_bars
     
     def create_CUMSUM_filter(self, bars):
@@ -157,14 +157,17 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =50000
+    dollar_amount =10000
 
-    lookback = 40
+    lookback = 20
     
     raw= pd.read_csv(f'merged.csv')
     
    # print('raw:',raw)
-    raw['Returns'] = raw[f'Close_{asset}'].pct_change()
+
+    for i in ['AUDUSD','USDCAD','USDCHF']:
+    
+        raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
     print(raw)
     
     cb = CreateBars(asset,raw, dollar_amount)
@@ -210,7 +213,7 @@ if __name__ in "__main__":
     df =L.triple_barriers()
 
     print('labeldf',df)
-    
+    df.to_csv('test_df.csv')
 
 #    print('tEvents:',tEvents)
 
@@ -219,7 +222,7 @@ if __name__ in "__main__":
 
 
     df= fm.feature_add()
-    fm.elbow_()
+   # fm.elbow_()
     
 
     print('df test',df)
@@ -237,17 +240,19 @@ if __name__ in "__main__":
   
 
     # Filter df by tEvents
-   # filtered_df = df[df.index.isin(tEvents)]
+    filtered_df = df[df.index.isin(tEvents)]
 
-    filtered_df = df[df.isin(tEvents)]
-
+   # filtered_df = df[df.isin(tEvents)]
+    
+    #filtered_df = filtered_df[42:]
+    #filtered_df =df
     #filtered_df =df
     #filtered_df =df
     print('filtered_df:',filtered_df)
     filtered_df =filtered_df.dropna()
     #print('df:',filtered_df)
-    df = df.dropna()
-    m = Model(df, asset)
+   # df = df.dropna()
+    m = Model(filtered_df, asset)
     print(m.train_model())
     
    # df =cb.create_dollar_bars()
