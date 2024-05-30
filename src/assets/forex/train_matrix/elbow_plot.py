@@ -5,12 +5,12 @@ from sklearn.preprocessing import StandardScaler
 
 
 def plot_pca(df):
-   feature_cols = [ 'Close', 'Volume', 'AUDUSD', 'USDCAD', 'USDCHF', 'Returns',
-       'Returns_100', 'upper_barrier', 'lower_barrier', 'label', 'Middle_Band',
-       'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD',
-       'RSI', '%K', '%D', 'daily_return', 'direction', 'volume_direction',
-       'OBV', 'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span']
+   feature_cols = [ 'Close', 'Volume','Close_USDCHF', 'Close_USDCAD', 'Close_AUDUSD',
+       'durableGoods', '15Yr_Fixed', '30Yr_Fixed', 'CPI',
+       'GDP', 'Production_Total_Index', 'Yields_COD', 'consumerSentiment',
+       'federalFunds', 'inflation', 'inflationRate', 'initialClaims',
+       'nominalPotentialGDP', 'rates_CreditCards', 'realGDP',
+       'realGDPPerCapita', 'retailMoneyFunds', 'retailSales']
 
 
    X = df[feature_cols]

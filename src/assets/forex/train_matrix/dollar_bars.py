@@ -31,7 +31,11 @@ def dollar_bar_creator(asset,df_,dollar_amt):
         #vol_count += d[volume]
 
         if dollar_count >= dollar_amt:
-            bar ={'Date':i,'Close':d[close],'Volume':d[volume],'AUDUSD':d['Close_AUDUSD'],'USDCAD':d['Close_USDCAD'],'USDCHF':d['Close_USDCHF'],'AUDUSD_Returns':d['AUDUSD_Returns'],'USDCAD_Returns':d['USDCAD_Returns'],'USDCHF_Returns':d['USDCHF_Returns']}
+            bar ={'Date':i,'Close':d[close],'Volume':d[volume],'Close_AUDUSD':d['Close_AUDUSD'],'Close_USDCAD':d['Close_USDCAD'],'Close_USDCHF':d['Close_USDCHF'],'AUDUSD_Returns':d['AUDUSD_Returns'],'USDCAD_Returns':d['USDCAD_Returns'],'USDCHF_Returns':d['USDCHF_Returns'], 'durableGoods':d['durableGoods'], '15Yr_Fixed':d['durableGoods'], '30Yr_Fixed':d['30Yr_Fixed'], 'CPI':d['CPI'],
+       'GDP':d['GDP'], 'Production_Total_Index':d['Production_Total_Index'], 'Yields_COD':d['Yields_COD'], 'consumerSentiment':d['consumerSentiment'],
+       'federalFunds':d['federalFunds'], 'inflation':d['inflation'], 'inflationRate':d['inflationRate'], 'initialClaims':d['initialClaims'],
+       'nominalPotentialGDP':d['nominalPotentialGDP'], 'rates_CreditCards':d['rates_CreditCards'], 'realGDP':d['realGDP'],
+       'realGDPPerCapita':d['realGDPPerCapita'], 'retailMoneyFunds':d['retailMoneyFunds'], 'retailSales':d['retailSales']}
             new_bar.append(bar)
          #   vol_count = 0 
             dollar_count = 0

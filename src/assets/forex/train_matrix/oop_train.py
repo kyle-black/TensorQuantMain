@@ -12,7 +12,7 @@ from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
-from train_models import random_forest_classifier, Hist_boosted
+from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
 
 
@@ -144,8 +144,8 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-       # output =random_forest_classifier(self.bars_df, self.asset, lookback)
-        output= Hist_boosted(self.bars_df, self.asset, lookback)
+        output =ensemble_methods(self.bars_df, self.asset, lookback)
+        #output= Hist_boosted(self.bars_df, self.asset, lookback)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
         return output
@@ -155,9 +155,9 @@ class Model:
 
 
 if __name__ in "__main__":
-    
+    '''
     asset = 'EURUSD'
-    dollar_amount =10000
+    dollar_amount =
 
     lookback = 20
     
@@ -224,17 +224,19 @@ if __name__ in "__main__":
     df= fm.feature_add()
    # fm.elbow_()
     
-
+    
     print('df test',df)
 
     
     
    # fm.elbow_()
-   
+    '''
 
    # cb = CreateBars(asset,raw, dollar_amount)
-    
-    
+    df =pd.read_csv('test_df.csv')
+    lookback =20
+    asset='EURUSD'
+    fm = FeatureMaker(df, lookback, asset)
     
     tEvents = fm.create_CUMSUM_filter()
   
@@ -254,18 +256,8 @@ if __name__ in "__main__":
    # df = df.dropna()
     m = Model(filtered_df, asset)
     print(m.train_model())
+
+
+
     
-   # df =cb.create_dollar_bars()
-    #print(df)
-
-    #df.to_csv('newnewtest.csv')
-
-
-
-    #ad = Analysis(df)
-
-    #print(ad.jaque_bera())
-
-    #print(ad.ks_test())
-    #ad.plot_histogram()
-    #print('adfuller:',ad.AD_fuller())
+  
