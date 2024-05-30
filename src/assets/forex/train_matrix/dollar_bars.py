@@ -48,8 +48,14 @@ def dollar_bar_creator(asset,df_,dollar_amt):
         #print(i,d)
 
     new_bar_df = pd.DataFrame(new_bar)
-    new_bar_df['Returns'] = new_bar_df['Close'].pct_change()
-    new_bar_df['Returns_100'] = new_bar_df['Returns'] *100
+    new_bar_df['pct_change'] = new_bar_df['Close'].pct_change()
+    pct_change_mean = new_bar_df['pct_change'].mean()
+    pct_change_std = new_bar_df['pct_change'].std()
+
+    new_bar_df['normal_pct_change'] = ((new_bar_df['pct_change']-pct_change_mean) / pct_change_std)
+
+
+    #new_bar_df['Returns_100'] = new_bar_df['Returns'] *100
 
 
     return new_bar_df

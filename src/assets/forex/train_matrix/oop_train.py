@@ -52,13 +52,13 @@ class Analysis:
 
 
     def jaque_bera(self):   # Test for normality
-        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['Returns'][1:])
+        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['normal_pct_change'][1:])
         return jb_stat, p_value, _, _ 
     
     def ks_test(self):
         # Standardize the data (mean 0, standard deviation 1)
         #n_ = len(self.bars_df['Close'][500000:])
-        standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
+        standardized_returns = (self.bars_df['normal_pct_change'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
       #  standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
         #standardized_returns = (self.bars_df['Returns'][1:])
         # Perform the KS test against a normal distribution
@@ -155,9 +155,9 @@ class Model:
 
 
 if __name__ in "__main__":
-    '''
+    
     asset = 'EURUSD'
-    dollar_amount =
+    dollar_amount =500000
 
     lookback = 20
     
@@ -178,13 +178,13 @@ if __name__ in "__main__":
     
     ad = Analysis(df)
 
-    #print(ad.jaque_bera())
-    print(df)
-    print(ad.ks_test())
+    print(ad.jaque_bera())
+    #print(df)
+   # print(ad.ks_test())
     ad.plot_histogram()
    # ad.elbow_()
     print('adfuller:',ad.AD_fuller())
-    
+    '''
    
    
    
