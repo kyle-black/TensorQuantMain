@@ -399,6 +399,119 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
     return df_merged
 
 
+def new_apply_triple_barrier_R(df, pt_sl, endbar, asset):
+    """
+    Apply the triple barrier method to label events.
+
+    Parameters:
+    df: DataFrame with price data.
+    pt_sl: List of multipliers for profit taking and stop-loss.
+    num_days_active: Number of days the barrier should be kept active.
+
+    Returns:
+    DataFrame with events labeled.
+    """
+    
+    if asset is not None:
+        close ='Close'
+     #   high = 'High'
+     #   low = 'Low'
+    else: 
+        close='Close' 
+      #  high='High'
+      #  low ='Low' 
+    
+
+
+
+    df = df.loc[~df.Date.duplicated(keep='first')]
+   # df.Date = df.Date.astype('int')
+
+    #print(df.Date)
+    #df.set_index('Date', inplace=True)
+
+    df.index = pd.to_datetime(df['Date'])
+    #df.index = pd.to_datetime(df.Date, unit='s')
+    
+
+    print('dataframeindex:', df.index)
+   # endbar = endbar + 50
+    # Compute rolling daily volatility
+    #rolling_window = 72 # Example window size, you can adjust this
+    daily_volatility = df[close].pct_change().rolling(window=endbar).std()
+######You dont need rolling volitility you need to use the volitlity of the  total pct change
+    barriers = pd.DataFrame(index=df.index)
+    bar_count = 0
+    for timestamp, data in df.iterrows():
+        bar_count += 1
+        price = data[close]
+        volatility = daily_volatility.loc[timestamp]
+
+        upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
+        lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
+
+        barriers.at[timestamp, 'upper_barrier'] = upper_barrier
+        barriers.at[timestamp, 'lower_barrier'] = lower_barrier
+
+        #t1_date = timestamp + pd.Timedelta(hours=72)
+        #t1_date = min(t1_date, df.index[-1])
+        
+        #barriers.at[timestamp, 't1'] = t1_date
+
+        df_temp = df.loc[timestamp:].iloc[1:]
+
+
+        try:
+            end_bar = df.iloc[(bar_count + endbar-1)].name
+
+           # print('endbar!!!!:',end_bar)
+           # print('endbartype:',type(end_bar))
+
+            touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
+            touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
+
+            barriers.at[timestamp, 'touch_upper'] = touch_upper
+            barriers.at[timestamp, 'touch_lower'] = touch_lower
+            
+        ####### New LOGIC for barrier touching
+            
+            if (touch_upper < touch_lower) and (touch_upper < end_bar):
+                barriers.at[timestamp, 'label'] = 1
+
+            elif (touch_lower < touch_upper) and (touch_lower < end_bar):
+                barriers.at[timestamp, 'label'] = -1
+            
+            else:
+                barriers.at[timestamp, 'label'] = 0
+        except:
+            touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
+            touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
+
+            barriers.at[timestamp, 'touch_upper'] = touch_upper
+            barriers.at[timestamp, 'touch_lower'] = touch_lower
+
+            barriers.at[timestamp,'label'] =  np.nan
+         
+    ###############################################
+    ####### New LOGIC for barrier touching
+        '''
+        if (touch_upper < touch_lower):
+            barriers.at[timestamp, 'label'] = 1
+
+        elif (touch_lower < touch_upper):
+            barriers.at[timestamp, 'label'] = -1
+        
+ #       else:
+  #          barriers.at[timestamp, 'label'] = 0
+        '''
+    ###############################################
+
+    df_merged = df.join(barriers, how='left')
+    df_merged.to_csv('sanity_check_72.csv')
+    return df_merged
+
+
+
 
 def apply_triple_barrier_P(df, pt_sl, num_days_active):
     """
