@@ -14,6 +14,8 @@ from CUMSUM_filter import gTEvents as gte
 import pandas as pd
 from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
+from check_distro import create_plot as cp
+
 
 
 
@@ -50,27 +52,30 @@ class Analysis:
         # Store the bars dataframe regardless of its type (time, volume, dollar)
         self.bars_df = bars_df
 
+    def make_plot(self):
+        return cp(self.bars_df, 'log_pct_change')
 
     def jaque_bera(self):   # Test for normality
-        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['normal_pct_change'][1:])
+        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['log_pct_change'][1:])
         return jb_stat, p_value, _, _ 
     
     def ks_test(self):
         # Standardize the data (mean 0, standard deviation 1)
         #n_ = len(self.bars_df['Close'][500000:])
-        standardized_returns = (self.bars_df['normal_pct_change'][1:] - self.bars_df['normal_pct_change'][1:].mean()) / self.bars_df['normal_pct_change'][1:].std()
-      #  standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
-        #standardized_returns = (self.bars_df['Returns'][1:])
+        #standardized_returns = (self.bars_df['log_pct_change'][1:] - self.bars_df['log_pct_change'][1:].mean()) / self.bars_df['log_pct_change'][1:].std()
+        standardized_returns = (self.bars_df['log_pct_change'][1:])  
+        
+       
         # Perform the KS test against a normal distribution
         ks_stat, p_value = kstest(standardized_returns, 'norm')
 
         return ks_stat, p_value
     def AD_fuller(self): # Check for Stationary
-        result = adfuller(self.bars_df['normal_pct_change'][1:])
+        result = adfuller(self.bars_df['log_pct_change'][1:])
         return  result
     def plot_histogram(self):
         """Plot a histogram of the 'Returns' data."""
-        plt.hist(self.bars_df['normal_pct_change'][1:], bins=50, edgecolor='black')
+        plt.hist(self.bars_df['log_pct_change'][1:], bins=50, edgecolor='black')
         plt.title('Histogram of Returns')
         plt.xlabel('Returns')
         plt.ylabel('Frequency')
@@ -178,20 +183,23 @@ if __name__ in "__main__":
     
     ad = Analysis(df)
 
+    ad.create_plot()
+
+    '''
     print(ad.jaque_bera())
     #print(df)
    # print(ad.ks_test())
     ad.plot_histogram()
    # ad.elbow_()
     print('adfuller:',ad.AD_fuller())
-    
+    '''
    
    
    
    
    
    
-   
+    '''
    
    
     #df = pd.read_csv('dollarbar.csv')
@@ -256,6 +264,7 @@ if __name__ in "__main__":
    # df = df.dropna()
     m = Model(filtered_df, asset)
     print(m.train_model())
+    '''
     
 
 
