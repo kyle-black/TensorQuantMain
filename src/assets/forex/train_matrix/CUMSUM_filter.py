@@ -2,12 +2,12 @@ import pandas as pd
 
 def gTEvents(gRaw, h=None):
 
-    h = gRaw['Returns'].std()
+    h = gRaw['Close'].pct_change().std()
     tEvents,sPos,sNeg = [],0,0
     diff = gRaw
     
     for idx, i in diff.iterrows():
-        sPos, sNeg = max(0, sPos + i['Returns']), min(0, sNeg + i['Returns'])
+        sPos, sNeg = max(0, sPos + i['pct_change']), min(0, sNeg + i['pct_change'])
         if sNeg < -h:
             sNeg = 0
             tEvents.append(idx)

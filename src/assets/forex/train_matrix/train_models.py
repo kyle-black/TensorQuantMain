@@ -94,7 +94,7 @@ def ensemble_methods(df, asset, lookback):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop(['Date','Close','Volume','Date.1', 'upper_barrier', 'lower_barrier'], axis =1)
+    df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
 
     
     
@@ -136,6 +136,8 @@ def ensemble_methods(df, asset, lookback):
         
     train_data =   train_datasets[-1]
 
+    print('train_dataset', len(train_data))
+
     test_data = test_datasets[-1]
 
   
@@ -170,12 +172,12 @@ def ensemble_methods(df, asset, lookback):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-   # clf =RandomForestClassifier( random_state=44, n_estimators=1000,criterion='gini')
+    clf =RandomForestClassifier( random_state=44, n_estimators=1000,criterion='gini')
     
     
     
     
-    clf = HistGradientBoostingClassifier()
+   # clf = HistGradientBoostingClassifier()
 
    
     clf.fit(X_train, y_train)
@@ -270,7 +272,17 @@ def ensemble_methods(df, asset, lookback):
     all_preds.extend(y_pred.tolist())
     print('###########################')
     #log_loss(y_test, y_pred)
-    l_l = log_loss(y_test, probas)
+
+    classes = np.unique(y_train)
+
+# Compute log loss
+    l_l = log_loss(y_test, probas, labels=classes)
+
+
+
+
+
+    #l_l = log_loss(y_test, probas)
     print('logloss', l_l)  
 
 
@@ -303,7 +315,7 @@ def Hist_boosted(df, asset, lookback):
 
     print('input dataframe:',df.columns)
 
-    df = df.drop(['Date','Date.1', 'upper_barrier', 'lower_barrier'], axis =1)
+    df = df.drop(['Date', 'upper_barrier', 'lower_barrier','pct_change'], axis =1)
 
     X = df.drop('label',axis=1)
     y = df['label']

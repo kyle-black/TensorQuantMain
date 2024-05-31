@@ -326,14 +326,16 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
    # endbar = endbar + 50
     # Compute rolling daily volatility
     #rolling_window = 72 # Example window size, you can adjust this
-    daily_volatility = df[close].pct_change().rolling(window=endbar).std()
+    daily_volatility = df[close].pct_change().std()
+
+   # print('daily volit:', daily_volatility)
 
     barriers = pd.DataFrame(index=df.index)
     bar_count = 0
     for timestamp, data in df.iterrows():
         bar_count += 1
         price = data[close]
-        volatility = daily_volatility.loc[timestamp]
+        volatility = daily_volatility
 
         upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
         lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
@@ -341,16 +343,16 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
         barriers.at[timestamp, 'upper_barrier'] = upper_barrier
         barriers.at[timestamp, 'lower_barrier'] = lower_barrier
 
-        #t1_date = timestamp + pd.Timedelta(hours=72)
-        #t1_date = min(t1_date, df.index[-1])
+        t1_date = timestamp + pd.Timedelta(hours=72)
+        t1_date = min(t1_date, df.index[-1])
         
-        #barriers.at[timestamp, 't1'] = t1_date
+        barriers.at[timestamp, 't1'] = t1_date
 
         df_temp = df.loc[timestamp:].iloc[1:]
 
 
         try:
-            end_bar = df.iloc[(bar_count + endbar-1)].name
+           # end_bar = df.iloc[(bar_count + endbar-1)].name
 
            # print('endbar!!!!:',end_bar)
            # print('endbartype:',type(end_bar))
@@ -361,12 +363,13 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
             barriers.at[timestamp, 'touch_upper'] = touch_upper
             barriers.at[timestamp, 'touch_lower'] = touch_lower
             
+          #  df['end_bar'] =end_bar
         ####### New LOGIC for barrier touching
             
-            if (touch_upper < touch_lower) and (touch_upper < end_bar):
+            if (touch_upper < touch_lower) and (touch_upper < t1_date):
                 barriers.at[timestamp, 'label'] = 1
 
-            elif (touch_lower < touch_upper) and (touch_lower < end_bar):
+            elif (touch_lower < touch_upper) and (touch_lower < t1_date):
                 barriers.at[timestamp, 'label'] = -1
             
             else:
@@ -438,7 +441,7 @@ def new_apply_triple_barrier_R(df, pt_sl, endbar, asset):
    # endbar = endbar + 50
     # Compute rolling daily volatility
     #rolling_window = 72 # Example window size, you can adjust this
-    daily_volatility = df[close].pct_change().rolling(window=endbar).std()
+    daily_volatility = df[close].pct_change().std()
 ######You dont need rolling volitility you need to use the volitlity of the  total pct change
     barriers = pd.DataFrame(index=df.index)
     bar_count = 0

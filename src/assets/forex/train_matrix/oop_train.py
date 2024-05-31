@@ -58,7 +58,7 @@ class Analysis:
     def ks_test(self):
         # Standardize the data (mean 0, standard deviation 1)
         #n_ = len(self.bars_df['Close'][500000:])
-        standardized_returns = (self.bars_df['normal_pct_change'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
+        standardized_returns = (self.bars_df['normal_pct_change'][1:] - self.bars_df['normal_pct_change'][1:].mean()) / self.bars_df['normal_pct_change'][1:].std()
       #  standardized_returns = (self.bars_df['Returns'][1:] - self.bars_df['Returns'][1:].mean()) / self.bars_df['Returns'][1:].std()
         #standardized_returns = (self.bars_df['Returns'][1:])
         # Perform the KS test against a normal distribution
@@ -66,11 +66,11 @@ class Analysis:
 
         return ks_stat, p_value
     def AD_fuller(self): # Check for Stationary
-        result = adfuller(self.bars_df['Returns'][1:])
+        result = adfuller(self.bars_df['normal_pct_change'][1:])
         return  result
     def plot_histogram(self):
         """Plot a histogram of the 'Returns' data."""
-        plt.hist(self.bars_df['Returns'][1:], bins=50, edgecolor='black')
+        plt.hist(self.bars_df['normal_pct_change'][1:], bins=50, edgecolor='black')
         plt.title('Histogram of Returns')
         plt.xlabel('Returns')
         plt.ylabel('Frequency')
@@ -157,9 +157,9 @@ class Model:
 if __name__ in "__main__":
     
     asset = 'EURUSD'
-    dollar_amount =500000
+    dollar_amount =50000
 
-    lookback = 20
+    lookback = 60
     
     raw= pd.read_csv(f'merged.csv')
     
@@ -184,7 +184,7 @@ if __name__ in "__main__":
     ad.plot_histogram()
    # ad.elbow_()
     print('adfuller:',ad.AD_fuller())
-    '''
+    
    
    
    
@@ -230,10 +230,10 @@ if __name__ in "__main__":
     
     
    # fm.elbow_()
-    '''
-
+    
+    
    # cb = CreateBars(asset,raw, dollar_amount)
-    df =pd.read_csv('test_df.csv')
+   # df =pd.read_csv('test_df.csv')
     lookback =20
     asset='EURUSD'
     fm = FeatureMaker(df, lookback, asset)
@@ -256,6 +256,7 @@ if __name__ in "__main__":
    # df = df.dropna()
     m = Model(filtered_df, asset)
     print(m.train_model())
+    
 
 
 
