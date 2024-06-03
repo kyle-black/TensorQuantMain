@@ -15,7 +15,8 @@ import pandas as pd
 from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
 from check_distro import create_plot as cp
-
+import numpy as np
+from scipy.stats import boxcox
 
 
 
@@ -50,20 +51,36 @@ class CreateBars:
 class Analysis:
     def __init__(self, bars_df):
         # Store the bars dataframe regardless of its type (time, volume, dollar)
+
+        bars_df['log_return'] = np.log(bars_df['pips'] / bars_df['pips'].shift(1)).dropna()
+        min_log_return = bars_df['log_return'].min()
+        
+        if min_log_return < 0:
+            bars_df['log_return'] = bars_df['log_return'] - min_log_return + 1  # Add 1 to avoid zero values
+
+# Apply Box-Cox transformation
+        bars_df = bars_df.dropna(subset=['log_return'])
+        bars_df['transformed_log_return'], lambda_value = boxcox(bars_df['log_return'].dropna())
+        bars_df = bars_df.dropna()
+      #  bars_df.loc[:, 'detrended_boxcox_price'] = bars_df['boxcox_price'] - bars_df['boxcox_price'].rolling(window=12).mean()
+        bars_df = bars_df.dropna()
+        
+       # bars_df.loc[:, 'diff_boxcox_price'] = bars_df['boxcox_price'].diff()
+        bars_df = bars_df.dropna()
         self.bars_df = bars_df
 
     def make_plot(self):
-        return cp(self.bars_df, 'log_pct_change')
+        return cp(self.bars_df, 'pct_change')
 
     def jaque_bera(self):   # Test for normality
-        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['log_pct_change'][1:])
+        jb_stat, p_value, _, _ = jarque_bera(self.bars_df['transformed_log_return'][2:])
         return jb_stat, p_value, _, _ 
     
     def ks_test(self):
         # Standardize the data (mean 0, standard deviation 1)
         #n_ = len(self.bars_df['Close'][500000:])
-        #standardized_returns = (self.bars_df['log_pct_change'][1:] - self.bars_df['log_pct_change'][1:].mean()) / self.bars_df['log_pct_change'][1:].std()
-        standardized_returns = (self.bars_df['log_pct_change'][1:])  
+        standardized_returns = (self.bars_df['transformed_log_return'][2:] - self.bars_df['transformed_log_return'][2:].mean()) / self.bars_df['transformed_log_return'][2:].std()
+      #  standardized_returns = (self.bars_df['boxcox_price'][2:])  
         
        
         # Perform the KS test against a normal distribution
@@ -71,11 +88,11 @@ class Analysis:
 
         return ks_stat, p_value
     def AD_fuller(self): # Check for Stationary
-        result = adfuller(self.bars_df['log_pct_change'][1:])
+        result = adfuller(self.bars_df['transformed_log_return'][2:])
         return  result
     def plot_histogram(self):
         """Plot a histogram of the 'Returns' data."""
-        plt.hist(self.bars_df['log_pct_change'][1:], bins=50, edgecolor='black')
+        plt.hist(self.bars_df['transformed_log_return'][2:], bins=50, edgecolor='black')
         plt.title('Histogram of Returns')
         plt.xlabel('Returns')
         plt.ylabel('Frequency')
@@ -160,112 +177,89 @@ class Model:
 
 
 if __name__ in "__main__":
-    
-    asset = 'EURUSD'
-    dollar_amount =50000
-
-    lookback = 60
-    
-    raw= pd.read_csv(f'merged.csv')
-    
-   # print('raw:',raw)
-
-    for i in ['AUDUSD','USDCAD','USDCHF']:
-    
-        raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
-    print(raw)
-    
-    cb = CreateBars(asset,raw, dollar_amount)
-    df =cb.create_dollar_bars()
-    print(df)
-    
-    #df.to_csv('dollarbar.csv')
+    '''
+    df = pd.read_csv('inf_check.csv')
     
     ad = Analysis(df)
 
-    ad.create_plot()
+    #ad.make_plot()
 
-    '''
+    
     print(ad.jaque_bera())
     #print(df)
-   # print(ad.ks_test())
+    print(ad.ks_test())
     ad.plot_histogram()
    # ad.elbow_()
     print('adfuller:',ad.AD_fuller())
     '''
-   
-   
-   
-   
-   
-   
-    '''
-   
-   
-    #df = pd.read_csv('dollarbar.csv')
 
-    #df['Returns'] = df[f'{asset}_Close'].pct_change()
+asset = 'EURUSD'
+dollar_amount =1000
+
+lookback = 60
+
+raw= pd.read_csv(f'merged.csv')
+
+# print('raw:',raw)
+
+for i in ['AUDUSD','USDCAD','USDCHF']:
+
+    raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
+print(raw)
+
+cb = CreateBars(asset,raw, dollar_amount)
+df =cb.create_dollar_bars()
+print(df)
+
+df.to_csv('inf_check.csv')
 
 
-    ad = Analysis(df)
+#print(df)
+L = Labeling(df,asset, lookback)
+df =L.triple_barriers()
 
-    #print(ad.jaque_bera())
-    print(df)
-    print(ad.ks_test())
-    ad.plot_histogram()
-    print('adfuller:',ad.AD_fuller())
-    
-
-    print(df)
-    L = Labeling(df,asset, lookback)
-    df =L.triple_barriers()
-
-    print('labeldf',df)
-    df.to_csv('test_df.csv')
+print('labeldf',df)
+df.to_csv('test_df.csv')
 
 #    print('tEvents:',tEvents)
 
-    
-    fm = FeatureMaker(df, lookback, asset)
+
+fm = FeatureMaker(df, lookback, asset)
 
 
-    df= fm.feature_add()
-   # fm.elbow_()
-    
-    
-    print('df test',df)
+df= fm.feature_add()
+# fm.elbow_()
 
-    
-    
-   # fm.elbow_()
-    
-    
-   # cb = CreateBars(asset,raw, dollar_amount)
-   # df =pd.read_csv('test_df.csv')
-    lookback =20
-    asset='EURUSD'
-    fm = FeatureMaker(df, lookback, asset)
-    
-    tEvents = fm.create_CUMSUM_filter()
-  
 
-    # Filter df by tEvents
-    filtered_df = df[df.index.isin(tEvents)]
+print('df test',df)
 
-   # filtered_df = df[df.isin(tEvents)]
-    
-    #filtered_df = filtered_df[42:]
-    #filtered_df =df
-    #filtered_df =df
-    #filtered_df =df
-    print('filtered_df:',filtered_df)
-    filtered_df =filtered_df.dropna()
-    #print('df:',filtered_df)
-   # df = df.dropna()
-    m = Model(filtered_df, asset)
-    print(m.train_model())
-    '''
-    
+
+
+
+lookback =20
+asset='EURUSD'
+fm = FeatureMaker(df, lookback, asset)
+
+tEvents = fm.create_CUMSUM_filter()
+
+
+# Filter df by tEvents
+filtered_df = df[df.index.isin(tEvents)]
+
+# filtered_df = df[df.isin(tEvents)]
+
+#filtered_df = filtered_df[42:]
+#filtered_df =df
+#filtered_df =df
+#filtered_df =df
+print('filtered_df:',filtered_df)
+filtered_df =filtered_df.dropna()
+#print('df:',filtered_df)
+# df = df.dropna()
+m = Model(filtered_df, asset)
+print(m.train_model())
+
+
 
 
 

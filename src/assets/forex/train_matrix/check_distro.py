@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
 import scipy.stats as stats
+import numpy as np
 
 
 def create_plot(df, column):
-   
-    plt.hist(df[column], bins=100, alpha=0.5, label=f'{column}')
+    df_column = df[column][2:]
+    df_column[np.isfinite(df_column)]
+    plt.hist(df_column, bins=100, alpha=0.5, label=f'{column}')
     plt.title('Histogram of log pct change')
 
     plt.xlabel('log pct change')
@@ -16,7 +18,7 @@ def create_plot(df, column):
 
     ## QQ plot
 
-    stats.probplot(df['log_pct_change'], dist="norm", plot=plt)
+    stats.probplot(df_column, dist="norm", plot=plt)
 
 
     plt.title('QQ plot of log pct change')
