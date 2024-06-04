@@ -223,15 +223,15 @@ def prepare_data():
 
   
   
-    fm = FeatureMaker(df, lookback, asset)
+    #fm = FeatureMaker(df, lookback, asset)
 
-    tEvents = fm.create_CUMSUM_filter()
+  #  tEvents = fm.create_CUMSUM_filter()
 
 
     # Filter df by tEvents
-    filtered_df = df[df.index.isin(tEvents)]
+   # filtered_df = df[df.index.isin(tEvents)]
 
-    
+    filtered_df =df
     print('filtered_df:',filtered_df)
     filtered_df =filtered_df.dropna()
     return filtered_df 
