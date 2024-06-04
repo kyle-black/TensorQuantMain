@@ -175,7 +175,7 @@ class Labeling:
         self.bars_df = pd.concat([self.bars_df, results], axis=1)
 
         return self.bars_df
-    def triple_barriers(self):
+    def triple_barriers(self,df):
         self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.triple_result
