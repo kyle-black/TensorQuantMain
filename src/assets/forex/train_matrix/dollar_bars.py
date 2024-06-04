@@ -53,24 +53,8 @@ def dollar_bar_creator(asset,df_,dollar_amt):
 
     new_bar_df['pips'] = new_bar_df['Close'] *10000
     new_bar_df['change'] = (new_bar_df['pips'].diff()) 
-    #new_bar_df['pct_change'] = new_bar_df['change'].pct_change()
-    epsilon = 1e-7  # Small constant
-   # new_bar_df['pct_change'] = new_bar_df['change'].diff() / (new_bar_df['change'].shift() + epsilon)
-   # dollar_bars['log_returns'] = np.log(dollar_bars['price'] / dollar_bars['price'].shift(1)).dropna()
-    
-    new_bar_df['log_returns'] = np.log(new_bar_df['pips'] / new_bar_df['pips'].shift(1)).dropna()
-    new_bar_df['boxcox_price'], fitted_lambda = boxcox(new_bar_df['pips'])
-    #new_bar_df['pct_change'] = new_bar_df['Close'].pct_change()
-    #pct_change_mean = new_bar_df['pct_change'].mean()
-    #pct_change_std = new_bar_df['pct_change'].std()
-
-    #new_bar_df['log_pct_change'] = np.log1p(new_bar_df['change'])
-
-
-    #new_bar_df['normal_pct_change'] = ((new_bar_df['pct_change']-pct_change_mean) / pct_change_std)
-
-
-    #new_bar_df['Returns_100'] = new_bar_df['Returns'] *100
+    new_bar_df['pct_change'] = new_bar_df['change'].pct_change()
+   
 
 
     return new_bar_df
