@@ -17,6 +17,8 @@ from train_models import ensemble_methods #random_forest_classifier, Hist_booste
 from check_distro import create_plot as cp
 import numpy as np
 from scipy.stats import boxcox
+from concurrent.futures import ProcessPoolExecutor
+
 
 
 
@@ -176,92 +178,29 @@ class Model:
     
 
 
-if __name__ in "__main__":
-    '''
-    df = pd.read_csv('inf_check.csv')
-    
-    ad = Analysis(df)
-
-    #ad.make_plot()
 
     
-    print(ad.jaque_bera())
-    #print(df)
-    print(ad.ks_test())
-    ad.plot_histogram()
-   # ad.elbow_()
-    print('adfuller:',ad.AD_fuller())
-    '''
+def process_asset(asset,dollar_amount,lookback):
+    raw= pd.read_csv(f'merged.csv')
 
-asset = 'EURUSD'
-dollar_amount =1000
+    for i in ['AUDUSD','USDCAD','USDCHF']:
 
-lookback = 60
-
-raw= pd.read_csv(f'merged.csv')
-
-# print('raw:',raw)
-
-for i in ['AUDUSD','USDCAD','USDCHF']:
-
-    raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
-print(raw)
-
-cb = CreateBars(asset,raw, dollar_amount)
-df =cb.create_dollar_bars()
-print(df)
-
-df.to_csv('inf_check.csv')
-
-
-#print(df)
-L = Labeling(df,asset, lookback)
-df =L.triple_barriers()
-
-print('labeldf',df)
-df.to_csv('test_df.csv')
-
-#    print('tEvents:',tEvents)
-
-
-fm = FeatureMaker(df, lookback, asset)
-
-
-df= fm.feature_add()
-# fm.elbow_()
-
-
-print('df test',df)
-
-
-
-
-lookback =20
-asset='EURUSD'
-fm = FeatureMaker(df, lookback, asset)
-
-tEvents = fm.create_CUMSUM_filter()
-
-
-# Filter df by tEvents
-filtered_df = df[df.index.isin(tEvents)]
-
-# filtered_df = df[df.isin(tEvents)]
-
-#filtered_df = filtered_df[42:]
-#filtered_df =df
-#filtered_df =df
-#filtered_df =df
-print('filtered_df:',filtered_df)
-filtered_df =filtered_df.dropna()
-#print('df:',filtered_df)
-# df = df.dropna()
-m = Model(filtered_df, asset)
-print(m.train_model())
-
-
-
-
-
+        raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
     
-  
+
+    cb = CreateBars(asset, raw, dollar_amount)
+    df = cb.create_dollar_bars()
+    df.to_csv(f'{asset}_bars.csv')
+
+    L = Labeling(df, asset, lookback)
+    filtered_df = L.get_df()
+    filtered_df = filtered_df.dropna()
+
+    m = Model(filtered_df, asset)
+    print(m.train_model())
+
+if __name__ == "__main__":
+    assets = 'EURUSD'
+
+    with ProcessPoolExecutor(max_workers=32) as executor:
+        executor.map(process_asset, assets,1000,60)
