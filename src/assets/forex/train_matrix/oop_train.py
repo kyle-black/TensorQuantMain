@@ -148,6 +148,8 @@ class Labeling:
     def calculate_barriers(self, pt_sl, time_, close='Close'):
         def inner_calculate(row):
             price = row[close]
+
+            print(row)
             daily_volatility = self.bars_df[close].pct_change().std()
             volatility = daily_volatility
 
@@ -177,7 +179,7 @@ class Labeling:
         self.bars_df = pd.concat([self.bars_df, results], axis=1)
 
         return self.bars_df
-    def triple_barriers(self,df):
+    def triple_barriers(self):
         self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.triple_result
