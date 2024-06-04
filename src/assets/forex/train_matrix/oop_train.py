@@ -18,6 +18,8 @@ from check_distro import create_plot as cp
 import numpy as np
 from scipy.stats import boxcox
 from concurrent.futures import ProcessPoolExecutor
+import multiprocessing as mp
+
 
 
 
@@ -151,8 +153,6 @@ class Labeling:
             upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
             lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
 
-           # self.bars_df.index = pd.to_datetime(self.bars_df.Date)
-
             t1_date = row.name + pd.Timedelta(hours=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
 
@@ -170,8 +170,15 @@ class Labeling:
 
             return pd.Series([upper_barrier, lower_barrier, t1_date, touch_upper, touch_lower, label], index=['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label'])
 
-        self.bars_df[['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label']] = self.bars_df.apply(inner_calculate, axis=1)
-        return self.bars_df
+        # Create a pool of processes
+        with mp.Pool(mp.cpu_count()) as pool:
+            # Apply the function to each row in parallel
+            results = pool.map(inner_calculate, [row for _, row in self.bars_df.iterrows()])
+
+        # Convert the list of results into a DataFrame
+        results_df = pd.DataFrame(results)
+
+        return results_df
     def triple_barriers(self):
         self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
