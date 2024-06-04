@@ -205,4 +205,4 @@ if __name__ == "__main__":
     lookbacks = [60] * len(assets)
 
     with ProcessPoolExecutor(max_workers=32) as executor:
-        executor.map(process_asset, assets,1000,60)
+        executor.map(process_asset, assets,dollar_amounts,lookbacks)
