@@ -161,7 +161,7 @@ class Labeling:
             
             
             current_index = self.bars_df.index.get_loc(row.name)
-            df_temp = self.bars_df.loc[row.name:].iloc[current_index +1:]
+            df_temp = self.bars_df.loc[row.name:].iloc[current_index +1:t1_date]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
             touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
