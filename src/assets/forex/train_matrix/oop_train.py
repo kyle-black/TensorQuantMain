@@ -138,10 +138,11 @@ class FeatureMaker:
 class Labeling:
     def __init__(self, bars_df, asset,lookback):
         self.bars_df = bars_df
-        self.asset =asset        
+        self.asset =asset
+        self.lookback =lookback        
 
     def triple_barriers(self):
-        self.triple_result =barriers.new_apply_triple_barrier(self.bars_df,[1,1,1], lookback, self.asset)
+        self.triple_result =barriers.new_apply_triple_barrier(self.bars_df,[1,1,1], self.lookback, self.asset)
         return self.triple_result
     
     def sample_weights(self):
@@ -158,17 +159,18 @@ class Labeling:
     
 
 class Model:
-    def __init__(self, bars_df, asset):
+    def __init__(self, bars_df, asset,lookback):
         self.bars_df = bars_df
         self.bar_shape = bars_df.shape
         self.asset = asset
+        self.lookback = lookback
         #self.weights =weights
 
     def train_model(self):
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =ensemble_methods(self.bars_df, self.asset, lookback)
+        output =ensemble_methods(self.bars_df, self.asset, self.lookback)
         #output= Hist_boosted(self.bars_df, self.asset, lookback)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
@@ -219,8 +221,8 @@ def prepare_data():
 
 
 
-    lookback =20
-    asset='EURUSD'
+  
+  
     fm = FeatureMaker(df, lookback, asset)
 
     tEvents = fm.create_CUMSUM_filter()
@@ -235,8 +237,8 @@ def prepare_data():
     return filtered_df 
 
 
-def train_data(filtered_df,asset):
-    m = Model(filtered_df, asset)
+def train_data(filtered_df,asset,lookback):
+    m = Model(filtered_df, asset,lookback)
     print(m.train_model())
 
 
@@ -246,4 +248,4 @@ if __name__ == "__main__":
     asset = "EURUSD"
     df = prepare_data()
 
-    train_data(df, asset)
+    train_data(df, asset,60)
