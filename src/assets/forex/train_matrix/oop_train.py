@@ -159,9 +159,9 @@ class Labeling:
             t1_date = row.name + pd.Timedelta(hours=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
             
-            
+            t1_index = self.bars_df.index.get_loc(t1_date, method='nearest')
             current_index = self.bars_df.index.get_loc(row.name)
-            df_temp = self.bars_df.loc[row.name:].iloc[current_index +1:t1_date]
+            df_temp = self.bars_df.iloc[current_index +1:t1_index]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
             touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
