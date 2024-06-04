@@ -19,6 +19,7 @@ import numpy as np
 from scipy.stats import boxcox
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing as mp
+import dask.dataframe as dd
 
 
 
@@ -142,7 +143,7 @@ class Labeling:
         self.bars_df = bars_df
         self.asset =asset
         self.lookback =lookback
-        self.bars_df.index = pd.to_datetime(self.bars_df.index)
+        self.bars_df.index = pd.to_datetime(self.bars_df.Date)
 
     def calculate_barriers(self, pt_sl, time_, close='Close'):
         def inner_calculate(row):
@@ -170,15 +171,10 @@ class Labeling:
 
             return pd.Series([upper_barrier, lower_barrier, t1_date, touch_upper, touch_lower, label], index=['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label'])
 
-        # Create a pool of processes
-        with mp.Pool(mp.cpu_count()) as pool:
-            # Apply the function to each row in parallel
-            results = pool.map(inner_calculate, [row for _, row in self.bars_df.iterrows()])
+        results = self.bars_df.apply(inner_calculate, axis=1)
+        self.bars_df = pd.concat([self.bars_df, results], axis=1)
 
-        # Convert the list of results into a DataFrame
-        results_df = pd.DataFrame(results)
-
-        return results_df
+        return self.bars_df
     def triple_barriers(self):
         self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
@@ -219,43 +215,34 @@ class Model:
 def prepare_data():
     asset = 'EURUSD'
     dollar_amount =100000
-
     lookback = 60
 
-    raw= pd.read_csv(f'merged.csv')
-
-   
-
-    for i in ['AUDUSD','USDCAD','USDCHF']:
-
-        raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
-    print(raw)
-
-    cb = CreateBars(asset,raw, dollar_amount)
-    df =cb.create_dollar_bars()
-    print(df)
-
-    df.to_csv('inf_check.csv')
-
-
-    #print(df)
-    L = Labeling(df,asset, lookback)
-    df =L.triple_barriers()
-
-    print('labeldf',df)
-    df.to_csv('test_df.csv')
+    # Use Dask to read the CSV file in chunks
+    raw = dd.read_csv('merged.csv')
 
     
 
+    # Compute the result and convert to a pandas DataFrame
+    raw = raw.compute()
+
+    cb = CreateBars(asset,raw, dollar_amount)
+    print('Creating Dollar Bars')
+    df =cb.create_dollar_bars()
+
+    # Save the DataFrame in a more efficient format
+    df.to_parquet('inf_check.parquet')
+    
+    L = Labeling(df,asset, lookback)
+    print('Applying Triple Barriers:')
+    df =L.triple_barriers()
+
+    df.to_parquet('test_df.parquet')
+    print('testdf:',df)
 
     fm = FeatureMaker(df, lookback, asset)
-
-
     df= fm.feature_add()
-    # fm.elbow_()
 
-
-    print('df test',df)
+    df.to_parquet('final_df.parquet')
 
 
 

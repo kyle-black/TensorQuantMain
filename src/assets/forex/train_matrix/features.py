@@ -11,7 +11,7 @@ def add_price_features(df,asset, window_length):
    # if asset is not None:
     #open = 'Open'
     
-    close ='Close'
+    close =f'Close'
 
     
     #high = 'High'

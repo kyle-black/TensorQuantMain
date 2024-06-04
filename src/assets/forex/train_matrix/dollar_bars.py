@@ -16,6 +16,9 @@ def dollar_bar_creator(asset,df_,dollar_amt):
     
     df_ = df_.set_index('Date')
 
+    for i in ['AUDUSD','USDCAD','USDCHF']:
+        df_[f'{i}_Returns'] = df_[f'Close_{asset}'].pct_change()
+
 
    # df_ = df_[[close,volume]]
 
@@ -25,6 +28,7 @@ def dollar_bar_creator(asset,df_,dollar_amt):
     vol_count = 0
     dollar_count = 0
     new_bar = []
+
 
     for i, d in df_.iterrows():
 
