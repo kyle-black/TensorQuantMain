@@ -175,34 +175,75 @@ class Model:
         return output
 
 
-    
+def prepare_data():
+    asset = 'EURUSD'
+    dollar_amount =1000
 
+    lookback = 60
 
-
-    
-def process_asset(asset,dollar_amount,lookback):
     raw= pd.read_csv(f'merged.csv')
+
+   
 
     for i in ['AUDUSD','USDCAD','USDCHF']:
 
         raw[f'{i}_Returns'] = raw[f'Close_{asset}'].pct_change()
+    print(raw)
+
+    cb = CreateBars(asset,raw, dollar_amount)
+    df =cb.create_dollar_bars()
+    print(df)
+
+    df.to_csv('inf_check.csv')
+
+
+    #print(df)
+    L = Labeling(df,asset, lookback)
+    df =L.triple_barriers()
+
+    print('labeldf',df)
+    df.to_csv('test_df.csv')
+
     
 
-    cb = CreateBars(asset, raw, dollar_amount)
-    df = cb.create_dollar_bars()
-    df.to_csv(f'{asset}_bars.csv')
 
-    L = Labeling(df, asset, lookback)
-    filtered_df = L.get_df()
-    filtered_df = filtered_df.dropna()
+    fm = FeatureMaker(df, lookback, asset)
 
+
+    df= fm.feature_add()
+    # fm.elbow_()
+
+
+    print('df test',df)
+
+
+
+
+    lookback =20
+    asset='EURUSD'
+    fm = FeatureMaker(df, lookback, asset)
+
+    tEvents = fm.create_CUMSUM_filter()
+
+
+    # Filter df by tEvents
+    filtered_df = df[df.index.isin(tEvents)]
+
+    
+    print('filtered_df:',filtered_df)
+    filtered_df =filtered_df.dropna()
+    return filtered_df 
+
+
+def train_data(filtered_df,asset):
     m = Model(filtered_df, asset)
     print(m.train_model())
 
-if __name__ == "__main__":
-    assets = ['EURUSD']
-    dollar_amounts = [1000] * len(assets)
-    lookbacks = [60] * len(assets)
 
-    with ProcessPoolExecutor(max_workers=32) as executor:
-        executor.map(process_asset, assets,dollar_amounts,lookbacks)
+
+
+if __name__ == "__main__":
+    asset = "EURUSD"
+    df = prepare_data()
+
+    train_data(df, asset)
