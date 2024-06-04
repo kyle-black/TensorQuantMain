@@ -158,7 +158,7 @@ class Labeling:
             t1_date = row.name + pd.Timedelta(hours=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
 
-            t1_index = (self.bars_df.index - t1_date).abs().argmin()
+            t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
             df_temp = self.bars_df.iloc[current_index +1:t1_index]
 
@@ -178,6 +178,8 @@ class Labeling:
         self.bars_df = pd.concat([self.bars_df, results], axis=1)
 
         return self.bars_df
+
+        
     def triple_barriers(self):
         self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
