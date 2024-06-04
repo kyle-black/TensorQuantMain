@@ -149,7 +149,6 @@ class Labeling:
         def inner_calculate(row):
             price = row[close]
 
-            print(row)
             daily_volatility = self.bars_df[close].pct_change().std()
             volatility = daily_volatility
 
@@ -158,8 +157,8 @@ class Labeling:
 
             t1_date = row.name + pd.Timedelta(hours=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
-            
-            t1_index = self.bars_df.index.get_loc(t1_date, method='nearest')
+
+            t1_index = (self.bars_df.index - t1_date).abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
             df_temp = self.bars_df.iloc[current_index +1:t1_index]
 
