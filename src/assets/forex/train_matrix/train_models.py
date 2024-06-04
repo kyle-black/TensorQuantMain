@@ -172,7 +172,7 @@ def ensemble_methods(df, asset, lookback):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier( random_state=44, n_estimators=1000,criterion='gini')
+    clf =RandomForestClassifier(n_jobs =-1,random_state=44, n_estimators=1000,criterion='gini')
     
     
     
