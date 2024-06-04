@@ -5,7 +5,7 @@ from statsmodels.tsa.stattools import adfuller
 from scipy.stats import kstest
 import matplotlib.pyplot as plt
 
-import barriers
+#import barriers
 import features
 import elbow_plot
 from pca_maker import pca_
@@ -139,10 +139,42 @@ class Labeling:
     def __init__(self, bars_df, asset,lookback):
         self.bars_df = bars_df
         self.asset =asset
-        self.lookback =lookback        
+        self.lookback =lookback
+        self.bars_df.index = pd.to_datetime(self.bars_df.index)
 
+    def calculate_barriers(self, pt_sl, time_, close='Close'):
+        def inner_calculate(row):
+            price = row[close]
+            daily_volatility = self.bars_df[close].pct_change().std()
+            volatility = daily_volatility
+
+            upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
+            lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
+
+           # self.bars_df.index = pd.to_datetime(self.bars_df.Date)
+
+            t1_date = row.name + pd.Timedelta(hours=time_)
+            t1_date = min(t1_date, self.bars_df.index[-1])
+
+            df_temp = self.bars_df.loc[row.name:].iloc[1:]
+
+            touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
+            touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
+
+            if (touch_upper < touch_lower) and (touch_upper < t1_date):
+                label = 1
+            elif (touch_lower < touch_upper) and (touch_lower < t1_date):
+                label = -1
+            else:
+                label = 0
+
+            return pd.Series([upper_barrier, lower_barrier, t1_date, touch_upper, touch_lower, label], index=['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label'])
+
+        self.bars_df[['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label']] = self.bars_df.apply(inner_calculate, axis=1)
+        return self.bars_df
     def triple_barriers(self):
-        self.triple_result =barriers.new_apply_triple_barrier(self.bars_df,[1,1,1], self.lookback, self.asset)
+        self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
+       # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.triple_result
     
     def sample_weights(self):
@@ -179,7 +211,7 @@ class Model:
 
 def prepare_data():
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =100000
 
     lookback = 60
 
