@@ -200,7 +200,9 @@ def process_asset(asset,dollar_amount,lookback):
     print(m.train_model())
 
 if __name__ == "__main__":
-    assets = 'EURUSD'
+    assets = ['EURUSD']
+    dollar_amounts = [1000] * len(assets)
+    lookbacks = [60] * len(assets)
 
     with ProcessPoolExecutor(max_workers=32) as executor:
         executor.map(process_asset, assets,1000,60)
