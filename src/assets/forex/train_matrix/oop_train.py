@@ -216,7 +216,7 @@ class Model:
 
 def prepare_data():
     asset = 'EURUSD'
-    dollar_amount =100000
+    dollar_amount =1000
     lookback = 60
 
     # Use Dask to read the CSV file in chunks
@@ -236,13 +236,13 @@ def prepare_data():
     print('Applying Triple Barriers:')
 
     # Convert the pandas DataFrame to a Dask DataFrame
-    ddf = dd.from_pandas(df, npartitions=10)
+
 
     # Apply the function to each partition
    # results = ddf.map_partitions(L.triple_barriers, meta=('upper_barrier', 'float64'), ('lower_barrier', 'float64'), ('t1', 'datetime64[ns]'), ('touch_upper', 'datetime64[ns]'), ('touch_lower', 'datetime64[ns]'), ('label', 'int64'))
-    results = ddf.map_partitions(L.triple_barriers, meta={'upper_barrier': 'float64', 'lower_barrier': 'float64', 't1': 'datetime64[ns]', 'touch_upper': 'datetime64[ns]', 'touch_lower': 'datetime64[ns]', 'label': 'int64'})
+   
     # Compute the results and convert back to a pandas DataFrame
-    df = results.compute()
+    df = L.triple_barriers()
 
     df.to_parquet('test_df.parquet')
     print('testdf:',df)
