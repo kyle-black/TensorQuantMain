@@ -156,10 +156,11 @@ class Labeling:
             lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
 
             t1_date = row.name + pd.Timedelta(days=time_)
-           # t1_date = min(t1_date, self.bars_df.index[-1])
+            t1_date = min(t1_date, self.bars_df.index[-1])
 
            # t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
+            end_index = self.bars_df.index.get_loc(t1_date)
             df_temp = self.bars_df.iloc[current_index +1:]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
