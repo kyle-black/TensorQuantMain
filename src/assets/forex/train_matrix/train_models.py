@@ -196,14 +196,7 @@ def ensemble_methods(df, asset, lookback):
     print('Real Score:',real_score)
 
 
-    #grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, n_jobs=-1, verbose=2)
-    #clf.fit(X_train, y_train, sample_weight=weight_data)
-
-    #best_params = grid_search.best_params_
-    # print(f"Best parameters found: {best_params}")
-
-    #best_rf = grid_search.best_estimator_
-    
+  
 
 
     ##########   Grid Search

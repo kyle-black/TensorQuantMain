@@ -155,12 +155,12 @@ class Labeling:
             upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
             lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
 
-            t1_date = row.name + pd.Timedelta(hours=time_)
-            t1_date = min(t1_date, self.bars_df.index[-1])
+            t1_date = row.name + pd.Timedelta(days=time_)
+           # t1_date = min(t1_date, self.bars_df.index[-1])
 
-            t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
+           # t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
-            df_temp = self.bars_df.iloc[current_index +1:t1_index]
+            df_temp = self.bars_df.iloc[current_index +1:]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
             touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
@@ -219,7 +219,7 @@ class Model:
 
 def prepare_data():
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =100000
     lookback = 60
 
     # Use Dask to read the CSV file in chunks
