@@ -158,10 +158,15 @@ class Labeling:
             t1_date = row.name + pd.Timedelta(days=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
 
+           # closest_date = (self.bars_df.index - t1_date).abs().idxmin()
+            closest_date = (self.bars_df.index.to_series() - t1_date).dt.total_seconds().abs().idxmin()
+            #closest_date = (self.bars_df.index - t1_date).total_seconds().abs().idxmin()
+            closest_index = self.bars_df.index.get_loc(closest_date)
+
            # t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
            # end_index = self.bars_df.index.get_loc(t1_date)
-            df_temp = self.bars_df.iloc[current_index:]
+            df_temp = self.bars_df.iloc[current_index:closest_index]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
             touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
@@ -220,9 +225,9 @@ class Model:
 
 def prepare_data():
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =100000
     lookback = 60
-    '''
+    
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
 
@@ -235,7 +240,7 @@ def prepare_data():
 
     # Save the DataFrame in a more efficient format
     df.to_parquet('inf_check.parquet')
-    '''
+    
     
     df = pd.read_parquet('inf_check.parquet')
     L = Labeling(df,asset, lookback)
