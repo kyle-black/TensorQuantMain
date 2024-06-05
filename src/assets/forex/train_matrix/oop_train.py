@@ -144,6 +144,7 @@ class Labeling:
         self.asset =asset
         self.lookback =lookback
         self.bars_df.index = pd.to_datetime(self.bars_df.Date)
+        self.daily_volatility = self.bars_df['Close'].pct_change().std()
 
     def calculate_barriers(self, pt_sl, time_, close='Close'):
         def inner_calculate(row):
@@ -151,8 +152,8 @@ class Labeling:
 
 
             print('input date:',row.name)
-            daily_volatility = self.bars_df[close].pct_change().std()
-            volatility = daily_volatility
+            #daily_volatility = self.bars_df[close].pct_change().std()
+            volatility = self.daily_volatility
 
             upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
             lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
