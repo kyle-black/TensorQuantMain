@@ -149,6 +149,8 @@ class Labeling:
         def inner_calculate(row):
             price = row[close]
 
+
+            print('input date:',row.name)
             daily_volatility = self.bars_df[close].pct_change().std()
             volatility = daily_volatility
 
