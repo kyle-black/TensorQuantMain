@@ -161,7 +161,7 @@ class Labeling:
            # t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
             current_index = self.bars_df.index.get_loc(row.name)
             end_index = self.bars_df.index.get_loc(t1_date)
-            df_temp = self.bars_df.iloc[current_index +1:]
+            df_temp = self.bars_df.iloc[current_index:]
 
             touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
             touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
