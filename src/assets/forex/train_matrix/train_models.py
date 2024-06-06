@@ -97,7 +97,7 @@ def ensemble_methods(df, asset, lookback):
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
+    #df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
 
     print('data dropped')
     
