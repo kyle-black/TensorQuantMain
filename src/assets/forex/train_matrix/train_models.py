@@ -88,7 +88,7 @@ def ensemble_methods(df, asset, lookback):
 
     print('input dataframe:',df.columns)
     
-    
+    print('splitting data ...')
     train_datasets, test_datasets, weights = crossvalidation.run_split_process(df)
    
     
@@ -96,7 +96,7 @@ def ensemble_methods(df, asset, lookback):
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
     df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
 
-    
+    print('data dropped')
     
     feature_cols = df.drop('label',axis=1).columns
     
@@ -161,7 +161,7 @@ def ensemble_methods(df, asset, lookback):
     # Standardize the data
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-
+    print('data scaled ...')
     # Apply PCA
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
@@ -179,10 +179,10 @@ def ensemble_methods(df, asset, lookback):
     
    # clf = HistGradientBoostingClassifier()
 
-   
+    print('fitting model ...')
     clf.fit(X_train, y_train)
     
-
+    print('model fitted ...')
 
 
 
@@ -214,8 +214,9 @@ def ensemble_methods(df, asset, lookback):
 
 # Use the best estimator to predict probabilities
     '''
+    print('predicting ...')
     probas = clf.predict_proba(X_test)
-    
+    print('predicted ...')  
     
 
     
