@@ -244,7 +244,7 @@ def prepare_data():
     # Save the DataFrame in a more efficient format
     df.to_parquet('inf_check.parquet')
     
-    '''
+    
     df = pd.read_parquet('inf_check.parquet')
     L = Labeling(df,asset, lookback)
     print('Applying Triple Barriers:')
@@ -278,12 +278,17 @@ def prepare_data():
 
     # Filter df by tEvents
    # filtered_df = df[df.index.isin(tEvents)]
-
-    filtered_df =df
+    '''
+    df = pd.read_parquet('test_df.parquet')
+    fm = FeatureMaker(df, lookback, asset)
+    tEvents = fm.create_CUMSUM_filter()
+    filtered_df = df[df.index.isin(tEvents)]
+    
     print('filtered_df:',filtered_df)
     filtered_df =filtered_df.dropna()
+    
     return filtered_df 
-
+    
 
 def train_data(filtered_df,asset,lookback):
     m = Model(filtered_df, asset,lookback)
