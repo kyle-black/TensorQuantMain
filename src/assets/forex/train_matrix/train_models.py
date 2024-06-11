@@ -34,7 +34,7 @@ from sklearn.dummy import DummyClassifier
 
 
 from sklearn.experimental import enable_hist_gradient_boosting  # noqa
-from sklearn.ensemble import HistGradientBoostingClassifier
+#from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
 
 from sklearn.pipeline import make_pipeline
@@ -80,23 +80,26 @@ def ensemble_methods(df, asset, lookback):
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
     
-    df = df.drop(columns=['touch_lower', 'touch_upper'])
-    df = df.dropna(how='all')
+    #df = df.drop(columns=['touch_lower', 'touch_upper'])
+    #df = df.dropna(how='all')
+    #df = df[lookback:]
+    # Drop unnecessary columns early and use inplace=True
+    df.drop(columns=['touch_lower', 'touch_upper', 'Date', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], inplace=True)
+    df.dropna(how='all', inplace=True)
     df = df[lookback:]
-    
     # Splitting data
 
     print('input dataframe:',df.columns)
     
-    
+    print('splitting data ...')
     train_datasets, test_datasets, weights = crossvalidation.run_split_process(df)
    
     
     
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
+    #df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
 
-    
+    print('data dropped')
     
     feature_cols = df.drop('label',axis=1).columns
     
@@ -161,7 +164,7 @@ def ensemble_methods(df, asset, lookback):
     # Standardize the data
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-
+    print('data scaled ...')
     # Apply PCA
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
@@ -179,10 +182,10 @@ def ensemble_methods(df, asset, lookback):
     
    # clf = HistGradientBoostingClassifier()
 
-   
+    print('fitting model ...')
     clf.fit(X_train, y_train)
     
-
+    print('model fitted ...')
 
 
 
@@ -214,8 +217,9 @@ def ensemble_methods(df, asset, lookback):
 
 # Use the best estimator to predict probabilities
     '''
+    print('predicting ...')
     probas = clf.predict_proba(X_test)
-    
+    print('predicted ...')  
     
 
     
