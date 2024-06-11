@@ -75,7 +75,7 @@ def time_decay_weights(data, decay_factor=0.95):
 
 def run_split_process(data):
     
-    data = data.reset_index(drop=True)  # resetting the index without adding 'index' as a column
+    data.reset_index(drop=True, inplace=True)  # resetting the index without adding 'index' as a column
     train_datasets = []
     test_datasets = []
     
