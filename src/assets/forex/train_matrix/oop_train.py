@@ -158,7 +158,7 @@ class Labeling:
             upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
             lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
 
-            t1_date = row.name + pd.Timedelta(days=time_)
+            t1_date = row.name + pd.Timedelta(hours=time_)
             t1_date = min(t1_date, self.bars_df.index[-1])
 
            # closest_date = (self.bars_df.index - t1_date).abs().idxmin()
@@ -227,9 +227,10 @@ class Model:
 
 
 def prepare_data():
+    
     asset = 'EURUSD'
     dollar_amount =1000
-    lookback = 60
+    lookback = 72
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
@@ -279,16 +280,14 @@ def prepare_data():
     # Filter df by tEvents
    # filtered_df = df[df.index.isin(tEvents)]
     
-    if __name__ == "__main__":
-    #asset = "EURUSD"
-        prepare_data()
+   
 
     #train_data(df, asset,60)
 
 
     
-    '''
-    df = pd.read_parquet('test_df.parquet')
+
+    df = pd.read_parquet('final_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
     tEvents = fm.create_CUMSUM_filter()
     filtered_df = df[df.index.isin(tEvents)]
@@ -311,4 +310,3 @@ if __name__ == "__main__":
     df = prepare_data()
 
     train_data(df, asset,60)
-'''
