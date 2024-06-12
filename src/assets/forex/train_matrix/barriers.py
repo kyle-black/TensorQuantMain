@@ -209,9 +209,15 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 
 
 def calculate_barriers_R(df, lookback):
+    volitility = df['Close'].pct_change().std()
     df['Date'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Date'].astype('int64') // 10**9
+
+    lookback_hours = pd.Timedelta(hours=lookback)
+    lookback_unix = lookback_hours / pd.Timedelta('1s')
+
     
+    df = df[['unix','Close']]
     arr = df.to_numpy()
     return arr
 
