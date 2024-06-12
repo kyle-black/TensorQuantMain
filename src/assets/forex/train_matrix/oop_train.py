@@ -231,7 +231,7 @@ def prepare_data():
     asset = 'EURUSD'
     dollar_amount =1000
     lookback = 72
-    
+    '''
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
 
@@ -245,9 +245,11 @@ def prepare_data():
     # Save the DataFrame in a more efficient format
     df.to_parquet('inf_check.parquet')
     
-    
+    '''
     df = pd.read_parquet('inf_check.parquet')
     L = Labeling(df,asset, lookback)
+    
+    
     print('Applying Triple Barriers:')
     df = L.triple_barriers()
     print(df)

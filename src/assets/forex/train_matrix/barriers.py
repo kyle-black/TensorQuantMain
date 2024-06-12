@@ -209,5 +209,7 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 
 
 def calculate_barriers_R(df,lookback):
+    df['unix'] = df['Date'].astype('int64') // 10**9
+    
     return df
 
