@@ -212,13 +212,8 @@ def calculate_barriers_R(df, lookback):
     volatility = df['Close'].pct_change().std()
     df['Date'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Date'].astype('int64') // 10**9
-    #barriers.at[timestamp, 'upper_barrier'] = upper_barrier
-    #barriers.at[timestamp, 'lower_barrier'] = lower_barrier
     df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
-
-
-
 
     lookback_hours = pd.Timedelta(hours=lookback)
     lookback_unix = lookback_hours / pd.Timedelta('1s')
@@ -233,10 +228,11 @@ def calculate_barriers_R(df, lookback):
     upper_touches = (next_arr[:-1, 1] > arr[:-1, 3]) & (next_arr[:-1, 0] <= arr[:-1, 2])
     lower_touches = (next_arr[:-1, 1] < arr[:-1, 4]) & (next_arr[:-1, 0] <= arr[:-1, 2])
 
-    # Print the results
-    print(f"Number of times the upper barrier was touched: {np.sum(upper_touches)}")
-    print(f"Number of times the lower barrier was touched: {np.sum(lower_touches)}")
+    # Create a new array that contains 1 where the upper barrier is touched first, -1 where the lower barrier is touched first, and 0 where the end barrier is reached before either the upper or lower barrier is touched
+    labels = np.where(upper_touches, 1, np.where(lower_touches, -1, 0))
 
-    
+    # Add the labels array as a new column to the original array
+    arr = np.column_stack((arr, labels))
+
     return arr
 
