@@ -230,7 +230,7 @@ def prepare_data():
     asset = 'EURUSD'
     dollar_amount =1000
     lookback = 60
-    '''
+    
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
 
@@ -278,6 +278,15 @@ def prepare_data():
 
     # Filter df by tEvents
    # filtered_df = df[df.index.isin(tEvents)]
+    
+    if __name__ == "__main__":
+    #asset = "EURUSD"
+        prepare_data()
+
+    #train_data(df, asset,60)
+
+
+    
     '''
     df = pd.read_parquet('test_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
@@ -302,3 +311,4 @@ if __name__ == "__main__":
     df = prepare_data()
 
     train_data(df, asset,60)
+'''
