@@ -212,6 +212,6 @@ def calculate_barriers_R(df, lookback):
     df['Date'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Date'].astype('int64') // 10**9
     
-    arr = df.to_values
+    arr = df.to_numpy()
     return arr
 
