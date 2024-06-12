@@ -231,6 +231,9 @@ def calculate_barriers_R(df, lookback):
     # Create a new array that contains 1 where the upper barrier is touched first, -1 where the lower barrier is touched first, and 0 where the end barrier is reached before either the upper or lower barrier is touched
     labels = np.where(upper_touches, 1, np.where(lower_touches, -1, 0))
 
+    # Append a default label to the end of the labels array
+    labels = np.append(labels, 0)
+
     # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
 
