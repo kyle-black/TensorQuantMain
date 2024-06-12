@@ -209,16 +209,34 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 
 
 def calculate_barriers_R(df, lookback):
-    volitility = df['Close'].pct_change().std()
+    volatility = df['Close'].pct_change().std()
     df['Date'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Date'].astype('int64') // 10**9
+    #barriers.at[timestamp, 'upper_barrier'] = upper_barrier
+    #barriers.at[timestamp, 'lower_barrier'] = lower_barrier
+    df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
+    df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
+
+
+
 
     lookback_hours = pd.Timedelta(hours=lookback)
     lookback_unix = lookback_hours / pd.Timedelta('1s')
 
     df['endbarrier_unix'] = df['unix'] + lookback_unix
-    df = df[['unix','Close','endbarrier_unix']]
+    df = df[['unix','Close','endbarrier_unix','upper_barrier','lower_barrier']]
     arr = df.to_numpy()
+
+    next_arr = np.roll(arr, -1, axis=0)
+
+    # Check if the Close value of the next row is greater than the upper barrier or less than the lower barrier
+    upper_touches = (next_arr[:-1, 1] > arr[:-1, 3]) & (next_arr[:-1, 0] <= arr[:-1, 2])
+    lower_touches = (next_arr[:-1, 1] < arr[:-1, 4]) & (next_arr[:-1, 0] <= arr[:-1, 2])
+
+    # Print the results
+    print(f"Number of times the upper barrier was touched: {np.sum(upper_touches)}")
+    print(f"Number of times the lower barrier was touched: {np.sum(lower_touches)}")
+
     
     return arr
 
