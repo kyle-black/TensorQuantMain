@@ -5,14 +5,14 @@ from statsmodels.tsa.stattools import adfuller
 from scipy.stats import kstest
 import matplotlib.pyplot as plt
 
-#import barriers
+import barriers
 import features
 import elbow_plot
 from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
-from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
+#from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
 from check_distro import create_plot as cp
 import numpy as np
@@ -190,7 +190,7 @@ class Labeling:
 
         
     def triple_barriers(self):
-        self.triple_result =self.calculate_barriers([1,1,1], self.lookback)
+        self.triple_result =barriers.calculate_barriers_R(self.bars_df, self.lookback)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.triple_result
     
@@ -249,10 +249,20 @@ def prepare_data():
     df = pd.read_parquet('inf_check.parquet')
     L = Labeling(df,asset, lookback)
     print('Applying Triple Barriers:')
+    df = L.triple_barriers()
+    print(df)
+
+if __name__ == "__main__":
+    asset = "EURUSD"
+    prepare_data()
+
+    #train_data(df, asset,60)
+
+
 
     # Convert the pandas DataFrame to a Dask DataFrame
 
-
+'''
     # Apply the function to each partition
    # results = ddf.map_partitions(L.triple_barriers, meta=('upper_barrier', 'float64'), ('lower_barrier', 'float64'), ('t1', 'datetime64[ns]'), ('touch_upper', 'datetime64[ns]'), ('touch_lower', 'datetime64[ns]'), ('label', 'int64'))
    
@@ -310,3 +320,4 @@ if __name__ == "__main__":
     df = prepare_data()
 
     train_data(df, asset,60)
+'''

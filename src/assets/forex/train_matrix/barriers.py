@@ -121,7 +121,7 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
     df_merged.to_csv('sanity_check_72.csv')
     return df_merged
 
-
+'''
 def calculate_barriers(row, df, pt_sl, time_, close='Close'):
     price = row[close]
     daily_volatility = df[close].pct_change().std()
@@ -148,7 +148,7 @@ def calculate_barriers(row, df, pt_sl, time_, close='Close'):
     return pd.Series([upper_barrier, lower_barrier, t1_date, touch_upper, touch_lower, label], index=['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label'])
 
 df[['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label']] = df.apply(calculate_barriers, axis=1)
-
+'''
 
 
 
@@ -205,4 +205,9 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
     df_merged = df.join(barriers, how='left')
     df_merged.to_csv('sanity_check.csv')
     return df_merged
+
+
+
+def calculate_barriers_R(df,lookback):
+    return df
 
