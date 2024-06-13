@@ -244,6 +244,6 @@ def calculate_barriers_R(df, lookback):
 
     print('barrier df:', df.columns)
 
-    df.drop('Close', inplace=True)
+    #df.drop('Close', inplace=True)
     return df
 
