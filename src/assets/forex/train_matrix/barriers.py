@@ -221,7 +221,7 @@ def calculate_barriers_R(df, lookback):
     lookback_unix = lookback_hours / pd.Timedelta('1s')
 
     df['endbarrier_unix'] = df['unix'] + lookback_unix
-    df = df[['unix','Close','endbarrier_unix','upper_barrier','lower_barrier','Date']]
+    df = df[['unix','Close','endbarrier_unix','upper_barrier','lower_barrier']]
     arr = df.to_numpy()
 
     next_arr = np.roll(arr, -1, axis=0)
