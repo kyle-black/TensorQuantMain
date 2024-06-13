@@ -239,5 +239,6 @@ def calculate_barriers_R(df, lookback):
 
     df = pd.DataFrame(arr, columns=['Date','unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
     df.index = df.Date
+    df.drop('Date', inplace=True)
     return df
 
