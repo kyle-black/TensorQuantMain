@@ -13,19 +13,19 @@ def add_price_features(df,asset, window_length):
    # if asset is not None:
     #open = 'Open'
     
-    close ='Close'
+   # 'Close' =''Close''
 
     
     #high = 'High'
     #low = 'Low'
     #else: 
     #    open= 'Open'
-    #    close='Close' 
+    #    'Close'=''Close'' 
     #    high='High'
     #    low ='Low' 
     
     ### Add autocorrelation / serial correlation
-    autocorr_lag_10 = df[close].autocorr(lag=window_length)
+    autocorr_lag_10 = df[''Close''].autocorr(lag=window_length)
 
     ############# Bolinger band Calc
 
@@ -36,30 +36,30 @@ def add_price_features(df,asset, window_length):
     # Middle Band = n-day simple moving average (SMA)
     num_std_dev = 2
 
-    df['Middle_Band'] = df[close].rolling(window=window_length).mean()
+    df['Middle_Band'] = df['Close'].rolling(window=window_length).mean()
 
     # Upper Band = Middle Band + (standard deviation of price x 2)
-    df['Upper_Band'] = df['Middle_Band'] + df[close].rolling(window=window_length).std() * num_std_dev
+    df['Upper_Band'] = df['Middle_Band'] + df['Close'].rolling(window=window_length).std() * num_std_dev
 
     # Lower Band = Middle Band - (standard deviation of price x 2)
-    df['Lower_Band'] = df['Middle_Band'] - df[close].rolling(window=window_length).std() * num_std_dev
+    df['Lower_Band'] = df['Middle_Band'] - df['Close'].rolling(window=window_length).std() * num_std_dev
 
     #Log Returns
-    df['Log_Returns'] = np.log(df[close]/ df[close].shift(window_length))
- #   df['SpreadOC'] = df[open] / df[close]
+    df['Log_Returns'] = np.log(df['Close']/ df['Close'].shift(window_length))
+ #   df['SpreadOC'] = df[open] / df['Close']
   #  df['SpreadLH'] = df[open] / df[high]
 
 
     #######################MACD 
-    exp1 = df[close].ewm(span=12, adjust=False).mean()
-    exp2 = df[close].ewm(span=26, adjust=False).mean()
+    exp1 = df['Close'].ewm(span=12, adjust=False).mean()
+    exp2 = df['Close'].ewm(span=26, adjust=False).mean()
     df['MACD'] = exp1 - exp2
     df['Signal_Line_MACD'] = df['MACD'].ewm(span=9, adjust=False).mean()
 
 
 
     #########################RSI
-    delta = df[close].diff()
+    delta = df['Close'].diff()
     gain = (delta.where(delta > 0, 0)).fillna(0)
     loss = (-delta.where(delta < 0, 0)).fillna(0)
     avg_gain = gain.rolling(window=window_length).mean()
@@ -88,43 +88,43 @@ def add_price_features(df,asset, window_length):
 
 def add_stochastic_oscillator(df, window_length):
     # Calculate the Stochastic Oscillator
-    low_min  = df['Close'].rolling(window=window_length).min()
-    high_max = df['Close'].rolling(window=window_length).max()
+    low_min  = df[''Close''].rolling(window=window_length).min()
+    high_max = df[''Close''].rolling(window=window_length).max()
 
-    df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
+    df['%K'] = (df[''Close''] - low_min) / (high_max - low_min) * 100
     df['%D'] = df['%K'].rolling(window=window_length).mean()
     return df
 
 
 def calculate_OBV(df):
-    df['daily_return'] = df['Close'].diff()
+    df['daily_return'] = df[''Close''].diff()
     df['direction'] = np.where(df['daily_return'] > 0, 1, -1)
     df['direction'][df['daily_return'] == 0] = 0
     df['volume_direction'] = df['Volume'] * df['direction']
     df['OBV'] = df['volume_direction'].cumsum()
     return df
 
-def add_ichimoku(df, high='High', low='Low', close='Close'):
+def add_ichimoku(df, high='High', low='Low', 'Close'=''Close''):
     # Tenkan-sen (Conversion Line): (9-period high + 9-period low)/2
-    period9_high = df[close].rolling(window=9).max()
-    period9_low = df[close].rolling(window=9).min()
+    period9_high = df['Close'].rolling(window=9).max()
+    period9_low = df['Close'].rolling(window=9).min()
     df['tenkan_sen'] = (period9_high + period9_low) / 2
 
     # Kijun-sen (Base Line): (26-period high + 26-period low)/2
-    period26_high = df[close].rolling(window=26).max()
-    period26_low = df[close].rolling(window=26).min()
+    period26_high = df['Close'].rolling(window=26).max()
+    period26_low = df['Close'].rolling(window=26).min()
     df['kijun_sen'] = (period26_high + period26_low) / 2
 
     # Senkou Span A (Leading Span A): (Conversion Line + Base Line)/2
     df['senkou_span_a'] = ((df['tenkan_sen'] + df['kijun_sen']) / 2).shift(26)
 
     # Senkou Span B (Leading Span B): (52-period high + 52-period low)/2
-    period52_high = df[close].rolling(window=52).max()
-    period52_low = df[close].rolling(window=52).min()
+    period52_high = df['Close'].rolling(window=52).max()
+    period52_low = df['Close'].rolling(window=52).min()
     df['senkou_span_b'] = ((period52_high + period52_low) / 2).shift(26)
 
-    # Chikou Span (Lagging Span): Close shifted back 26 periods
-    df['chikou_span'] = df[close].shift(-26)
+    # Chikou Span (Lagging Span): 'Close' shifted back 26 periods
+    df['chikou_span'] = df['Close'].shift(-26)
 
     return df
 
