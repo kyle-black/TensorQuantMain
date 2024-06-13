@@ -210,8 +210,9 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 
 def calculate_barriers_R(df, lookback):
     volatility = df['Close'].pct_change().std()
-    df['Dated'] =df['Date']
-    df['Datetime'] = pd.to_datetime(df['Dated'])
+    date_index = df.index
+    
+    df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
     df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
@@ -238,8 +239,8 @@ def calculate_barriers_R(df, lookback):
     # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
 
-    df = pd.DataFrame(arr, columns=['Date','unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
-    df.index = df.Date
+    df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
+    df.index = date_index
    # df.drop('Date', inplace=True)
     return df
 
