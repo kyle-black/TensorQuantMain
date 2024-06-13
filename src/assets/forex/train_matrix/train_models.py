@@ -137,15 +137,17 @@ def ensemble_methods(df, asset, lookback):
 
    
         
-    train_data =   train_datasets[-1]
+    train_idx =   train_datasets[-1]
 
     print('train_dataset', len(train_data))
 
-    test_data = test_datasets[-1]
+    test_idx = test_datasets[-1]
 
+    train_data =df.iloc[train_idx]
+    test_data = df.iloc[test_idx]
   
 
-    weight_data =  weights[-1]
+   # weight_data =  weights[-1]
         
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]

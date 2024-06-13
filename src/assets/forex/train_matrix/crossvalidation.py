@@ -80,18 +80,18 @@ def run_split_process(data):
     test_datasets = []
     
     for train, test in purged_walk_forward_split_with_embargo(data, initial_train_size=20, test_size=400, gap=5, embargo_size=3):
-        train_data = data.iloc[train]
-        test_data = data.iloc[test]
+        #train_data = data.iloc[train]
+        #test_data = data.iloc[test]
 
-        train_datasets.append(train_data)
-        test_datasets.append(test_data)
+        train_datasets.append(train)
+        test_datasets.append(test)
 
         # If you want to use time-decay weights
-        weights = time_decay_weights(train_data, decay_factor=0.95)
+       # weights = time_decay_weights(train_data, decay_factor=0.95)
 
 
     
-    return train_datasets, test_datasets, weights
+    return train_datasets, test_datasets
 
 '''
 def run_split_process(data_list):
