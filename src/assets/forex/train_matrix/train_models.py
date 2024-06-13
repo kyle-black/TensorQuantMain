@@ -92,7 +92,7 @@ def ensemble_methods(df, asset, lookback):
     print('input dataframe:',df.columns)
     
     print('splitting data ...')
-    train_datasets, test_datasets, weights = crossvalidation.run_split_process(df)
+    train_datasets, test_datasets = crossvalidation.run_split_process(df)
    
     
     
