@@ -146,53 +146,13 @@ class Labeling:
         self.bars_df.index = pd.to_datetime(self.bars_df.Date)
         self.daily_volatility = self.bars_df['Close'].pct_change().std()
 
-    def calculate_barriers(self, pt_sl, time_, close='Close'):
-        def inner_calculate(row):
-            price = row[close]
-
-
-            print('input date:',row.name)
-            #daily_volatility = self.bars_df[close].pct_change().std()
-            volatility = self.daily_volatility
-
-            upper_barrier = price * (1 + pt_sl[0] * (2*volatility))
-            lower_barrier = price * (1 - pt_sl[1] * (2*volatility))
-
-            t1_date = row.name + pd.Timedelta(hours=time_)
-            t1_date = min(t1_date, self.bars_df.index[-1])
-
-           # closest_date = (self.bars_df.index - t1_date).abs().idxmin()
-            closest_date = (self.bars_df.index.to_series() - t1_date).dt.total_seconds().abs().idxmin()
-            #closest_date = (self.bars_df.index - t1_date).total_seconds().abs().idxmin()
-            closest_index = self.bars_df.index.get_loc(closest_date)
-
-           # t1_index = (self.bars_df.index - t1_date).total_seconds().abs().argmin()
-            current_index = self.bars_df.index.get_loc(row.name)
-           # end_index = self.bars_df.index.get_loc(t1_date)
-            df_temp = self.bars_df.iloc[current_index:closest_index]
-
-            touch_upper = df_temp[df_temp[close] >= upper_barrier].index.min()
-            touch_lower = df_temp[df_temp[close] <= lower_barrier].index.min()
-
-            if (touch_upper < touch_lower) and (touch_upper < t1_date):
-                label = 1
-            elif (touch_lower < touch_upper) and (touch_lower < t1_date):
-                label = -1
-            else:
-                label = 0
-
-            return pd.Series([upper_barrier, lower_barrier, t1_date, touch_upper, touch_lower, label], index=['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label'])
-
-        results = self.bars_df.apply(inner_calculate, axis=1)
-        self.bars_df = pd.concat([self.bars_df, results], axis=1)
-
-        return self.bars_df
+    
 
         
     def triple_barriers(self):
         self.triple_result =barriers.calculate_barriers_R(self.bars_df, self.lookback)
 
-        self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
+       # self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.bars_df
     
