@@ -84,9 +84,9 @@ def ensemble_methods(df, asset, lookback):
     #df = df.dropna(how='all')
     #df = df[lookback:]
     # Drop unnecessary columns early and use inplace=True
-    df.drop(columns=[  'Date','unix','endbarrier_unix', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime'], inplace=True)
+    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime'], inplace=True)
     df.dropna(how='all', inplace=True)
-    df = df[lookback:]
+    #df = df[lookback:]
     # Splitting data
 
     print('input dataframe:',df.columns)
