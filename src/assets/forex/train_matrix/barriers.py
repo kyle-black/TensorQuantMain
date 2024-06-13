@@ -240,10 +240,11 @@ def calculate_barriers_R(df, lookback):
     arr = np.column_stack((arr, labels))
 
     df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
+    df.drop('Close', inplace=True)
     df.index = date_index
 
     print('barrier df:', df.columns)
 
-    #df.drop('Close', inplace=True)
+    
     return df
 
