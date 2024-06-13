@@ -15,4 +15,7 @@ def gTEvents(gRaw, h=None):
             sPos = 0
             tEvents.append(idx)
     return tEvents
-    
+
+
+
+

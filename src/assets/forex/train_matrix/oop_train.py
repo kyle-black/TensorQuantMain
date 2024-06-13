@@ -218,23 +218,6 @@ def prepare_data():
     df = L.triple_barriers()
     print(df)
 
-if __name__ == "__main__":
-    asset = "EURUSD"
-    prepare_data()
-
-    #train_data(df, asset,60)
-
-
-
-    # Convert the pandas DataFrame to a Dask DataFrame
-
-'''
-    # Apply the function to each partition
-   # results = ddf.map_partitions(L.triple_barriers, meta=('upper_barrier', 'float64'), ('lower_barrier', 'float64'), ('t1', 'datetime64[ns]'), ('touch_upper', 'datetime64[ns]'), ('touch_lower', 'datetime64[ns]'), ('label', 'int64'))
-   
-    # Compute the results and convert back to a pandas DataFrame
-    df = L.triple_barriers()
-
     df.to_parquet('test_df.parquet')
     print('testdf:',df)
 
@@ -243,25 +226,6 @@ if __name__ == "__main__":
 
     df.to_parquet('final_df.parquet')
 
-
-
-
-  
-  
-    #fm = FeatureMaker(df, lookback, asset)
-
-  #  tEvents = fm.create_CUMSUM_filter()
-
-
-    # Filter df by tEvents
-   # filtered_df = df[df.index.isin(tEvents)]
-    
-   
-
-    #train_data(df, asset,60)
-
-
-    
 
     df = pd.read_parquet('final_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
@@ -285,5 +249,4 @@ if __name__ == "__main__":
     asset = "EURUSD"
     df = prepare_data()
 
-    train_data(df, asset,60)
-'''
+    train_data(df, asset,72)
