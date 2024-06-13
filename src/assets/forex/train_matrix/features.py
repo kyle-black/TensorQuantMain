@@ -8,6 +8,8 @@ from statsmodels.tsa.statespace.tools import diff
 def add_price_features(df,asset, window_length):
     df =df.copy()
 
+    print('preauto:',df)
+
    # if asset is not None:
     #open = 'Open'
     
