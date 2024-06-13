@@ -237,7 +237,7 @@ def calculate_barriers_R(df, lookback):
     # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
 
-    df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
-
+    df = pd.DataFrame(arr, columns=['Date','unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
+    df.index = df.Date
     return df
 
