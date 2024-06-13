@@ -210,8 +210,8 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 
 def calculate_barriers_R(df, lookback):
     volatility = df['Close'].pct_change().std()
-    df['Date'] = pd.to_datetime(df['Date'])
-    df['unix'] = df['Date'].astype('int64') // 10**9
+    df['Datetime'] = pd.to_datetime(df['Date'])
+    df['unix'] = df['Datetime'].astype('int64') // 10**9
     df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
 
