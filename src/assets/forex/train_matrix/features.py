@@ -9,6 +9,7 @@ def add_price_features(df,asset, window_length):
     df =df.copy()
 
     print('preauto:',df)
+    print(df.columns)
 
    # if asset is not None:
     #open = 'Open'
