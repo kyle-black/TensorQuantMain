@@ -88,23 +88,23 @@ def add_price_features(df,asset, window_length):
 
 def add_stochastic_oscillator(df, window_length):
     # Calculate the Stochastic Oscillator
-    low_min  = df[''Close''].rolling(window=window_length).min()
-    high_max = df[''Close''].rolling(window=window_length).max()
+    low_min  = df['Close'].rolling(window=window_length).min()
+    high_max = df['Close'].rolling(window=window_length).max()
 
-    df['%K'] = (df[''Close''] - low_min) / (high_max - low_min) * 100
+    df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
     df['%D'] = df['%K'].rolling(window=window_length).mean()
     return df
 
 
 def calculate_OBV(df):
-    df['daily_return'] = df[''Close''].diff()
+    df['daily_return'] = df['Close'].diff()
     df['direction'] = np.where(df['daily_return'] > 0, 1, -1)
     df['direction'][df['daily_return'] == 0] = 0
     df['volume_direction'] = df['Volume'] * df['direction']
     df['OBV'] = df['volume_direction'].cumsum()
     return df
 
-def add_ichimoku(df, high='High', low='Low', 'Close'=''Close''):
+def add_ichimoku(df, high='High', low='Low'):
     # Tenkan-sen (Conversion Line): (9-period high + 9-period low)/2
     period9_high = df['Close'].rolling(window=9).max()
     period9_low = df['Close'].rolling(window=9).min()
