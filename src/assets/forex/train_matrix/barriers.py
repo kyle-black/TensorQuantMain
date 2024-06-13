@@ -238,9 +238,10 @@ def calculate_barriers_R(df, lookback):
 
     # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
+    arr = np.delete(arr, 1, axis=1)
 
-    df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
-    df.drop('Close', inplace=True)
+    df = pd.DataFrame(arr, columns=['unix','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
+   # df.drop('Close', inplace=True)
     df.index = date_index
 
     print('barrier df:', df.columns)
