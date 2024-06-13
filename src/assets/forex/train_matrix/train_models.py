@@ -33,7 +33,7 @@ from sklearn.metrics import log_loss
 from sklearn.dummy import DummyClassifier
 
 
-from sklearn.experimental import enable_hist_gradient_boosting  # noqa
+#from sklearn.experimental import enable_hist_gradient_boosting  # noqa
 #from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
 

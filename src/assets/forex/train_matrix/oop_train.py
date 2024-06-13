@@ -12,7 +12,7 @@ from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
-#from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
+from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
 from check_distro import create_plot as cp
 import numpy as np
