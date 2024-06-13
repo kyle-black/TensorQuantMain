@@ -229,12 +229,12 @@ def prepare_data():
 
     #df = pd.read_parquet('final_df.parquet')
    # fm = FeatureMaker(df, lookback, asset)
-    tEvents = fm.create_CUMSUM_filter()
-    filtered_df = df[df.index.isin(tEvents)]
+    #tEvents = fm.create_CUMSUM_filter()
+    #filtered_df = df[df.index.isin(tEvents)]
     
-    print('filtered_df:',filtered_df)
-    filtered_df.dropna(inplace=True)
-    
+    #print('filtered_df:',filtered_df)
+    #filtered_df.dropna(inplace=True)
+    filtered_df =df
     return filtered_df 
     
 
