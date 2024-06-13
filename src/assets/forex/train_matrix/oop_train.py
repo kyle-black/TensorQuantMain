@@ -191,8 +191,10 @@ class Labeling:
         
     def triple_barriers(self):
         self.triple_result =barriers.calculate_barriers_R(self.bars_df, self.lookback)
+
+        self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
-        return self.triple_result
+        return self.bars_df
     
     def sample_weights(self):
         self.triple_result = self.triple_barriers()
