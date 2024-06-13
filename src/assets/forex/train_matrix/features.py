@@ -25,7 +25,7 @@ def add_price_features(df,asset, window_length):
     #    low ='Low' 
     
     ### Add autocorrelation / serial correlation
-    autocorr_lag_10 = df[''Close''].autocorr(lag=window_length)
+    autocorr_lag_10 = df['Close'].autocorr(lag=window_length)
 
     ############# Bolinger band Calc
 
