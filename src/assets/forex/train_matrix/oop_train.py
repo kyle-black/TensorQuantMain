@@ -233,8 +233,10 @@ def prepare_data():
     #filtered_df = df[df.index.isin(tEvents)]
     
     #print('filtered_df:',filtered_df)
-    #filtered_df.dropna(inplace=True)
+    
     filtered_df =df
+    filtered_df.dropna(inplace=True)
+    
     return filtered_df 
     
 
