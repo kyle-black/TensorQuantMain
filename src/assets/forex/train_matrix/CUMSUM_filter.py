@@ -8,10 +8,10 @@ def gTEvents(gRaw, h=None):
     
     for idx, i in diff.iterrows():
         sPos, sNeg = max(0, sPos + i['pct_change']), min(0, sNeg + i['pct_change'])
-        if sNeg < -h:
+        if sNeg < -(2*h):
             sNeg = 0
             tEvents.append(idx)
-        elif sPos > h:
+        elif sPos > (2*h):
             sPos = 0
             tEvents.append(idx)
     return tEvents
