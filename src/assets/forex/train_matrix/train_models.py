@@ -91,7 +91,7 @@ def ensemble_methods(df, asset, lookback):
     # Splitting data
     mapping = {-1: 0, 0: 1, 1: 2}
 
-    df['label'].map(mapping)
+    df['label'] = df['label'].map(mapping)
 
     print('input dataframe:',df.columns)
     
