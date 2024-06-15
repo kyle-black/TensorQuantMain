@@ -89,6 +89,9 @@ def ensemble_methods(df, asset, lookback):
     df.dropna(how='all', inplace=True)
     #df = df[lookback:]
     # Splitting data
+    mapping = {-1: 0, 0: 1, 1: 2}
+
+    df['label'].map(mapping)
 
     print('input dataframe:',df.columns)
     
