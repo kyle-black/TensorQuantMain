@@ -43,6 +43,7 @@ from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_validate
 from sklearn.utils import class_weight
+import xgboost as xgb
 
 #from sklearn.tree import export_graphviz
 #import pydotplus
@@ -177,8 +178,8 @@ def ensemble_methods(df, asset, lookback):
 
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier(n_jobs =-1,random_state=44, n_estimators=1000,class_weight='balanced_subsample', criterion='entropy')
-    
+   # clf =RandomForestClassifier(n_jobs =-1,random_state=44, n_estimators=1000,class_weight='balanced_subsample', criterion='entropy')
+    clf = xgb.XGBClassifier(objective='binary:logistic', random_state=42)
     
     
     
