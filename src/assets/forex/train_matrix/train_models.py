@@ -179,7 +179,7 @@ def ensemble_methods(df, asset, lookback):
     # Initialize GridSearchCV
     #clf = SVC(probability=True, C=50)
    # clf =RandomForestClassifier(n_jobs =-1,random_state=44, n_estimators=1000,class_weight='balanced_subsample', criterion='entropy')
-    clf = xgb.XGBClassifier(objective='binary:logistic', random_state=42)
+    clf = xgb.XGBClassifier(objective='multi:softmax',num_class=3, random_state=42)
     
     
     
