@@ -11,7 +11,7 @@ def gTEvents(gRaw, h=None):
         if sNeg < -2*(h):
             sNeg = 0
             tEvents.append(idx)
-        elif sPos > -2*(h):
+        elif sPos > 2*(h):
             sPos = 0
             tEvents.append(idx)
     return tEvents
