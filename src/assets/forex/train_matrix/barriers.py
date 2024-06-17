@@ -215,8 +215,8 @@ def calculate_barriers_R(df, lookback):
     
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
-    df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
+    df['upper_barrier'] = df['Close'] * (1 +1 * (0.5*volatility))
+    df['lower_barrier'] = df['Close'] * (1 -1 * (0.5*volatility))
 
     lookback_hours = pd.Timedelta(days=lookback)
     lookback_unix = lookback_hours / pd.Timedelta('1s')
