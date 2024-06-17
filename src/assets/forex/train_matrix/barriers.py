@@ -6,7 +6,7 @@ from pandas.tseries.offsets import Day, BMonthEnd
 
 
 
-
+'''
 def new_apply_triple_barrier(df, pt_sl, endbar, asset):
     """
     Apply the triple barrier method to label events.
@@ -105,7 +105,7 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
          
     ###############################################
     ####### New LOGIC for barrier touching
-        '''
+        
         if (touch_upper < touch_lower):
             barriers.at[timestamp, 'label'] = 1
 
@@ -114,14 +114,14 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
         
  #       else:
   #          barriers.at[timestamp, 'label'] = 0
-        '''
+        
     ###############################################
 
     df_merged = df.join(barriers, how='left')
     df_merged.to_csv('sanity_check_72.csv')
     return df_merged
 
-'''
+
 def calculate_barriers(row, df, pt_sl, time_, close='Close'):
     price = row[close]
     daily_volatility = df[close].pct_change().std()
@@ -215,8 +215,8 @@ def calculate_barriers_R(df, lookback):
     
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 +1 * (2*volatility))
-    df['lower_barrier'] = df['Close'] * (1 -1 * (2*volatility))
+    df['upper_barrier'] = df['Close'] * (1 +1 * (1*volatility))
+    df['lower_barrier'] = df['Close'] * (1 -1 * (1*volatility))
 
     lookback_hours = pd.Timedelta(days=lookback)
     lookback_unix = lookback_hours / pd.Timedelta('1s')
