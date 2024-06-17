@@ -63,7 +63,7 @@ def new_apply_triple_barrier(df, pt_sl, endbar, asset):
         barriers.at[timestamp, 'upper_barrier'] = upper_barrier
         barriers.at[timestamp, 'lower_barrier'] = lower_barrier
 
-        t1_date = timestamp + pd.Timedelta(hours=72)
+        t1_date = timestamp + pd.Timedelta(days=30)
         t1_date = min(t1_date, df.index[-1])
         
         barriers.at[timestamp, 't1'] = t1_date
