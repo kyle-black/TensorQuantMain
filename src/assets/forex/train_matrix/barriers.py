@@ -150,7 +150,7 @@ def calculate_barriers(row, df, pt_sl, time_, close='Close'):
 df[['upper_barrier', 'lower_barrier', 't1', 'touch_upper', 'touch_lower', 'label']] = df.apply(calculate_barriers, axis=1)
 '''
 
-
+'''
 
 def apply_triple_barrier_P(df, pt_sl, num_days_active):
     """
@@ -205,7 +205,7 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
     df_merged = df.join(barriers, how='left')
     df_merged.to_csv('sanity_check.csv')
     return df_merged
-
+'''
 
 
 def calculate_barriers_R(df, lookback):
@@ -218,7 +218,7 @@ def calculate_barriers_R(df, lookback):
     df['upper_barrier'] = df['Close'] * (1 +1 * (1*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (1*volatility))
 
-    lookback_hours = pd.Timedelta(days=lookback)
+    lookback_hours = pd.Timedelta(hours=lookback)
     lookback_unix = lookback_hours / pd.Timedelta('1s')
 
     df['endbarrier_unix'] = df['unix'] + lookback_unix
