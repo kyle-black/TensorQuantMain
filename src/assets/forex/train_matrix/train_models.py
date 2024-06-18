@@ -100,13 +100,13 @@ def ensemble_methods(df, asset, lookback):
 
     #print('endbarrier',df.columns)
 
-    df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
+    #df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     df['unix'] = pd.to_datetime(df['unix'], unit='s')
 
     df_sorted = df.sort_values('unix')
 
     print('dfsorted columns',df_sorted.columns)
-    tester_df = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')
+    tester_df = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close_x']
 
     print('teser df',tester_df)
     df['endbarrier_price'] = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close']
