@@ -208,10 +208,10 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 '''
 
 
-def calculate_barriers_R(df, lookback, volatility):
-
-
+def calculate_barriers_R(df, lookback):
     date_index = df.index
+    volatility = df['Close'].pct_change().rolling(window=1000).std()
+
     df['upper_barrier'] = df['Close'] * (1 + (1*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (1*volatility))
 
@@ -224,24 +224,17 @@ def calculate_barriers_R(df, lookback, volatility):
 
     next_arr = np.roll(arr, -1, axis=0)
 
-    # Check if the Close value of the next row is greater than the upper barrier or less than the lower barrier
     upper_touches = (next_arr[:-1, 1] > arr[:-1, 3]) & (next_arr[:-1, 0] <= arr[:-1, 2])
     lower_touches = (next_arr[:-1, 1] < arr[:-1, 4]) & (next_arr[:-1, 0] <= arr[:-1, 2])
 
-    # Create a new array that contains 1 where the upper barrier is touched first, -1 where the lower barrier is touched first, and 0 where the end barrier is reached before either the upper or lower barrier is touched
     labels = np.where(upper_touches, 1, np.where(lower_touches, -1, 0))
-
-    # Append a default label to the end of the labels array
     labels = np.append(labels, 0)
 
-    # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
 
-    # Add the Close price of the upper barrier touch, lower barrier touch, or end barrier close
     touch_price = np.where(upper_touches, next_arr[:-1, 1], np.where(lower_touches, next_arr[:-1, 1], arr[:-1, 1]))
     touch_price = np.append(touch_price, arr[-1, 1])
 
-    # Replace the touch price with the close price at the end barrier index when the label is 0
     end_barrier_indices = arr[:, 2].astype(int)
     end_barrier_prices = arr[end_barrier_indices, 1]
     touch_price = np.where(labels == 0, end_barrier_prices, touch_price)
