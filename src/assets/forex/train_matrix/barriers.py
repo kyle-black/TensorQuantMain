@@ -239,6 +239,9 @@ def calculate_barriers_R(df, lookback):
     # Append a default label to the end of the labels array
     labels = np.append(labels, 0)
 
+    upper_touches = upper_touches[:-1]
+    lower_touches = lower_touches[:-1]
+
     touch_price = np.where(upper_touches,arr[:-1, 1], np.where(lower_touches,arr[:-1, 1], arr[:-1, 1]))
     touch_price = np.append(touch_price, arr[-1, 1])
     arr = np.column_stack((arr, touch_price))
