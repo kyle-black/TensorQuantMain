@@ -94,28 +94,23 @@ def ensemble_methods(df, asset, lookback):
     #df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     
     #df = df.drop(df.columns[-5], axis=1)
-    duplicate_columns = df.columns[df.columns.duplicated()]
-    print(duplicate_columns)
-    df = df.loc[:,~df.columns.duplicated()]
+    
 
     #print('endbarrier',df.columns)
 
     #df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    df['unix'] = pd.to_datetime(df['unix'], unit='s')
+    
 
-    df_sorted = df.sort_values('unix')
+  
 
-    print('dfsorted columns',df_sorted.columns)
-    tester_df = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close_x']
-
-    print('teser df',tester_df)
-    df['endbarrier_price'] = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close']
+    
+   
         
-    prices = df[['Close','touch_price', 'endbarrier_price']]
+    prices = df[['Close','touch_price']]
    
     
 
-    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'endbarrier_price'], inplace=True)
+    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price'], inplace=True)
     df.dropna(how='all', inplace=True)
     #df = df[lookback:]
     # Splitting data
@@ -186,8 +181,7 @@ def ensemble_methods(df, asset, lookback):
     startprice = prices['Close'].iloc[test_idx]
 
     endprice = prices['touch_price'].iloc[test_idx]
-
-    endtimes = prices['endbarrier_price'].iloc[test_idx]
+    
   
 
    # weight_data =  weights[-1]
