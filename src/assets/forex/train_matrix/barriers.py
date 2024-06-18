@@ -239,14 +239,19 @@ def calculate_barriers_R(df, lookback):
 
     # Add the labels array as a new column to the original array
     arr = np.column_stack((arr, labels))
-    arr = np.delete(arr, 1, axis=1)
 
-    df = pd.DataFrame(arr, columns=['unix','endbarrier_unix','upper_barrier','lower_barrier', 'label'])
-   # df.drop('Close', inplace=True)
+    # Add the Close price of the upper barrier touch, lower barrier touch, or end barrier close
+    touch_price = np.where(upper_touches, next_arr[:-1, 1], np.where(lower_touches, next_arr[:-1, 1], arr[:-1, 1]))
+    touch_price = np.append(touch_price, arr[-1, 1])
+    arr = np.column_stack((arr, touch_price))
+
+    df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label', 'touch_price'])
     df.index = date_index
 
     print('barrier df:', df.columns)
 
-    
     return df
+
+    
+    
 
