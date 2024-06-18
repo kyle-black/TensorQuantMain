@@ -106,7 +106,7 @@ def ensemble_methods(df, asset, lookback):
     
    
         
-    prices = df[['Close','touch_price']]
+    prices = df[['Close','touch_price', 'Date']]
    
     
 
@@ -181,6 +181,7 @@ def ensemble_methods(df, asset, lookback):
     startprice = prices['Close'].iloc[test_idx]
 
     endprice = prices['touch_price'].iloc[test_idx]
+    Dates = prices['Date'].iloc[test_idx]
     
   
 
@@ -322,8 +323,8 @@ def ensemble_methods(df, asset, lookback):
     print('logloss', l_l)  
 
 
-    for actual,prediction,dwn,neutral,up, start,end, endtimeprice in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice, endtimes):
-        print(actual, prediction, dwn, neutral,up,start,end, endtimeprice)
+    for actual,prediction,dwn,neutral,up, start,end, date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice, Dates):
+        print(actual, prediction, dwn, neutral,up,start,end, date)
 
    # print(test_data)
     test_data['predictions'] = y_pred
