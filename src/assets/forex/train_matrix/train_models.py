@@ -91,13 +91,19 @@ def ensemble_methods(df, asset, lookback):
     
 
     #df['endbarrier_time'] = df['endbarrier_unix']
-    df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
+    #df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     
-    df['endbarrier_price'] = df['Close'].asof(df.endbarrier_time)
+   
 
+    
+
+    df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
+    df['unix'] = pd.to_datetime(df['unix'], unit='s')
+
+    df_sorted = df.sort_values('unix')
+    df['endbarrier_price'] = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close']
+        
     prices = df[['Close','touch_price', 'endbarrier_price']]
-    
-
    
     
 
