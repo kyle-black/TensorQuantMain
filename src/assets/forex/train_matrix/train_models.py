@@ -107,6 +107,9 @@ def ensemble_methods(df, asset, lookback):
     print('data dropped')
     
     feature_cols = df.drop('label',axis=1).columns
+
+    feature_cols = ['Close_AUDUSD', 'Close_USDCAD',
+       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']
     
 
     target_col = 'label'
@@ -117,7 +120,7 @@ def ensemble_methods(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 15
+    n_components = 3
     scaler = StandardScaler()
     
     # Define a parameter grid for GridSearchCV
