@@ -104,6 +104,8 @@ def ensemble_methods(df, asset, lookback):
     df['unix'] = pd.to_datetime(df['unix'], unit='s')
 
     df_sorted = df.sort_values('unix')
+
+    print('dfsorted columns',df_sorted.columns)
     df['endbarrier_price'] = pd.merge_asof(df_sorted, df_sorted, left_on='endbarrier_unix', right_on='unix', direction='nearest')['Close']
         
     prices = df[['Close','touch_price', 'endbarrier_price']]
