@@ -83,7 +83,7 @@ def ensemble_methods(df, asset, lookback):
     threshold = 0.7 
 
 
-    df.drop
+    
     #df = df.drop(columns=['touch_lower', 'touch_upper'])
     #df = df.dropna(how='all')
     #df = df[lookback:]
@@ -93,7 +93,10 @@ def ensemble_methods(df, asset, lookback):
     #df['endbarrier_time'] = df['endbarrier_unix']
     #df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     
-    df = df.drop(df.columns[-5], axis=1)
+    #df = df.drop(df.columns[-5], axis=1)
+    duplicate_columns = df.columns[df.columns.duplicated()]
+    print(duplicate_columns)
+    df = df.loc[:,~df.columns.duplicated()]
 
     #print('endbarrier',df.columns)
 
