@@ -88,8 +88,20 @@ def ensemble_methods(df, asset, lookback):
     #df = df.dropna(how='all')
     #df = df[lookback:]
     # Drop unnecessary columns early and use inplace=True
-    prices = df[['Close','touch_price']]
-    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price'], inplace=True)
+    
+
+    #df['endbarrier_time'] = df['endbarrier_unix']
+    df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
+    
+    df['endbarrier_price'] = df['Close'].asof(df.endbarrier_time)
+
+    prices = df[['Close','touch_price', 'endbarrier_price']]
+    
+
+   
+    
+
+    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'endbarrier_price'], inplace=True)
     df.dropna(how='all', inplace=True)
     #df = df[lookback:]
     # Splitting data
@@ -103,7 +115,7 @@ def ensemble_methods(df, asset, lookback):
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
    
     
-    print('dataframe index type',df.index[0])
+    
     #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
     #df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
 
@@ -160,6 +172,8 @@ def ensemble_methods(df, asset, lookback):
     startprice = prices['Close'].iloc[test_idx]
 
     endprice = prices['touch_price'].iloc[test_idx]
+
+    endtimes = prices['endbarrier_price'].iloc[test_idx]
   
 
    # weight_data =  weights[-1]
@@ -300,8 +314,8 @@ def ensemble_methods(df, asset, lookback):
     print('logloss', l_l)  
 
 
-    for actual,prediction,dwn,neutral,up, start,end in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice):
-        print(actual, prediction, dwn, neutral,up,start,end)
+    for actual,prediction,dwn,neutral,up, start,end, endtimeprice in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice, endtimes):
+        print(actual, prediction, dwn, neutral,up,start,end, endtimeprice)
 
    # print(test_data)
     test_data['predictions'] = y_pred
