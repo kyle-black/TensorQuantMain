@@ -208,14 +208,11 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
 '''
 
 
-def calculate_barriers_R(df, lookback):
-    volatility = df['Close'].pct_change().rolling(window=1000).std()
-    #volatility = df['Close'].pct_change().std()
+def calculate_barriers_R(df, lookback, volatility):
+
+
     date_index = df.index
-    
-    df['Datetime'] = pd.to_datetime(df['Date'])
-    df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 +1 * (1*volatility))
+    df['upper_barrier'] = df['Close'] * (1 + (1*volatility))
     df['lower_barrier'] = df['Close'] * (1 -1 * (1*volatility))
 
     lookback_hours = pd.Timedelta(hours=lookback)
@@ -243,6 +240,12 @@ def calculate_barriers_R(df, lookback):
     # Add the Close price of the upper barrier touch, lower barrier touch, or end barrier close
     touch_price = np.where(upper_touches, next_arr[:-1, 1], np.where(lower_touches, next_arr[:-1, 1], arr[:-1, 1]))
     touch_price = np.append(touch_price, arr[-1, 1])
+
+    # Replace the touch price with the close price at the end barrier index when the label is 0
+    end_barrier_indices = arr[:, 2].astype(int)
+    end_barrier_prices = arr[end_barrier_indices, 1]
+    touch_price = np.where(labels == 0, end_barrier_prices, touch_price)
+
     arr = np.column_stack((arr, touch_price))
 
     df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label', 'touch_price'])
