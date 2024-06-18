@@ -81,12 +81,15 @@ def ensemble_methods(df, asset, lookback):
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
+
+
     
     #df = df.drop(columns=['touch_lower', 'touch_upper'])
     #df = df.dropna(how='all')
     #df = df[lookback:]
     # Drop unnecessary columns early and use inplace=True
-    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime'], inplace=True)
+    prices = df[['Close','touch_price']]
+    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price'], inplace=True)
     df.dropna(how='all', inplace=True)
     #df = df[lookback:]
     # Splitting data
@@ -153,6 +156,10 @@ def ensemble_methods(df, asset, lookback):
 
     train_data =df.iloc[train_idx]
     test_data = df.iloc[test_idx]
+
+    startprice = prices['Close'].iloc[test_idx]
+
+    endprice = prices['touch_price'].iloc[test_idx]
   
 
    # weight_data =  weights[-1]
@@ -293,8 +300,8 @@ def ensemble_methods(df, asset, lookback):
     print('logloss', l_l)  
 
 
-    for actual,prediction,dwn,neutral,up in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2]):
-        print(actual, prediction, dwn, neutral,up)
+    for actual,prediction,dwn,neutral,up, start,end in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice):
+        print(actual, prediction, dwn, neutral,up,start,end)
 
    # print(test_data)
     test_data['predictions'] = y_pred

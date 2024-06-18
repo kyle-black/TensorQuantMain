@@ -245,7 +245,7 @@ def calculate_barriers_R(df, lookback):
     touch_price = np.append(touch_price, arr[-1, 1])
     arr = np.column_stack((arr, touch_price))
 
-    df = pd.DataFrame(arr, columns=['unix','Close','endbarrier_unix','upper_barrier','lower_barrier', 'label', 'touch_price'])
+    df = pd.DataFrame(arr, columns=['unix','endbarrier_unix','upper_barrier','lower_barrier', 'label', 'touch_price'])
     df.index = date_index
 
     print('barrier df:', df.columns)
