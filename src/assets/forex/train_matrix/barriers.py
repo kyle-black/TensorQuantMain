@@ -257,16 +257,18 @@ def calculate_barriers_R(df, lookback):
     zero_label_rows = df[df['label'] == 0]
 
     # Get the 'endbarrier_dt' values for these rows
-    endbarrier_dt_values = zero_label_rows['endbarrier_dt']
+    endbarrier_unix_values = zero_label_rows['endbarrier_unix']
 
-    # Find the first valid index
-    first_valid_endbarrier_dt_index = endbarrier_dt_values.first_valid_index()
+    difference = abs(df['endbarrier_unix'] - df['unix'])
+
+   
+    closest_index = difference.idxmin()
 
     # Get the price at this index
-    price_at_first_valid_endbarrier_dt = df.loc[first_valid_endbarrier_dt_index, 'Close']
+    price_at_first_valid_endbarrier_dt = df.loc[closest_index, 'Close']
 
     # Replace the 'touch_price' value at this index
-    df.loc[first_valid_endbarrier_dt_index, 'touch_price'] = price_at_first_valid_endbarrier_dt
+    df.loc[closest_index, 'touch_price'] = price_at_first_valid_endbarrier_dt
 
     df.drop('Close', axis =1,inplace=True)
     df.index = date_index
