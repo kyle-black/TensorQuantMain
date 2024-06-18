@@ -95,7 +95,7 @@ def ensemble_methods(df, asset, lookback):
     
    
 
-    
+    print('endbarrier',df['endbarrier_unix'])
 
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     df['unix'] = pd.to_datetime(df['unix'], unit='s')
