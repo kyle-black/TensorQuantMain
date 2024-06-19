@@ -227,6 +227,8 @@ def calculate_barriers_R(df, lookback):
 
     next_arr = np.roll(arr, -10, axis=0)
 
+    print('next arr:', next_arr)
+
     # Check if the Close value of the next row is greater than the upper barrier or less than the lower barrier
     upper_touches = (next_arr[:-1, 1] > arr[:-1, 3]) & (next_arr[:-1, 0] <= arr[:-1, 2])
     lower_touches = (next_arr[:-1, 1] < arr[:-1, 4]) & (next_arr[:-1, 0] <= arr[:-1, 2])
