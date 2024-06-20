@@ -153,8 +153,8 @@ class Labeling:
         self.triple_result =barriers.calculate_barriers_R(self.bars_df, self.lookback)
       #  print(self.triple_barriers.columns)
       #  print(self.barrierss)
-
-        self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
+        self.bars_df = self.triple_result
+        #self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
        # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
         return self.bars_df
     
@@ -217,7 +217,7 @@ def prepare_data():
     print('Applying Triple Barriers:')
     df = L.triple_barriers()
     print(df)
-    
+
    # df.to_parquet('test_df.parquet')
     print('testdf:',df)
 
