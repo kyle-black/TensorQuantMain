@@ -324,7 +324,7 @@ def ensemble_methods(df, asset, lookback):
     print('logloss', l_l)  
 
 
-    for actual,prediction,dwn,neutral,up, start,end, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
+    for actual,prediction,dwn,neutral,up, start,end,upperbarrier,lowerbarrier, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
         print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end},upperbarrier{upperbarrier}, lowerbarrier{lowerbarrier}, date {date}, end date {end_date}')
 
    # print(test_data)
