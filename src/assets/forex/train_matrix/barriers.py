@@ -295,7 +295,7 @@ def calculate_barriers_R(df, lookback):
     df.loc[mask_lower, 'touch_price'] = df['future_close'][mask_lower]
 
     # Drop unnecessary columns
-    df.drop(['Close', 'Datetime', 'pct_change', 'future_unix', 'future_close'], axis=1, inplace=True)
+    df.drop([ 'Datetime', 'pct_change', 'future_unix', 'future_close'], axis=1, inplace=True)
     df = df.dropna()
     return df
     
