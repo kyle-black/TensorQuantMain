@@ -258,60 +258,44 @@ def calculate_barriers_R(df, lookback):
 
     return df
 '''
-
 def calculate_barriers_R(df, lookback):
     # Calculate volatility
-    volatility = df['Close'].pct_change().rolling(window=1000).std()
+    df['pct_change'] = df['Close'].pct_change()
+    volatility = df['pct_change'].rolling(window=1000).std()
     
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
     df['upper_barrier'] = df['Close'] * (1 + volatility)
     df['lower_barrier'] = df['Close'] * (1 - volatility)
-
+    
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
     df['endbarrier_unix'] = df['unix'] + lookback_seconds
 
+    # Create a new DataFrame for future values lookup
+    future_df = df[['unix', 'Close']].copy()
+    future_df.columns = ['future_unix', 'future_close']
+    
+    # Merge to get the closest future_close before endbarrier_unix
+    df = pd.merge_asof(df, future_df, left_on='endbarrier_unix', right_on='future_unix', direction='backward')
+
     # Initialize columns for results
     df['label'] = 0
-    df['touch_price'] = df['Close']
+    df['touch_price'] = df['future_close']
 
-    # Vectorized approach to find touches
-    n = len(df)
-    unix = df['unix'].values
-    close = df['Close'].values
-    upper_barrier = df['upper_barrier'].values
-    lower_barrier = df['lower_barrier'].values
-    endbarrier_unix = df['endbarrier_unix'].values
+    # Vectorized touch condition checks
+    mask_upper = df['future_close'] > df['upper_barrier']
+    mask_lower = df['future_close'] < df['lower_barrier']
 
-    for i in range(n):
-        mask = (unix > unix[i]) & (unix <= endbarrier_unix[i])
-        future_close = close[mask]
-
-        if future_close.size == 0:
-            continue
-
-        future_time = unix[mask]
-        touch_upper = future_close > upper_barrier[i]
-        touch_lower = future_close < lower_barrier[i]
-
-        if touch_upper.any():
-            first_touch_index = np.where(touch_upper)[0][0]
-            df.at[i, 'label'] = 1
-            df.at[i, 'touch_price'] = future_close[first_touch_index]
-        elif touch_lower.any():
-            first_touch_index = np.where(touch_lower)[0][0]
-            df.at[i, 'label'] = -1
-            df.at[i, 'touch_price'] = future_close[first_touch_index]
-        else:
-            # No touches, find the close price nearest to the end barrier
-            nearest_index = np.abs(future_time - endbarrier_unix[i]).argmin()
-            df.at[i, 'touch_price'] = future_close[nearest_index]
+    # Determine labels and touch prices
+    df.loc[mask_upper, 'label'] = 1
+    df.loc[mask_lower, 'label'] = -1
+    df.loc[mask_upper, 'touch_price'] = df['future_close'][mask_upper]
+    df.loc[mask_lower, 'touch_price'] = df['future_close'][mask_lower]
 
     # Drop unnecessary columns
-    df.drop(['Close', 'Datetime'], axis=1, inplace=True)
+    df.drop(['Close', 'Datetime', 'pct_change', 'future_unix', 'future_close'], axis=1, inplace=True)
     
     return df
-
     
