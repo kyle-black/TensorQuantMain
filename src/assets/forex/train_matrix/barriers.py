@@ -225,7 +225,7 @@ def calculate_barriers_R(df, lookback):
     df = df[['unix','Close','endbarrier_unix','upper_barrier','lower_barrier']]
     arr = df.to_numpy()
 
-    next_arr = np.roll(arr, -10, axis=0)
+    next_arr = np.roll(arr, -1, axis=0)
 
     print('next arr:', next_arr)
 
@@ -259,5 +259,3 @@ def calculate_barriers_R(df, lookback):
     return df
 
     
-    
-

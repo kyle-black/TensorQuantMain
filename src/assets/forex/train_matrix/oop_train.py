@@ -217,7 +217,7 @@ def prepare_data():
     print('Applying Triple Barriers:')
     df = L.triple_barriers()
     print(df)
-
+    
    # df.to_parquet('test_df.parquet')
     print('testdf:',df)
 
