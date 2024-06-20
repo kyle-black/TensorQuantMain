@@ -207,7 +207,7 @@ def apply_triple_barrier_P(df, pt_sl, num_days_active):
     return df_merged
 '''
 
-
+'''
 def calculate_barriers_R(df, lookback):
     volatility = df['Close'].pct_change().rolling(window=1000).std()
     #volatility = df['Close'].pct_change().std()
@@ -256,6 +256,62 @@ def calculate_barriers_R(df, lookback):
 
     print('barrier df:', df.columns)
 
+    return df
+'''
+
+def calculate_barriers_R(df, lookback):
+    # Calculate volatility
+    volatility = df['Close'].pct_change().rolling(window=1000).std()
+    
+    # Add necessary columns
+    df['Datetime'] = pd.to_datetime(df['Date'])
+    df['unix'] = df['Datetime'].astype('int64') // 10**9
+    df['upper_barrier'] = df['Close'] * (1 + volatility)
+    df['lower_barrier'] = df['Close'] * (1 - volatility)
+
+    # Calculate lookback in seconds
+    lookback_seconds = lookback * 3600
+    df['endbarrier_unix'] = df['unix'] + lookback_seconds
+
+    # Initialize columns for results
+    df['label'] = 0
+    df['touch_price'] = df['Close']
+
+    # Vectorized approach to find touches
+    n = len(df)
+    unix = df['unix'].values
+    close = df['Close'].values
+    upper_barrier = df['upper_barrier'].values
+    lower_barrier = df['lower_barrier'].values
+    endbarrier_unix = df['endbarrier_unix'].values
+
+    for i in range(n):
+        mask = (unix > unix[i]) & (unix <= endbarrier_unix[i])
+        future_close = close[mask]
+
+        if future_close.size == 0:
+            continue
+
+        future_time = unix[mask]
+        touch_upper = future_close > upper_barrier[i]
+        touch_lower = future_close < lower_barrier[i]
+
+        if touch_upper.any():
+            first_touch_index = np.where(touch_upper)[0][0]
+            df.at[i, 'label'] = 1
+            df.at[i, 'touch_price'] = future_close[first_touch_index]
+        elif touch_lower.any():
+            first_touch_index = np.where(touch_lower)[0][0]
+            df.at[i, 'label'] = -1
+            df.at[i, 'touch_price'] = future_close[first_touch_index]
+        else:
+            # No touches, find the close price nearest to the end barrier
+            nearest_index = np.abs(future_time - endbarrier_unix[i]).argmin()
+            df.at[i, 'touch_price'] = future_close[nearest_index]
+
+    # Drop unnecessary columns
+    df.drop(['Close', 'Datetime'], axis=1, inplace=True)
+    
     return df
 
     

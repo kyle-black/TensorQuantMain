@@ -125,9 +125,6 @@ def ensemble_methods(df, asset, lookback):
    
     
     
-    #feature_cols = ['Daily_Returns', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'SpreadOC', 'SpreadLH', 'SMI']
-    #df =df.drop(['Date','Close','Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 't1'], axis =1)
-
     print('data dropped')
     
     feature_cols = df.drop('label',axis=1).columns
@@ -209,7 +206,7 @@ def ensemble_methods(df, asset, lookback):
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
 
-   # X_train.to_csv('X_train.csv')
+
     
     X_test = pca.transform(X_test)
 
