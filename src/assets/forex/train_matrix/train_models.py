@@ -98,7 +98,7 @@ def ensemble_methods(df, asset, lookback):
 
     #print('endbarrier',df.columns)
 
-    #df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
+    df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     
 
   
@@ -106,7 +106,7 @@ def ensemble_methods(df, asset, lookback):
     
    
         
-    prices = df[['Close','touch_price', 'Date']]
+    prices = df[['Close','touch_price', 'Date', 'endbarrier_unix']]
    
     
 
@@ -179,6 +179,7 @@ def ensemble_methods(df, asset, lookback):
 
     endprice = prices['touch_price'].iloc[test_idx]
     Dates = prices['Date'].iloc[test_idx]
+    enddate = prices['endbarrier_unix'].iloc[test_idx]
     
   
 
@@ -320,8 +321,8 @@ def ensemble_methods(df, asset, lookback):
     print('logloss', l_l)  
 
 
-    for actual,prediction,dwn,neutral,up, start,end, date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice, Dates):
-        print(actual, prediction, dwn, neutral,up,start,end, date)
+    for actual,prediction,dwn,neutral,up, start,end, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice, Dates, enddate):
+        print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end}, date {date}, end date {end_date}')
 
    # print(test_data)
     test_data['predictions'] = y_pred
