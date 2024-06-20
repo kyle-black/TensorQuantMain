@@ -43,7 +43,7 @@ from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_validate
 from sklearn.utils import class_weight
-import xgboost as xgb
+#import xgboost as xgb
 #from imblearn.over_sampling import SMOTE
 
 #from sklearn.tree import export_graphviz
