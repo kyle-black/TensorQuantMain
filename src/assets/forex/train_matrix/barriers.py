@@ -296,6 +296,6 @@ def calculate_barriers_R(df, lookback):
 
     # Drop unnecessary columns
     df.drop(['Close', 'Datetime', 'pct_change', 'future_unix', 'future_close'], axis=1, inplace=True)
-    
+    df = df.dropna(subset=['Date'])
     return df
     
