@@ -298,6 +298,8 @@ def calculate_barriers_R(df, lookback):
     df.drop([  'future_unix', 'future_close'], axis=1, inplace=True)
     
     df = df.dropna()
-    df.to_csv('barrier_check.csv')
+    #df.to_csv('barrier_check.csv')
+    df.to_parquet('barrier_check.parquet')
+
     return df
     
