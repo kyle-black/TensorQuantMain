@@ -293,7 +293,7 @@ def calculate_barriers_R(df, lookback):
     df.loc[mask_lower, 'label'] = -1
     df.loc[mask_upper, 'touch_price'] = df['future_close'][mask_upper]
     df.loc[mask_lower, 'touch_price'] = df['future_close'][mask_lower]
-    print(df['close','future_close','upper_barrier','lower_barrier'])
+    print(df['Close','future_close','upper_barrier','lower_barrier'])
     # Drop unnecessary columns
     df.drop([  'future_unix', 'future_close'], axis=1, inplace=True)
     
