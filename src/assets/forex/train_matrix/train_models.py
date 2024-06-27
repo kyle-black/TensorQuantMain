@@ -322,17 +322,41 @@ def ensemble_methods(df, asset, lookback):
 
     #l_l = log_loss(y_test, probas)
     print('logloss', l_l)  
-    '''
+    
 
     for actual,prediction,dwn,neutral,up, start,end,upperbarrier,lowerbarrier, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
         print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end},upperbarrier{upperbarrier}, lowerbarrier{lowerbarrier}, date {date}, end date {end_date}')
+
+
+    # Initialize an empty list to store the data
+    data = []
+
+# Iterate through the zipped lists
+    for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate):
+        # Append a dictionary for each row of data
+        data.append({
+            'actual': actual,
+            'prediction': prediction,
+            'dwn': dwn,
+            'neutral': neutral,
+            'up': up,
+            'start': start,
+            'end': end,
+            'upperbarrier': upperbarrier,
+            'lowerbarrier': lowerbarrier,
+            'date': date,
+            'end_date': end_date
+        })
+
+# Convert the list of dictionaries into a DataFrame
+    predictions_df = pd.DataFrame(data)
 
    # print(test_data)
     test_data['predictions'] = y_pred
     test_data['probs dwn'] = probas[:,0]
     test_data['probs neutral'] = probas[:,1]
     test_data['probs up'] = probas[:,2]
-    '''
+
     comparison_df.to_csv('comparison_df.csv')
     predictions_df.to_csv('predictions_data.csv')
 
