@@ -28,6 +28,6 @@ def run_email():
     msg.add_attachment(file_data, maintype="application", subtype="octet-stream", filename=file_name)
 
     # Send the email
-    with smtplib.SMTP_SSL("smtp.example.com", 465) as server:  # Use your SMTP server
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:  # Use your SMTP server
         server.login(sender_email, password)
         server.send_message(msg)
