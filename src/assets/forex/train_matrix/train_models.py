@@ -334,7 +334,7 @@ def ensemble_methods(df, asset, lookback):
     test_data['probs up'] = probas[:,2]
     '''
 
-    test_data.to_csv('test_data.csv')
+    predictions_df.to_csv('predictions_data.csv')
 
 
 
