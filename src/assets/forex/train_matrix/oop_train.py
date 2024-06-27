@@ -20,6 +20,7 @@ from scipy.stats import boxcox
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing as mp
 import dask.dataframe as dd
+import send_email
 
 
 
@@ -254,3 +255,5 @@ if __name__ == "__main__":
     df = prepare_data()
 
     train_data(df, asset,24)
+    send_email.run_email()
+    

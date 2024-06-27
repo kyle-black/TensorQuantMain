@@ -1,0 +1,33 @@
+import smtplib
+from email.message import EmailMessage
+
+
+
+
+
+def run_email():
+# Email setup
+    sender_email = "kpblack87@gmail.com"
+    receiver_email = "kpblack87@gmail.com"
+    password = "Blanca123$"  # Consider using a more secure authentication method
+    subject = "Test Data CSV"
+    body = "Attached is the test_data.csv file."
+    file_path = "test_data.csv"
+
+    # Create the email message
+    msg = EmailMessage()
+    msg["From"] = sender_email
+    msg["To"] = receiver_email
+    msg["Subject"] = subject
+    msg.set_content(body)
+
+    # Attach the file
+    with open(file_path, "rb") as f:
+        file_data = f.read()
+        file_name = f.name
+    msg.add_attachment(file_data, maintype="application", subtype="octet-stream", filename=file_name)
+
+    # Send the email
+    with smtplib.SMTP_SSL("smtp.example.com", 465) as server:  # Use your SMTP server
+        server.login(sender_email, password)
+        server.send_message(msg)
