@@ -9,7 +9,7 @@ def run_email():
 # Email setup
     sender_email = "kpblack87@gmail.com"
     receiver_email = "kpblack87@gmail.com"
-    password = "Blanca123$"  # Consider using a more secure authentication method
+    password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
     file_path = "test_data.csv"
