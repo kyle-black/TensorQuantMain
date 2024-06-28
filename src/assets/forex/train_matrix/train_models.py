@@ -347,8 +347,8 @@ def ensemble_methods(df, asset, lookback):
     print(len(probas[:,0]))
     print(len(probas[:,1]))
     print(len(probas[:,2]))
-    print(len(upperbarrier))
-    print(len(lowerbarrier))
+    print(len(upperbarrier_series))
+    print(len(lowerbarrier_series))
     print(len(enddate))
     
     predictions_df = pd.DataFrame({
@@ -358,8 +358,8 @@ def ensemble_methods(df, asset, lookback):
         'down proba': probas[:,0],
         'neutral proba': probas[:,1],
         'up proba': probas[:,2],
-        'upper_barrier': upperbarrier,
-        'lower_barrier': lowerbarrier,
+        'upper_barrier': upperbarrier_series,
+        'lower_barrier': lowerbarrier_series,
         'end_date': enddate})
     
     print('datalist:',data)
