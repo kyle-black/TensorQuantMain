@@ -184,6 +184,7 @@ def ensemble_methods(df, asset, lookback):
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
+    print('lowerbarrier', lowerbarrier)
 
     
   
