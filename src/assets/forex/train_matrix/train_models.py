@@ -351,7 +351,7 @@ def ensemble_methods(df, asset, lookback):
         'up proba': probas[:,2],
         'upper_barrier': upperbarrier_series,
         'lower_barrier': lowerbarrier_series,
-        'end_date': end_date})
+        'end_date': enddate})
     
     print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
