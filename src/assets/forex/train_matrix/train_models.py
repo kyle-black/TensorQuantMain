@@ -172,6 +172,8 @@ def ensemble_methods(df, asset, lookback):
 
     test_idx = test_datasets[-1]
 
+    print('Test idx:', test_idx)
+
     train_data =df.iloc[train_idx]
     test_data = df.iloc[test_idx]
 
