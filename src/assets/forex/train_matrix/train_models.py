@@ -339,21 +339,20 @@ def ensemble_methods(df, asset, lookback):
     print(type(startprice), type(endprice), type(upperbarrier), type(lowerbarrier), type(Dates), type(enddate))
     upperbarrier_series = pd.Series(upperbarrier)
     lowerbarrier_series = pd.Series(lowerbarrier)
-    for actual, prediction, dwn, neutral, up, start, end, ub, lb, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier_series, lowerbarrier_series, Dates, enddate):
-        # Append a dictionary for each row of data
-        data.append({
-            'actual': actual,
-            'prediction': prediction,
-            'dwn': dwn,
-            'neutral': neutral,
-            'up': up,
-            'start': start,
-            'end': end,
-            'upperbarrier': ub,
-            'lowerbarrier': lb,
-            'date': date,
-            'end_date': end_date
-        })
+
+
+    
+    predictions_df = pd.DataFrame({
+        'Date': Dates,
+        'Actual': y_test,
+        'Predictions': y_pred,
+        'down proba': probas[:,0],
+        'neutral proba': probas[:,1],
+        'up proba': probas[:,2],
+        'upper_barrier': upperbarrier_series,
+        'lower_barrier': lowerbarrier_series,
+        'end_date': end_date})
+    
     print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
     predictions_df = pd.DataFrame(data)
