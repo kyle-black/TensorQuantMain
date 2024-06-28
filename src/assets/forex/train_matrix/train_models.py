@@ -337,7 +337,7 @@ def ensemble_methods(df, asset, lookback):
 # Iterate through the zipped lists
 
     print(type(startprice), type(endprice), type(upperbarrier), type(lowerbarrier), type(Dates), type(enddate))
-    for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate):
+    for actual, prediction, dwn, neutral, up, start, end, ub, lb, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate):
         # Append a dictionary for each row of data
         data.append({
             'actual': actual,
@@ -347,8 +347,8 @@ def ensemble_methods(df, asset, lookback):
             'up': up,
             'start': start,
             'end': end,
-            'upperbarrier': upperbarrier,
-            'lowerbarrier': lowerbarrier,
+            'upperbarrier': ub,
+            'lowerbarrier': lb,
             'date': date,
             'end_date': end_date
         })
