@@ -349,8 +349,8 @@ def ensemble_methods(df, asset, lookback):
     print(len(probas[:,0]))
     print(len(probas[:,1]))
     print(len(probas[:,2]))
-    print(len(upperbarrier_series))
-    print(len(lowerbarrier_series))
+    print(len(upperbarrier))
+    print(len(lowerbarrier))
     print(len(enddate))
     
     predictions_df = pd.DataFrame({
