@@ -178,7 +178,7 @@ def ensemble_methods(df, asset, lookback):
 
     startprice = prices['Close'].iloc[test_idx]
 
-    endprice = prices['touch_price'].iloc[test_idx]
+    endprice = prices['touch_price']
     Dates = prices['Date'].iloc[test_idx]
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
