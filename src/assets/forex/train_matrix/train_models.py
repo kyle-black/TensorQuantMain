@@ -352,6 +352,10 @@ def ensemble_methods(df, asset, lookback):
     # Explicitly creating an index that matches the data length
     index = pd.RangeIndex(start=0, stop=len(Dates), step=1)
 
+    # Example of converting to datetime
+    Dates = pd.to_datetime(Dates, errors='coerce')  # 'coerce' will convert invalid parsing to NaT
+    enddate = pd.to_datetime(enddate, errors='coerce')
+
     # Creating the DataFrame with an explicit index
     predictions_df = pd.DataFrame({
         'Date': Dates,
