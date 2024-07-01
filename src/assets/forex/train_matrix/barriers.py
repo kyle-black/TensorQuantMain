@@ -322,6 +322,7 @@ def calculate_barriers_R(df, lookback):
     
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
+    df['endbarrier_unix'] = df['unix'] + lookback_seconds
 
     # Calculate lookback periods
     lookback_periods = int(lookback_seconds / (df['unix'].iloc[1] - df['unix'].iloc[0]))
