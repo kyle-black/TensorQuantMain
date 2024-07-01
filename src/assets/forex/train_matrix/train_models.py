@@ -328,11 +328,55 @@ def ensemble_methods(df, asset, lookback):
     #l_l = log_loss(y_test, probas)
     print('logloss', l_l)  
   
-
+    actual_ =[]
+    prediction_ =[]
+    dwn_ =[]
+    neutral_ =[]
+    up_ =[]
+    start_ =[]
+    end_ = []
+    upper_ = []
+    lower_ =[]
+    date_ =[]
+    enddate_=[]
     for actual,prediction,dwn,neutral,up, start,end,upperbarrier,lowerbarrier, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
         print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end},upperbarrier{upperbarrier}, lowerbarrier{lowerbarrier}, date {date}, end date {end_date}')
-      
+        actual_.append(actual)
+        prediction_.append(prediction)
+        dwn_.append(dwn)
+        neutral_.append(neutral)
+        up_.append(up)
+        start_.append(start)
+        end_.append(end)
+        upper_.append(upperbarrier)
+        lower_.append(lowerbarrier)
+        date_.append(date)
+        enddate_.append(enddate)
 
+
+    predictions_df = pd.DataFrame({
+        'Actual': actual_,
+        'Predictions': prediction_,
+        'down proba': dwn_,
+        'neutral proba': neutral_,
+        'up proba': up_,
+        'start': start_,
+        'end': end_,
+        'upper':upper_,
+
+
+        'Dates': date_
+    })
+
+    predictions_df.to_csv('predictions_df.csv')
+
+    
+
+
+
+
+
+    '''
     # Initialize an empty list to store the data
     data = []
 
@@ -343,33 +387,7 @@ def ensemble_methods(df, asset, lookback):
     lowerbarrier_series = pd.Series(lowerbarrier)
 
 
-    print("Length checks before DataFrame creation:")
-    print(f"Length of Dates: {len(Dates)}")
-    print(f"Length of y_test: {len(y_test)}")
-    print(f"Length of y_pred: {len(y_pred)}")
-    print(f"Length of probas[:,0]: {len(probas[:,0])}")
-    print(f"Length of probas[:,1]: {len(probas[:,1])}")
-    print(f"Length of probas[:,2]: {len(probas[:,2])}")
-    print(f"Length of enddate: {len(enddate)}")
-
-
-
-
-
-    # Creating the DataFrame with an explicit index
-    prediction2_df = pd.DataFrame({
-        'Date': Dates,
-        'Actual': y_test,
-        'Predictions': y_pred,
-      #  'down proba': probas[:,0],
-      #  'neutral proba': probas[:,1],
-      #  'up proba': probas[:,2],
-     #   'end_date': enddate
-    })
-   # print('datalist:',data)
-# Convert the list of dictionaries into a DataFrame
-   # predictions_df = pd.DataFrame(data)
-    print(f'Number of rows in predictions_df: {len(prediction2_df)}')
+ 
 
 # Optionally, inspect the first few rows to confirm data looks correct
     print('predictions:',prediction2_df.head())
@@ -383,7 +401,7 @@ def ensemble_methods(df, asset, lookback):
     comparison_df.to_csv('comparison_df.csv')
    # prediction2_df.to_csv('predictions_df.csv')
 
-
+    '''
 
 def Hist_boosted(df, asset, lookback):
     if asset is not None:
