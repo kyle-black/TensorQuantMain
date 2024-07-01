@@ -201,7 +201,7 @@ def prepare_data():
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
-    raw = raw[-10000:]
+   # raw = raw[-10000:]
 
     # Compute the result and convert to a pandas DataFrame
     raw = raw.compute()
