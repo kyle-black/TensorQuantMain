@@ -356,12 +356,12 @@ def ensemble_methods(df, asset, lookback):
     # Creating the DataFrame with an explicit index
     prediction2_df = pd.DataFrame({
         'Date': Dates,
-        'Actual': y_test,
-        'Predictions': y_pred,
-        'down proba': probas[:,0],
-        'neutral proba': probas[:,1],
-        'up proba': probas[:,2],
-        'end_date': enddate
+        'Actual': y_test
+      #  'Predictions': y_pred,
+      #  'down proba': probas[:,0],
+      #  'neutral proba': probas[:,1],
+      #  'up proba': probas[:,2],
+     #   'end_date': enddate
     })
    # print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
