@@ -359,9 +359,9 @@ def ensemble_methods(df, asset, lookback):
         
         'end_date': enddate})
     
-    print('datalist:',data)
+   # print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
-    predictions_df = pd.DataFrame(data)
+   # predictions_df = pd.DataFrame(data)
     print(f'Number of rows in predictions_df: {len(predictions_df)}')
 
 # Optionally, inspect the first few rows to confirm data looks correct
