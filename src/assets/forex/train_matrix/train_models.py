@@ -349,12 +349,9 @@ def ensemble_methods(df, asset, lookback):
     print(f"Length of probas[:,2]: {len(probas[:,2])}")
     print(f"Length of enddate: {len(enddate)}")
 
-    # Explicitly creating an index that matches the data length
-    index = pd.RangeIndex(start=0, stop=len(Dates), step=1)
 
-    # Example of converting to datetime
-    Dates = pd.to_datetime(Dates, errors='coerce')  # 'coerce' will convert invalid parsing to NaT
-    enddate = pd.to_datetime(enddate, errors='coerce')
+
+    
 
     # Creating the DataFrame with an explicit index
     predictions_df = pd.DataFrame({
@@ -365,7 +362,7 @@ def ensemble_methods(df, asset, lookback):
         'neutral proba': probas[:,1],
         'up proba': probas[:,2],
         'end_date': enddate
-    }, index=index)
+    })
    # print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
    # predictions_df = pd.DataFrame(data)
