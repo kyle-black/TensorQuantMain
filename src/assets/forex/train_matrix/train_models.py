@@ -346,6 +346,8 @@ def ensemble_methods(df, asset, lookback):
     # Ensure all lists have the same length before creating the DataFrame
     if not all(len(lst) == len(actual_) for lst in [prediction_, dwn_, neutral_, up_, start_, end_, upper_, lower_, date_, enddate_]):
         print("Not all lists have the same length. Check the loop logic and data sources.")
+   
+    '''
     else:
         predictions_df = pd.DataFrame({
             'Actual': actual_,
@@ -358,8 +360,8 @@ def ensemble_methods(df, asset, lookback):
             'upper': upper_,
             # Ensure all columns are included here
         })
-
-    predictions_df.to_csv('predictions_df.csv')
+    '''
+ #   predictions_df.to_csv('predictions_df.csv')
 
     
 
