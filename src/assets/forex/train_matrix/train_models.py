@@ -340,15 +340,19 @@ def ensemble_methods(df, asset, lookback):
     lowerbarrier_series = pd.Series(lowerbarrier)
 
 
-    print(len(Dates))
-    print(len(y_test))
-    print(len(y_pred))
-    print(len(probas[:,0]))
-    print(len(probas[:,1]))
-    print(len(probas[:,2]))
-    
-    print(len(enddate))
-    
+    print("Length checks before DataFrame creation:")
+    print(f"Length of Dates: {len(Dates)}")
+    print(f"Length of y_test: {len(y_test)}")
+    print(f"Length of y_pred: {len(y_pred)}")
+    print(f"Length of probas[:,0]: {len(probas[:,0])}")
+    print(f"Length of probas[:,1]: {len(probas[:,1])}")
+    print(f"Length of probas[:,2]: {len(probas[:,2])}")
+    print(f"Length of enddate: {len(enddate)}")
+
+    # Explicitly creating an index that matches the data length
+    index = pd.RangeIndex(start=0, stop=len(Dates), step=1)
+
+    # Creating the DataFrame with an explicit index
     predictions_df = pd.DataFrame({
         'Date': Dates,
         'Actual': y_test,
@@ -356,9 +360,8 @@ def ensemble_methods(df, asset, lookback):
         'down proba': probas[:,0],
         'neutral proba': probas[:,1],
         'up proba': probas[:,2],
-        
-        'end_date': enddate})
-    
+        'end_date': enddate
+    }, index=index)
    # print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
    # predictions_df = pd.DataFrame(data)
