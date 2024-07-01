@@ -328,8 +328,7 @@ def calculate_barriers_R(df, lookback):
 
     # Create a rolling window function to check barriers
     def check_barriers(x):
-        start = x.index[0]
-        end = x.index[-1]
+        start = int(x.index[0])
         upper_barrier = df['upper_barrier'].iloc[start]
         lower_barrier = df['lower_barrier'].iloc[start]
         close_prices = x.values
@@ -342,12 +341,13 @@ def calculate_barriers_R(df, lookback):
             return 0, np.nan
 
     # Apply the rolling window
-    result = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(
-        lambda x: pd.Series(check_barriers(x)),
+    rolling_result = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(
+        lambda x: check_barriers(x),
         raw=False
     )
     
-    df['label'], df['touch_price'] = zip(*result)
+    # Separate the rolling results into labels and touch prices
+    df[['label', 'touch_price']] = pd.DataFrame(rolling_result.tolist(), index=df.index)
     
     # Drop unnecessary columns and rows with NaN touch prices
     df.drop(['pct_change'], axis=1, inplace=True)
@@ -358,4 +358,3 @@ def calculate_barriers_R(df, lookback):
     df.to_csv('barrier_check.csv')
 
     return df
-    
