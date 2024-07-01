@@ -354,6 +354,12 @@ def ensemble_methods(df, asset, lookback):
         enddate_.append(enddate)
 
 
+    print(len(actual_))
+    print(len(prediction_))
+    print(len(dwn_))
+    print(len(neutral_))
+
+
     predictions_df = pd.DataFrame({
         'Actual': actual_,
         'Predictions': prediction_,
