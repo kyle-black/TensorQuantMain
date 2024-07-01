@@ -308,6 +308,7 @@ def calculate_barriers_R(df, lookback):
 '''
 
 
+
 def calculate_barriers_R(df, lookback):
     # Calculate volatility
     df['pct_change'] = df['Close'].pct_change()
@@ -322,12 +323,15 @@ def calculate_barriers_R(df, lookback):
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
 
+    # Calculate lookback periods
+    lookback_periods = int(lookback_seconds / (df['unix'].iloc[1] - df['unix'].iloc[0]))
+
     # Create a rolling window function to check barriers
     def check_barriers(x):
         start = x.index[0]
         end = x.index[-1]
-        upper_barrier = df['upper_barrier'][start]
-        lower_barrier = df['lower_barrier'][start]
+        upper_barrier = df['upper_barrier'].iloc[start]
+        lower_barrier = df['lower_barrier'].iloc[start]
         close_prices = x.values
 
         if (close_prices > upper_barrier).any():
@@ -336,11 +340,15 @@ def calculate_barriers_R(df, lookback):
             return -1, close_prices[close_prices < lower_barrier][0]
         else:
             return 0, np.nan
-    
-    # Apply the rolling window
-    lookback_periods = lookback_seconds // (df['unix'][1] - df['unix'][0])  # Convert lookback_seconds to periods
-    df['label'], df['touch_price'] = zip(*df['Close'].rolling(window=lookback_periods, min_periods=1).apply(check_barriers, raw=False))
 
+    # Apply the rolling window
+    result = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(
+        lambda x: pd.Series(check_barriers(x)),
+        raw=False
+    )
+    
+    df['label'], df['touch_price'] = zip(*result)
+    
     # Drop unnecessary columns and rows with NaN touch prices
     df.drop(['pct_change'], axis=1, inplace=True)
     df.dropna(subset=['touch_price'], inplace=True)
