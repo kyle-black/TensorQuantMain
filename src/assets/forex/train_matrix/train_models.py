@@ -338,8 +338,8 @@ def ensemble_methods(df, asset, lookback):
     lower_ =[]
     date_ =[]
     enddate_=[]
-    print(f"Length of actual_: {len(actual_)}")
-    print(f"Length of prediction_: {len(prediction_)}")
+   # print(f"Length of actual_: {len(actual_)}")
+   # print(f"Length of prediction_: {len(prediction_)}")
     # Add similar print statements for dwn_, neutral_, up_, start_, end_, upper_, lower_, date_, enddate_
 
     # Ensure all lists have the same length before creating the DataFrame
@@ -360,7 +360,7 @@ def ensemble_methods(df, asset, lookback):
             # Ensure all columns are included here
         })
     
-    predictions_df2.to_csv('predictions_df.csv')
+        predictions_df2.to_csv('predictions_df.csv')
 
     
 
