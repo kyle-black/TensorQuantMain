@@ -339,40 +339,25 @@ def ensemble_methods(df, asset, lookback):
     lower_ =[]
     date_ =[]
     enddate_=[]
-    for actual,prediction,dwn,neutral,up, start,end,upperbarrier,lowerbarrier, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
-        print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end},upperbarrier{upperbarrier}, lowerbarrier{lowerbarrier}, date {date}, end date {end_date}')
-        actual_.append(actual)
-        prediction_.append(prediction)
-        dwn_.append(dwn)
-        neutral_.append(neutral)
-        up_.append(up)
-        start_.append(start)
-        end_.append(end)
-        upper_.append(upperbarrier)
-        lower_.append(lowerbarrier)
-        date_.append(date)
-        enddate_.append(enddate)
+    print(f"Length of actual_: {len(actual_)}")
+    print(f"Length of prediction_: {len(prediction_)}")
+    # Add similar print statements for dwn_, neutral_, up_, start_, end_, upper_, lower_, date_, enddate_
 
-
-    print(len(actual_))
-    print(len(prediction_))
-    print(len(dwn_))
-    print(len(neutral_))
-
-
-    predictions_df = pd.DataFrame({
-        'Actual': actual_,
-        'Predictions': prediction_,
-        'down proba': dwn_,
-        'neutral proba': neutral_,
-        'up proba': up_,
-        'start': start_,
-        'end': end_,
-        'upper':upper_,
-
-
-        'Dates': date_
-    })
+    # Ensure all lists have the same length before creating the DataFrame
+    if not all(len(lst) == len(actual_) for lst in [prediction_, dwn_, neutral_, up_, start_, end_, upper_, lower_, date_, enddate_]):
+        print("Not all lists have the same length. Check the loop logic and data sources.")
+    else:
+        predictions_df = pd.DataFrame({
+            'Actual': actual_,
+            'Predictions': prediction_,
+            'down proba': dwn_,
+            'neutral proba': neutral_,
+            'up proba': up_,
+            'start': start_,
+            'end': end_,
+            'upper': upper_,
+            # Ensure all columns are included here
+        })
 
     predictions_df.to_csv('predictions_df.csv')
 
