@@ -327,28 +327,36 @@ def calculate_barriers_R(df, lookback):
     lookback_periods = int(lookback_seconds / (df['unix'].iloc[1] - df['unix'].iloc[0]))
 
     # Create a rolling window function to check barriers
-    def check_barriers(x):
-        start = int(x.index[0])
+    def check_label(x):
+        start = df.index.get_loc(x.index[0])
         upper_barrier = df['upper_barrier'].iloc[start]
         lower_barrier = df['lower_barrier'].iloc[start]
         close_prices = x.values
 
         if (close_prices > upper_barrier).any():
-            return 1, close_prices[close_prices > upper_barrier][0]
+            return 1
         elif (close_prices < lower_barrier).any():
-            return -1, close_prices[close_prices < lower_barrier][0]
+            return -1
         else:
-            return 0, np.nan
+            return 0
 
-    # Apply the rolling window
-    rolling_result = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(
-        lambda x: check_barriers(x),
-        raw=False
-    )
-    
-    # Separate the rolling results into labels and touch prices
-    df[['label', 'touch_price']] = pd.DataFrame(rolling_result.tolist(), index=df.index)
-    
+    def check_touch_price(x):
+        start = df.index.get_loc(x.index[0])
+        upper_barrier = df['upper_barrier'].iloc[start]
+        lower_barrier = df['lower_barrier'].iloc[start]
+        close_prices = x.values
+
+        if (close_prices > upper_barrier).any():
+            return close_prices[close_prices > upper_barrier][0]
+        elif (close_prices < lower_barrier).any():
+            return close_prices[close_prices < lower_barrier][0]
+        else:
+            return np.nan
+
+    # Apply the rolling window for label and touch price
+    df['label'] = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(check_label, raw=False)
+    df['touch_price'] = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(check_touch_price, raw=False)
+
     # Drop unnecessary columns and rows with NaN touch prices
     df.drop(['pct_change'], axis=1, inplace=True)
     df.dropna(subset=['touch_price'], inplace=True)
