@@ -258,6 +258,7 @@ def calculate_barriers_R(df, lookback):
 
     return df
 '''
+'''
 def calculate_barriers_R(df, lookback):
     # Calculate volatility
     df['pct_change'] = df['Close'].pct_change()
@@ -302,6 +303,58 @@ def calculate_barriers_R(df, lookback):
     df.to_parquet('barrier_check.parquet')
 
     df.to_csv('barriercheck.csv')
+
+    return df
+'''
+
+
+def calculate_barriers_R(df, lookback):
+    # Calculate volatility
+    df['pct_change'] = df['Close'].pct_change()
+    volatility = df['pct_change'].rolling(window=1000).std()
+    
+    # Add necessary columns
+    df['Datetime'] = pd.to_datetime(df['Date'])
+    df['unix'] = df['Datetime'].astype('int64') // 10**9
+    df['upper_barrier'] = df['Close'] * (1 + volatility)
+    df['lower_barrier'] = df['Close'] * (1 - volatility)
+    
+    # Calculate lookback in seconds
+    lookback_seconds = lookback * 3600
+    df['endbarrier_unix'] = df['unix'] + lookback_seconds
+
+    # Create a new DataFrame for future values lookup
+    future_df = df[['unix', 'Close']].copy()
+    future_df.columns = ['future_unix', 'future_close']
+    
+    # Merge to get the closest future_close before endbarrier_unix
+    df = pd.merge_asof(df, future_df, left_on='endbarrier_unix', right_on='future_unix', direction='forward')
+
+    # Initialize columns for results
+    df['label'] = 0
+    df['touch_price'] = np.nan
+
+    # Vectorized touch condition checks
+    for i in range(len(df)):
+        start_time = df['unix'].iloc[i]
+        end_time = df['endbarrier_unix'].iloc[i]
+        mask = (df['unix'] >= start_time) & (df['unix'] <= end_time)
+        
+        if (df['Close'][mask] > df['upper_barrier'].iloc[i]).any():
+            df['label'].iloc[i] = 1
+            df['touch_price'].iloc[i] = df['Close'][mask & (df['Close'] > df['upper_barrier'].iloc[i])].iloc[0]
+        elif (df['Close'][mask] < df['lower_barrier'].iloc[i]).any():
+            df['label'].iloc[i] = -1
+            df['touch_price'].iloc[i] = df['Close'][mask & (df['Close'] < df['lower_barrier'].iloc[i])].iloc[0]
+
+    # Drop unnecessary columns
+    df.drop(['future_unix', 'future_close'], axis=1, inplace=True)
+    
+    df = df.dropna()
+    
+    # Save to parquet and csv
+    df.to_parquet('barrier_check.parquet')
+    df.to_csv('barrier_check.csv')
 
     return df
     
