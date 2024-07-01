@@ -365,9 +365,11 @@ def ensemble_methods(df, asset, lookback):
         'start': start_,
         'end': end_,
         'upper':upper_,
+        'lower_':lower_,
 
 
-        'Dates': date_
+        'Dates': date_,
+        'Endate': enddate_
     })
 
     predictions_df2.to_csv('predictions_df.csv')
