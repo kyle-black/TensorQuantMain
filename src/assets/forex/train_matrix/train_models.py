@@ -304,8 +304,11 @@ def ensemble_methods(df, asset, lookback):
         'Predictions': y_pred,
         'down proba': probas[:,0],
         'neutral proba': probas[:,1],
-        'up proba': probas[:,2] 
+        'up proba': probas[:,2],
+        'Dates':Dates  
     })
+
+    predictions_df.to_csv('predictions_df.csv')
     all_predictions.append(predictions_df)
 
     all_actuals.extend(y_test.tolist())
@@ -351,7 +354,7 @@ def ensemble_methods(df, asset, lookback):
 
 
 
-        
+
 
     # Creating the DataFrame with an explicit index
     prediction2_df = pd.DataFrame({
@@ -378,7 +381,7 @@ def ensemble_methods(df, asset, lookback):
     test_data['probs up'] = probas[:,2]
 
     comparison_df.to_csv('comparison_df.csv')
-    prediction2_df.to_csv('predictions_df.csv')
+   # prediction2_df.to_csv('predictions_df.csv')
 
 
 
