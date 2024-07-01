@@ -359,7 +359,7 @@ def calculate_barriers_R(df, lookback):
     df['touch_price'] = df['Close'].rolling(window=lookback_periods, min_periods=1).apply(check_touch_price, raw=False)
 
     # Drop unnecessary columns and rows with NaN touch prices
-    df.drop(['pct_change'], axis=1, inplace=True)
+   # df.drop(['pct_change'], axis=1, inplace=True)
     df.dropna(subset=['touch_price'], inplace=True)
 
     # Save to parquet and csv
