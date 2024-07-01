@@ -166,10 +166,10 @@ def ensemble_methods(df, asset, lookback):
 
    
         
-   # train_idx =   train_datasets[-1]
+   train_idx =   train_datasets[-1]
    
    
-    #test_idx = test_datasets[-1]
+    test_idx = test_datasets[-1]
 
     print('Test idx:', test_idx)
 
