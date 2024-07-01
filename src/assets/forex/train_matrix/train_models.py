@@ -350,7 +350,7 @@ def ensemble_methods(df, asset, lookback):
         upper_.append(upperbarrier)
         lower_.append(lowerbarrier)
         date_.append(date)
-        enddate_.append(enddate)
+        enddate_.append(end_date)
 
 
    
