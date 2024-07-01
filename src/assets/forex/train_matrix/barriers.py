@@ -278,7 +278,7 @@ def calculate_barriers_R(df, lookback):
     future_df.columns = ['future_unix', 'future_close']
     
     # Merge to get the closest future_close before endbarrier_unix
-    df = pd.merge_asof(df, future_df, left_on='endbarrier_unix', right_on='future_unix', direction='backward')
+    df = pd.merge_asof(df, future_df, left_on='endbarrier_unix', right_on='future_unix', direction='forward')
 
     # Initialize columns for results
     df['label'] = 0
@@ -300,6 +300,8 @@ def calculate_barriers_R(df, lookback):
     df = df.dropna()
     #df.to_csv('barrier_check.csv')
     df.to_parquet('barrier_check.parquet')
+
+    df.to_csv('barriercheck.csv')
 
     return df
     
