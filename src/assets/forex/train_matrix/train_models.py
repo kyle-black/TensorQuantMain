@@ -354,7 +354,7 @@ def ensemble_methods(df, asset, lookback):
     
 
     # Creating the DataFrame with an explicit index
-    predictions_df = pd.DataFrame({
+    prediction2_df = pd.DataFrame({
         'Date': Dates,
         'Actual': y_test,
         'Predictions': y_pred,
@@ -366,10 +366,10 @@ def ensemble_methods(df, asset, lookback):
    # print('datalist:',data)
 # Convert the list of dictionaries into a DataFrame
    # predictions_df = pd.DataFrame(data)
-    print(f'Number of rows in predictions_df: {len(predictions_df)}')
+    print(f'Number of rows in predictions_df: {len(prediction2_df)}')
 
 # Optionally, inspect the first few rows to confirm data looks correct
-    print('predictions:',predictions_df.head())
+    print('predictions:',prediction2_df.head())
 
    # print(test_data)
     test_data['predictions'] = y_pred
@@ -378,7 +378,7 @@ def ensemble_methods(df, asset, lookback):
     test_data['probs up'] = probas[:,2]
 
     comparison_df.to_csv('comparison_df.csv')
-    predictions_df.to_csv('predictions_df.csv')
+    prediction2_df.to_csv('predictions_df.csv')
 
 
 
