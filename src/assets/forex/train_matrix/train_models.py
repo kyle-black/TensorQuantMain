@@ -304,8 +304,7 @@ def ensemble_methods(df, asset, lookback):
         'Predictions': y_pred,
         'down proba': probas[:,0],
         'neutral proba': probas[:,1],
-        'up proba': probas[:,2],
-        'Dates':Dates  
+        'up proba': probas[:,2]
     })
 
     predictions_df.to_csv('predictions_df.csv')
@@ -347,9 +346,9 @@ def ensemble_methods(df, asset, lookback):
     if not all(len(lst) == len(actual_) for lst in [prediction_, dwn_, neutral_, up_, start_, end_, upper_, lower_, date_, enddate_]):
         print("Not all lists have the same length. Check the loop logic and data sources.")
    
-    '''
+    
     else:
-        predictions_df = pd.DataFrame({
+        predictions_df2 = pd.DataFrame({
             'Actual': actual_,
             'Predictions': prediction_,
             'down proba': dwn_,
@@ -357,11 +356,11 @@ def ensemble_methods(df, asset, lookback):
             'up proba': up_,
             'start': start_,
             'end': end_,
-            'upper': upper_,
+            'upper': upper_
             # Ensure all columns are included here
         })
-    '''
- #   predictions_df.to_csv('predictions_df.csv')
+    
+    predictions_df2.to_csv('predictions_df.csv')
 
     
 
