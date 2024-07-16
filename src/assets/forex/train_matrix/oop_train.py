@@ -257,7 +257,7 @@ if __name__ == "__main__":
     asset = "EURUSD"
     df = prepare_data()
     
-    send_email.run_email()
+   # send_email.run_email()
 
     train_data(df, asset,720)
     send_email.run_email()
