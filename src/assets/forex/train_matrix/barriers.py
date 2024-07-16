@@ -422,4 +422,4 @@ def calculate_barriers_R(df, lookback):
     # Apply the price_barrier_check function to each row
     df[['label', 'touch_price']] = df.apply(price_barrier_check, axis=1, result_type='expand')
 
-    return df, price_df_values
+    return df
