@@ -367,3 +367,52 @@ def calculate_barriers_R(df, lookback):
     df.to_csv('barrier_check.csv')
 
     return df
+
+
+def calculate_barriers_R(df, lookback):
+    # Calculate volatility
+    df['pct_change'] = df['Close'].pct_change()
+    volatility = df['pct_change'].rolling(window=1000).std()
+    
+    # Add necessary columns
+    df['Datetime'] = pd.to_datetime(df['Date'])
+    df['unix'] = df['Datetime'].astype('int64') // 10**9
+
+    df['upper_barrier'] = df['Close'] * (1 + 2*volatility)
+    df['lower_barrier'] = df['Close'] * (1 - 2*volatility)
+    
+    # Calculate lookback in seconds
+    lookback_seconds = lookback * 3600
+    df['endbarrier_unix'] = df['unix'] + lookback_seconds
+
+    # Copy df to price_df and keep only 'unix' and 'Close'
+    price_df = df[['unix', 'Close']].copy()
+
+    # Convert price_df to a numpy array
+    price_df_values = price_df.values
+
+    # Function to find prices between unix and endbarrier_unix
+    def find_prices_in_range(start_unix, end_unix):
+        mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
+        return price_df_values[mask, 1]
+
+    # Apply the function to each row
+    df['prices_in_range'] = df.apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
+
+    # Function to check if prices hit barriers and which hits first
+    def price_barrier_check(row):
+        lower_barrier = row['lower_barrier']
+        upper_barrier = row['upper_barrier']
+        prices = row['prices_in_range']
+        
+        for price in prices:
+            if price > upper_barrier:
+                return 1, price
+            elif price < lower_barrier:
+                return -1, price
+        return 0, np.nan
+
+    # Apply the price_barrier_check function to each row
+    df[['label', 'touch_price']] = df.apply(price_barrier_check, axis=1, result_type='expand')
+    df.to_csv('hit_check.csv')
+    return df

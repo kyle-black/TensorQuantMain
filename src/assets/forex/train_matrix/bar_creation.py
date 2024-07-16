@@ -14,7 +14,7 @@ def time_bars(raw_data, asset):
 
     df =raw_data
     df['Daily_Returns'] = df['Close'].pct_change()
-    df = df[:]
+    df = df[-100000:]
     df = df.sort_values(by='Date', ascending=True)
 
     
