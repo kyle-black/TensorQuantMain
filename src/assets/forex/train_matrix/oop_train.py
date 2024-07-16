@@ -223,7 +223,7 @@ def prepare_data():
     df = L.triple_barriers()
     print(df)
     return df
-    '''
+    
    # df.to_parquet('test_df.parquet')
     print('testdf:',df)
 
@@ -245,7 +245,7 @@ def prepare_data():
     
     return filtered_df 
     
-    '''
+    
 def train_data(filtered_df,asset,lookback):
     m = Model(filtered_df, asset,lookback)
     print(m.train_model())
@@ -257,8 +257,8 @@ if __name__ == "__main__":
     asset = "EURUSD"
     df = prepare_data()
     
-    #send_email.run_email()
+    send_email.run_email()
 
-    #train_data(df, asset,720)
-   # send_email.run_email()
+    train_data(df, asset,720)
+    send_email.run_email()
     
