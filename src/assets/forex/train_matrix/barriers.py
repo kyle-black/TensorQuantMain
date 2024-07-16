@@ -377,9 +377,8 @@ def calculate_barriers_R(df, lookback):
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-
-    df['upper_barrier'] = df['Close'] * (1 + 2*volatility)
-    df['lower_barrier'] = df['Close'] * (1 - 2*volatility)
+    df['upper_barrier'] = df['Close'] * (1 + 2 * volatility)
+    df['lower_barrier'] = df['Close'] * (1 - 2 * volatility)
     
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
@@ -405,14 +404,22 @@ def calculate_barriers_R(df, lookback):
         upper_barrier = row['upper_barrier']
         prices = row['prices_in_range']
         
-        for price in prices:
-            if price > upper_barrier:
-                return 1, price
-            elif price < lower_barrier:
-                return -1, price
-        return 0, np.nan
+        # Use numpy to find the first occurrence of crossing the barriers
+        if prices.size == 0:
+            return 0, np.nan
+        
+        upper_hits = np.where(prices > upper_barrier)[0]
+        lower_hits = np.where(prices < lower_barrier)[0]
+        
+        if upper_hits.size == 0 and lower_hits.size == 0:
+            return 0, np.nan
+        
+        if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
+            return 1, prices[upper_hits[0]]
+        elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
+            return -1, prices[lower_hits[0]]
 
     # Apply the price_barrier_check function to each row
     df[['label', 'touch_price']] = df.apply(price_barrier_check, axis=1, result_type='expand')
-    df.to_csv('hit_check.csv')
-    return df
+
+    return df, price_df_values
