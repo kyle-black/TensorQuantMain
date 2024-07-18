@@ -421,5 +421,9 @@ def calculate_barriers_R(df, lookback):
 
     # Apply the price_barrier_check function to each row
     df[['label', 'touch_price']] = df.apply(price_barrier_check, axis=1, result_type='expand')
-
+    non_numeric_cols = df.select_dtypes(exclude=[np.number]).columns
+    if len(non_numeric_cols) > 0:
+        print(f"Non-numeric columns detected: {non_numeric_cols}")
+        print("Please handle these columns before proceeding.")
+        
     return df
