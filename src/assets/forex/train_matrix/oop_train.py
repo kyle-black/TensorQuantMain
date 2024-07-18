@@ -196,9 +196,9 @@ class Model:
 def prepare_data():
     
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =10000
     lookback = 720
-    '''
+    
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
    # raw = raw[-10000:]
@@ -222,12 +222,12 @@ def prepare_data():
     print('Applying Triple Barriers:')
     df = L.triple_barriers()
     print(df)
-    df.to_parquet('barrier_df.parquet')
-    return df
-    '''
+   # df.to_parquet('barrier_df.parquet')
+    #return df
+    
    # df.to_parquet('test_df.parquet')
     #print('testdf:',df)
-    df = pd.read_parquet('barrier_df.parquet')
+   # df = pd.read_parquet('barrier_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
     df= fm.feature_add()
 
