@@ -198,7 +198,7 @@ def prepare_data():
     asset = 'EURUSD'
     dollar_amount =1000
     lookback = 720
-    
+    '''
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
    # raw = raw[-10000:]
@@ -226,8 +226,8 @@ def prepare_data():
     return df
     '''
    # df.to_parquet('test_df.parquet')
-    print('testdf:',df)
-
+    #print('testdf:',df)
+    df = pd.read_parquet('barrier_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
     df= fm.feature_add()
 
@@ -245,7 +245,7 @@ def prepare_data():
     filtered_df.dropna(inplace=True)
     
     return filtered_df
-    '''
+    
     
     
 def train_data(filtered_df,asset,lookback):
@@ -261,6 +261,6 @@ if __name__ == "__main__":
     
    # send_email.run_email()
 
-   # train_data(df, asset,720)
-   # send_email.run_email()
+    train_data(df, asset,720)
+    send_email.run_email()
     
