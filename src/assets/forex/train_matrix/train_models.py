@@ -298,7 +298,7 @@ def ensemble_methods(df, asset, lookback):
     print(len(probas[2]))
     print(probas.shape)
 
-
+    '''
     predictions_df = pd.DataFrame({
         'Actual': y_test,
         'Predictions': y_pred,
@@ -309,7 +309,7 @@ def ensemble_methods(df, asset, lookback):
 
     predictions_df.to_csv('predictions_df.csv')
     all_predictions.append(predictions_df)
-
+    '''
     all_actuals.extend(y_test.tolist())
     all_preds.extend(y_pred.tolist())
     print('###########################')
