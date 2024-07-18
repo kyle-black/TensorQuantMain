@@ -110,7 +110,7 @@ def ensemble_methods(df, asset, lookback):
    
     
 
-    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price'], inplace=True)
+    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price','prices_in_range'], inplace=True)
     df.dropna(how='all', inplace=True)
     #df = df[lookback:]
     # Splitting data
