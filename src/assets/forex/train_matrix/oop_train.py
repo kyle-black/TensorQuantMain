@@ -196,7 +196,7 @@ class Model:
 def prepare_data():
     
     asset = 'EURUSD'
-    dollar_amount =10000
+    dollar_amount =5000
     lookback = 100
     
     # Use Dask to read the CSV file in chunks
