@@ -222,6 +222,8 @@ def prepare_data():
     print('Applying Triple Barriers:')
     df = L.triple_barriers()
     print(df)
+    return df
+    '''
    # df.to_parquet('barrier_df.parquet')
     #return df
     
@@ -245,7 +247,7 @@ def prepare_data():
     filtered_df.dropna(inplace=True)
     
     return filtered_df
-    
+    '''
     
     
 def train_data(filtered_df,asset,lookback):
@@ -261,6 +263,6 @@ if __name__ == "__main__":
     
    # send_email.run_email()
 
-    train_data(df, asset,720)
-    send_email.run_email()
+   # train_data(df, asset,720)
+   # send_email.run_email()
     
