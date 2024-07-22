@@ -12,7 +12,7 @@ def run_email():
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
-    file_path = "barrier_check.csv"
+    file_path = "updated_df.csv"
 
     # Create the email message
     msg = EmailMessage()
@@ -31,3 +31,7 @@ def run_email():
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:  # Use your SMTP server
         server.login(sender_email, password)
         server.send_message(msg)
+
+
+if __name__ in "__main__":
+    run_email()
