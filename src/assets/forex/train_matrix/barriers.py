@@ -426,6 +426,6 @@ def calculate_barriers_R(df, lookback):
         print(f"Non-numeric columns detected: {non_numeric_cols}")
         print("Please handle these columns before proceeding.")
 
-    df.to_csv('updated_df.csv')
+    df.to_csv('updated_df2.csv')
         
     return df
