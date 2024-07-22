@@ -1,5 +1,6 @@
 import smtplib
 from email.message import EmailMessage
+import mimetypes
 
 
 
@@ -20,6 +21,12 @@ def run_email():
     msg["To"] = receiver_email
     msg["Subject"] = subject
     msg.set_content(body)
+
+     # Attach the file
+    ctype, encoding = mimetypes.guess_type(file_path)
+    if ctype is None or encoding is not None:
+        ctype = 'application/octet-stream'
+    maintype, subtype = ctype.split('/', 1)
 
     # Attach the file
     with open(file_path, "rb") as f:
