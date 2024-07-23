@@ -378,8 +378,8 @@ def calculate_barriers_R(df, lookback):
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 + 3 * volatility)
-    df['lower_barrier'] = df['Close'] * (1 - 3 * volatility)
+    df['upper_barrier'] = df['Close'] * (1 + 2 * volatility)
+    df['lower_barrier'] = df['Close'] * (1 - 2 * volatility)
     
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
@@ -407,7 +407,7 @@ def calculate_barriers_R(df, lookback):
         
         # Use numpy to find the first occurrence of crossing the barriers
         if prices.size == 0:
-            return 0, np.nan
+            return 1, np.nan
         
         upper_hits = np.where(prices > upper_barrier)[0]
         lower_hits = np.where(prices < lower_barrier)[0]
@@ -426,7 +426,7 @@ def calculate_barriers_R(df, lookback):
     if len(non_numeric_cols) > 0:
         print(f"Non-numeric columns detected: {non_numeric_cols}")
         print("Please handle these columns before proceeding.")
-    
+
     df.to_csv('updated_df3.csv')
         
     return df
