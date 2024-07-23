@@ -223,7 +223,8 @@ def prepare_data():
     df = L.triple_barriers()
     print(df)
     
-    
+    return df
+    '''
    # return df
     
    # df.to_parquet('barrier_df.parquet')
@@ -249,6 +250,7 @@ def prepare_data():
     filtered_df.dropna(inplace=True)
     
     return filtered_df
+    '''
     
     
     
@@ -265,6 +267,6 @@ if __name__ == "__main__":
     
    # send_email.run_email()
 
-    train_data(df, asset,10)
+  #  train_data(df, asset,10)
     send_email.run_email()
     
