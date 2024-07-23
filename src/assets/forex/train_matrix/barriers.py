@@ -426,7 +426,7 @@ def calculate_barriers_R(df, lookback):
     if len(non_numeric_cols) > 0:
         print(f"Non-numeric columns detected: {non_numeric_cols}")
         print("Please handle these columns before proceeding.")
-
+    
     df.to_csv('updated_df3.csv')
         
     return df
