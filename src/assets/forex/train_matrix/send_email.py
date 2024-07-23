@@ -43,6 +43,6 @@ def run_email():
     os.remove(zip_filename)
 
 # Run the function
-run_email()
+#run_email()
 
 
