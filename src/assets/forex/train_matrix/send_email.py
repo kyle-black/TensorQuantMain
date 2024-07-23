@@ -13,7 +13,7 @@ def run_email():
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
-    file_path = "updated_df.csv"
+    file_path = "test_data.csv"
 
     # Create the email message
     msg = EmailMessage()
@@ -40,5 +40,3 @@ def run_email():
         server.send_message(msg)
 
 
-if __name__ in "__main__":
-    run_email()

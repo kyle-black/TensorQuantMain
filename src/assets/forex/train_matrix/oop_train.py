@@ -265,6 +265,6 @@ if __name__ == "__main__":
     
    # send_email.run_email()
 
-#    train_data(df, asset,720)
-#    send_email.run_email()
+    train_data(df, asset,720)
+    send_email.run_email()
     
