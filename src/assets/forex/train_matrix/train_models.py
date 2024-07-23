@@ -94,7 +94,7 @@ def ensemble_methods(df, asset, lookback):
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
     df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range'], inplace=True)
     df.dropna(how='all', inplace=True)
-    df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
+    #df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
     print('input dataframe:', df.columns)
     print('splitting data ...')

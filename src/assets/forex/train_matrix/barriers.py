@@ -413,12 +413,12 @@ def calculate_barriers_R(df, lookback):
         lower_hits = np.where(prices < lower_barrier)[0]
         
         if upper_hits.size == 0 and lower_hits.size == 0:
-            return 0, np.nan
+            return 1, np.nan
         
         if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
-            return 1, prices[upper_hits[0]]
+            return 2, prices[upper_hits[0]]
         elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
-            return -1, prices[lower_hits[0]]
+            return 0, prices[lower_hits[0]]
 
     # Apply the price_barrier_check function to each row
     df[['label', 'touch_price']] = df.apply(price_barrier_check, axis=1, result_type='expand')
