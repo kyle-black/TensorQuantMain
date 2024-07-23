@@ -373,7 +373,7 @@ def calculate_barriers_R(df, lookback):
     # Calculate volatility
     #df = df[:]
     df['pct_change'] = df['Close'].pct_change()
-    volatility = df['pct_change'].rolling(window=1000).std()
+    volatility = df['pct_change'].rolling(window=100).std()
     
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
