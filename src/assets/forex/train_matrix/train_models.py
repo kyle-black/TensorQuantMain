@@ -70,114 +70,65 @@ import random
     # You might want to return something from this function, like t
   
 
+import joblib
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, log_loss
+from sklearn.dummy import DummyClassifier
+
 def ensemble_methods(df, asset, lookback):
     
-    
     if asset is not None:
-        asset =asset
-    
+        asset = asset
 
     # Data Preprocessing
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
 
-
-    
-    #df = df.drop(columns=['touch_lower', 'touch_upper'])
-    #df = df.dropna(how='all')
-    #df = df[lookback:]
-    # Drop unnecessary columns early and use inplace=True
-    
-
-    #df['endbarrier_time'] = df['endbarrier_unix']
-    #df['endbarrier_time'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    
-    #df = df.drop(df.columns[-5], axis=1)
-    
-
-    #print('endbarrier',df.columns)
-
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    
 
-  
-
-    
-   
-        
-    prices = df[['Close','touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
-   
-    
-
-    df.drop(columns=[  'Date','unix','endbarrier_unix','Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price','prices_in_range'], inplace=True)
+    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
+    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range'], inplace=True)
     df.dropna(how='all', inplace=True)
-    #df = df[lookback:]
-    # Splitting data
-    mapping = {-1: 0, 0: 1, 1: 2}
+    df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
-    df['label'] = df['label'].map(mapping)
-
-    print('input dataframe:',df.columns)
-    
+    print('input dataframe:', df.columns)
     print('splitting data ...')
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
-   
-    
     
     print('data dropped')
     
-    feature_cols = df.drop('label',axis=1).columns
-
-   # feature_cols = ['Close_AUDUSD', 'Close_USDCAD',
-    #   'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']
-    
-
+    feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
-
-    print('featurecols:',feature_cols)
-    
+    print('featurecols:', feature_cols)
 
     all_predictions = []
     all_actuals = []
     all_preds = []
     n_components = 15
     scaler = StandardScaler()
-    
-    # Define a parameter grid for GridSearchCV
-    
 
-    
-    
     param_grid = {
         'n_estimators': [1000],
         'max_features': [4],
         'max_depth': [10, 20, None],
         'min_samples_split': [2, 5],
         'min_samples_leaf': [1, 2],
-       # 'bootstrap': [True, False]
     }
 
-    # Training and Predicting for each split
-   # for train_data, test_data, weight_data in zip(train_datasets[-1], test_datasets[-1], weights[-1]):
-        #train = train_datasets
-        #test = test_datasets
-        #weight = weights[-1]
-
-   
-        
-    train_idx =   train_datasets[-1]
-   
-   
+    train_idx = train_datasets[-1]
     test_idx = test_datasets[-1]
 
     print('Test idx:', test_idx)
 
-    train_data =df.iloc[train_idx]
+    train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
 
     startprice = prices['Close'].iloc[test_idx]
-
     endprice = prices['touch_price']
     Dates = prices['Date'].iloc[test_idx]
     enddate = prices['endbarrier_unix'].iloc[test_idx]
@@ -185,161 +136,73 @@ def ensemble_methods(df, asset, lookback):
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
     print('lowerbarrier', lowerbarrier)
 
-    
-  
-
-   # weight_data =  weights[-1]
-        
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
     X_test = test_data[feature_cols]
     y_test = test_data[target_col]
 
-    # Get the names of the columns with datetime dtype
-   
-#
-    
-    # Calculate class weights
-   # 
-    
-    
-    
-    # Standardize the data
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
     print('data scaled ...')
-    # Apply PCA
+
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
-
-
-    
     X_test = pca.transform(X_test)
 
-    # Initialize GridSearchCV
-    #clf = SVC(probability=True, C=50)
-    clf =RandomForestClassifier(n_jobs =-1,random_state=44, n_estimators=1000,class_weight='balanced_subsample', criterion='entropy')
-  #  clf = xgb.XGBClassifier(objective='multi:softmax',num_class=3, random_state=42)
-    
-    
-    
-   # clf = HistGradientBoostingClassifier()
+    clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced_subsample', criterion='entropy')
 
     print('fitting model ...')
     clf.fit(X_train, y_train)
-    
     print('model fitted ...')
 
-
-
     dum = DummyClassifier(strategy='stratified', random_state=0)
+    dum.fit(X_train, y_train)
+    dum_score = dum.score(X_test, y_test)
+    print('Dumb Score:', dum_score)
 
-    dum.fit(X_train,y_train)
-    dum_score =dum.score(X_test,y_test)
+    real_score = clf.score(X_test, y_test)
+    print('Real Score:', real_score)
 
-    print('Dumb Score:',dum_score)
-    real_score =clf.score(X_test,y_test)
-    print('Real Score:',real_score)
-
-
-  
-
-
-    ##########   Grid Search
-    '''
-    grid_search = GridSearchCV(clf, param_grid,refit=True,scoring='neg_log_loss', verbose=3, n_jobs=-1)
-    grid_search.fit(X_train, y_train, sample_weight=weight_data)
-
-    best_log_loss = -grid_search.best_score_
-    print(f"Best parameters found: {best_log_loss}")
-
-    #grid_search.fit(X_train, y_train)
-
-# Get the best estimator
-    best_clf = grid_search.best_estimator_
-
-# Use the best estimator to predict probabilities
-    '''
     print('predicting ...')
     probas = clf.predict_proba(X_test)
     print('predicted ...')  
     
-
-    
-    #y_pred = (probas[:, 1] >= threshold).astype(int)
-
-   # selected_columns= probas[:,[0,2]]
     max_proba_indices = np.argmax(probas, axis=1)
-   # max_proba_indices= np.where(max_proba_indices==1,2,max_proba_indices)
     predicted_classes = clf.classes_[max_proba_indices]
     y_pred = predicted_classes
 
-    
-
-
-    # Print and store results
     print('######################')
     print('probas:', probas)
     print(classification_report(y_test, y_pred, zero_division=1))
     print('Confusion Matrix:', confusion_matrix(y_test, y_pred))
     
-    print(f'Y_true:{y_test} Y_pred:{y_pred}' )
+    print(f'Y_true:{y_test} Y_pred:{y_pred}')
 
     comparison_df = pd.DataFrame({'Y_true': y_test, 'Y_pred': y_pred})
-
     print(comparison_df)
 
-   
-
-    print(len(y_test))
-    print(len(y_pred))
-    print(len(probas[0]))
-    print(len(probas[1]))
-    print(len(probas[2]))
-    print(probas.shape)
-
-    '''
-    predictions_df = pd.DataFrame({
-        'Actual': y_test,
-        'Predictions': y_pred,
-        'down proba': probas[:,0],
-        'neutral proba': probas[:,1],
-        'up proba': probas[:,2] 
-    })
-
-    predictions_df.to_csv('predictions_df.csv')
-    all_predictions.append(predictions_df)
-    '''
     all_actuals.extend(y_test.tolist())
     all_preds.extend(y_pred.tolist())
     print('###########################')
-    #log_loss(y_test, y_pred)
 
     classes = np.unique(y_train)
-
-# Compute log loss
     l_l = log_loss(y_test, probas, labels=classes)
-
-
-
-
-
-    #l_l = log_loss(y_test, probas)
     print('logloss', l_l)  
-  
-    actual_ =[]
-    prediction_ =[]
-    dwn_ =[]
-    neutral_ =[]
-    up_ =[]
-    start_ =[]
+
+    actual_ = []
+    prediction_ = []
+    dwn_ = []
+    neutral_ = []
+    up_ = []
+    start_ = []
     end_ = []
     upper_ = []
-    lower_ =[]
-    date_ =[]
-    enddate_=[]
-    for actual,prediction,dwn,neutral,up, start,end,upperbarrier,lowerbarrier, date, end_date in zip(y_test,y_pred,probas[:,0],probas[:,1], probas[:,2], startprice, endprice,upperbarrier, lowerbarrier, Dates, enddate):
-        print(f'actual{actual},prediction {prediction},dwn {dwn},neutral {neutral},up {up},start {start},end {end},upperbarrier{upperbarrier}, lowerbarrier{lowerbarrier}, date {date}, end date {end_date}')
+    lower_ = []
+    date_ = []
+    enddate_ = []
+
+    for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate):
+        print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}')
         actual_.append(actual)
         prediction_.append(prediction)
         dwn_.append(dwn)
@@ -352,10 +215,6 @@ def ensemble_methods(df, asset, lookback):
         date_.append(date)
         enddate_.append(end_date)
 
-
-   
-
-
     predictions_df2 = pd.DataFrame({
         'Actual': actual_,
         'Predictions': prediction_,
@@ -364,15 +223,24 @@ def ensemble_methods(df, asset, lookback):
         'up proba': up_,
         'start': start_,
         'end': end_,
-        'upper':upper_,
-        'lower_':lower_,
-
-
+        'upper': upper_,
+        'lower_': lower_,
         'Dates': date_,
         'Endate': enddate_
     })
 
-    predictions_df2.to_csv('predictions_df.csv')
+    predictions_df2.to_csv('predictions_df.csv', index=False)
+
+    # Save the model and PCA
+    joblib.dump(clf, 'random_forest_model.pkl')
+    joblib.dump(pca, 'pca.pkl')
+    joblib.dump(scaler, 'scaler.pkl')
+    print("Model and PCA saved successfully.")
+
+# Assuming you have a crossvalidation object and run_split_process method
+# and df is your dataframe
+# crossvalidation = CrossValidationClass()
+# ensemble_methods(df, asset, lookback)
 
     
 
