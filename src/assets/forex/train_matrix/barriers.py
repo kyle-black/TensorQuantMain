@@ -307,7 +307,7 @@ def calculate_barriers_R(df, lookback):
     return df
 '''
 
-
+'''
 
 def calculate_barriers_R(df, lookback):
     # Calculate volatility
@@ -367,7 +367,7 @@ def calculate_barriers_R(df, lookback):
     df.to_csv('barrier_check.csv')
 
     return df
-
+'''
 
 def calculate_barriers_R(df, lookback):
     # Calculate volatility
