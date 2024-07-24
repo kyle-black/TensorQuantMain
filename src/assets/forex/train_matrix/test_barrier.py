@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
+import multiprocessing
 
 def calculate_barriers_R(df, lookback):
     start_time = time.time()
@@ -57,17 +58,31 @@ def calculate_barriers_R(df, lookback):
     end_time = time.time()
     elapsed_time = end_time - start_time
     print(f"Elapsed time: {elapsed_time:.2f} seconds")
-
+    print(df)
     return df
 
 
-period = 100000
-# Example usage
-data = {
+
+
+if __name__ == '__main__':
+    period = 100000
+    # Example usage
+    data = {
     'Date': pd.date_range(start='2022-01-01', periods=period, freq='h'),
     'Close': np.random.rand(period) * period
-}
-df = pd.DataFrame(data)
-lookback = 4  # 24 hours lookback period
-result_df = calculate_barriers_R(df, lookback)
-print(result_df)
+    }
+    df = pd.DataFrame(data)
+    lookback = 4  # 24 hours lookback period
+    #result_df = calculate_barriers_R(df, lookback)
+    #print(result_df)
+    starttime = time.time()
+    processes = []
+    #for i in range(0,10):
+    p = multiprocessing.Process(target=calculate_barriers_R, args=(df,lookback))
+    processes.append(p)
+    p.start()
+        
+    for process in processes:
+        process.join()
+        
+    print('That took {} seconds'.format(time.time() - starttime))
