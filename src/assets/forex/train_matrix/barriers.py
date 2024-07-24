@@ -470,7 +470,7 @@ def calculate_barriers_R(df, lookback):
 
     arr =np.where(price_df_values)
     
-    '''    
+       
     # Function to check if prices hit barriers and which hits first
     def price_barrier_check(row):
         lower_barrier = row['lower_barrier']
@@ -502,5 +502,5 @@ def calculate_barriers_R(df, lookback):
     df.to_csv('updated_df3.csv')
         
     return df
-    '''
+    
 
