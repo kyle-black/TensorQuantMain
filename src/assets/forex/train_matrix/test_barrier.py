@@ -26,39 +26,45 @@ def calculate_barriers_R(df, lookback):
     labels = np.zeros(len(df), dtype=int)
     touch_prices = np.full(len(df), np.nan)
 
-    for i in range(len(df)):
-       # print('date:',df['Datetime'].iloc[i])
-        start_unix = df['unix'].iloc[i]
-        end_unix = df['endbarrier_unix'].iloc[i]
-        upper_barrier = df['upper_barrier'].iloc[i]
-        lower_barrier = df['lower_barrier'].iloc[i]
+    return df, labels,touch_prices,price_df
 
-        # Find indices within the range
-        mask = (price_df[:, 0] >= start_unix) & (price_df[:, 0] <= end_unix)
-        prices_in_range = price_df[mask, 1]
 
-        if prices_in_range.size == 0:
-            continue
 
-        # Check for barrier hits
-        upper_hits = np.where(prices_in_range > upper_barrier)[0]
-        lower_hits = np.where(prices_in_range < lower_barrier)[0]
+def price_check(df,labels,touch_prices, price_df, i):
+        
+#    for i in range(len(df)):
+    # print('date:',df['Datetime'].iloc[i])
+    start_unix = df['unix'].iloc[i]
+    end_unix = df['endbarrier_unix'].iloc[i]
+    upper_barrier = df['upper_barrier'].iloc[i]
+    lower_barrier = df['lower_barrier'].iloc[i]
 
-        if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
-            labels[i] = 1
-            touch_prices[i] = prices_in_range[upper_hits[0]]
-        elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
-            labels[i] = -1
-            touch_prices[i] = prices_in_range[lower_hits[0]]
+    # Find indices within the range
+    mask = (price_df[:, 0] >= start_unix) & (price_df[:, 0] <= end_unix)
+    prices_in_range = price_df[mask, 1]
+
+    if prices_in_range.size == 0:
+        labels[i] =0
+
+    # Check for barrier hits
+    upper_hits = np.where(prices_in_range > upper_barrier)[0]
+    lower_hits = np.where(prices_in_range < lower_barrier)[0]
+
+    if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
+        labels[i] = 1
+        touch_prices[i] = prices_in_range[upper_hits[0]]
+    elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
+        labels[i] = -1
+        touch_prices[i] = prices_in_range[lower_hits[0]]
 
     df['label'] = labels
     df['touch_price'] = touch_prices
 
-    df.to_csv('updated_df.csv')
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    print(f"Elapsed time: {elapsed_time:.2f} seconds")
-    print(df)
+  #  df.to_csv('updated_df.csv')
+    #end_time = time.time()
+   # elapsed_time = end_time - start_time
+   # print(f"Elapsed time: {elapsed_time:.2f} seconds")
+    #print(df)
     return df
 
 
@@ -73,16 +79,16 @@ if __name__ == '__main__':
     }
     df = pd.DataFrame(data)
     lookback = 4  # 24 hours lookback period
-    #result_df = calculate_barriers_R(df, lookback)
+    df, labels,touch_prices,price_df = calculate_barriers_R(df, lookback)
     #print(result_df)
     starttime = time.time()
     processes = []
-    #for i in range(0,10):
-    p = multiprocessing.Process(target=calculate_barriers_R, args=(df,lookback))
-    processes.append(p)
-    p.start()
-        
+    for i in range(len(df)):
+        p = multiprocessing.Process(target=price_check, args=(df, labels,touch_prices,price_df, i))
+        processes.append(p)
+        p.start()
+            
     for process in processes:
         process.join()
-        
+            
     print('That took {} seconds'.format(time.time() - starttime))
