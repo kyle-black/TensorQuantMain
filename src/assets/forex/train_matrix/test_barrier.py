@@ -68,7 +68,7 @@ def calculate_barriers_R(df, lookback):
 
 # Example usage
 
-period =1000000
+period =100000
 data = {
     'Date': pd.date_range(start='2022-01-01', periods=period, freq='h'),
     'Close': np.random.rand(period) * period
