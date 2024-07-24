@@ -61,7 +61,7 @@ def calculate_barriers_R(df, lookback):
     return df
 
 
-period = 10000
+period = 100000
 # Example usage
 data = {
     'Date': pd.date_range(start='2022-01-01', periods=period, freq='h'),
