@@ -105,14 +105,14 @@ def ensemble_methods(df, asset, lookback):
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
-
+    df  = df[lookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
     df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range'], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
-
+    print('columns in training:', df.columns)
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     
     feature_cols = df.drop('label', axis=1).columns
