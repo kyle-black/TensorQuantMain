@@ -79,12 +79,29 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, log_loss
 from sklearn.dummy import DummyClassifier
 
+
+# Assuming you have a crossvalidation object and run_split_process method
+# and df is your dataframe
+# crossvalidation = CrossValidationClass()
+# ensemble_methods(df, asset, lookback)
+
+    
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, log_loss
+from sklearn.dummy import DummyClassifier
+from sklearn.model_selection import GridSearchCV
+from imblearn.over_sampling import SMOTE
+import joblib
+
 def ensemble_methods(df, asset, lookback):
     
     if asset is not None:
         asset = asset
 
-    # Data Preprocessing
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
@@ -94,17 +111,12 @@ def ensemble_methods(df, asset, lookback):
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
     df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range'], inplace=True)
     df.dropna(how='all', inplace=True)
-    #df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
+    df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
-    print('input dataframe:', df.columns)
-    print('splitting data ...')
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
-    
-    print('data dropped')
     
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
-    print('featurecols:', feature_cols)
 
     all_predictions = []
     all_actuals = []
@@ -112,18 +124,8 @@ def ensemble_methods(df, asset, lookback):
     n_components = 15
     scaler = StandardScaler()
 
-    param_grid = {
-        'n_estimators': [1000],
-        'max_features': [4],
-        'max_depth': [10, 20, None],
-        'min_samples_split': [2, 5],
-        'min_samples_leaf': [1, 2],
-    }
-
     train_idx = train_datasets[-1]
     test_idx = test_datasets[-1]
-
-    print('Test idx:', test_idx)
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
@@ -134,7 +136,6 @@ def ensemble_methods(df, asset, lookback):
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
-    print('lowerbarrier', lowerbarrier)
 
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
@@ -143,32 +144,40 @@ def ensemble_methods(df, asset, lookback):
 
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-    print('data scaled ...')
 
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced_subsample', criterion='entropy')
+    sm = SMOTE(random_state=42)
+    X_train_res, y_train_res = sm.fit_resample(X_train, y_train)
 
-    print('fitting model ...')
-    clf.fit(X_train, y_train)
-    print('model fitted ...')
+    clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
+
+    param_grid = {
+        'n_estimators': [500, 1000],
+        'max_features':  [6, 8],
+        'max_depth': [10, 20, None],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+    }
+
+    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
+    grid_search.fit(X_train_res, y_train_res)
+    
+    best_clf = grid_search.best_estimator_
 
     dum = DummyClassifier(strategy='stratified', random_state=0)
     dum.fit(X_train, y_train)
     dum_score = dum.score(X_test, y_test)
     print('Dumb Score:', dum_score)
 
-    real_score = clf.score(X_test, y_test)
+    real_score = best_clf.score(X_test, y_test)
     print('Real Score:', real_score)
 
-    print('predicting ...')
-    probas = clf.predict_proba(X_test)
-    print('predicted ...')  
-    
+    probas = best_clf.predict_proba(X_test)
     max_proba_indices = np.argmax(probas, axis=1)
-    predicted_classes = clf.classes_[max_proba_indices]
+    predicted_classes = best_clf.classes_[max_proba_indices]
     y_pred = predicted_classes
 
     print('######################')
@@ -231,18 +240,14 @@ def ensemble_methods(df, asset, lookback):
 
     predictions_df2.to_csv('predictions_df.csv', index=False)
 
-    # Save the model and PCA
-    joblib.dump(clf, 'random_forest_model.pkl')
+    joblib.dump(best_clf, 'random_forest_model.pkl')
     joblib.dump(pca, 'pca.pkl')
     joblib.dump(scaler, 'scaler.pkl')
     print("Model and PCA saved successfully.")
 
-# Assuming you have a crossvalidation object and run_split_process method
-# and df is your dataframe
-# crossvalidation = CrossValidationClass()
-# ensemble_methods(df, asset, lookback)
-
-    
+# Example usage
+# df = pd.read_csv('your_data.csv')
+# ensemble_methods
 
 
 
