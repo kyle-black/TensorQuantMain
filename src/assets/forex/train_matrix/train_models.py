@@ -155,11 +155,11 @@ def ensemble_methods(df, asset, lookback):
     clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
 
     param_grid = {
-        'n_estimators': [500, 1000],
-        'max_features':  [6, 8],
-        'max_depth': [10, 20, None],
-        'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4],
+        'n_estimators': [500],
+        'max_features':  [8],
+        'max_depth': [20],
+        'min_samples_split': [10],
+        'min_samples_leaf': [2],
     }
 
     grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
