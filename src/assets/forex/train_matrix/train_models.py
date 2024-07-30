@@ -154,7 +154,7 @@ def ensemble_methods(df, asset, lookback):
 
     param_grid = {
     'n_estimators': [1500],
-    'max_features': ['auto'],
+    'max_features': ['sqrt'],
     'max_depth': [None],
     'min_samples_split': [2],
     'min_samples_leaf': [ 2],
