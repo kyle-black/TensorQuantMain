@@ -153,13 +153,13 @@ def ensemble_methods(df, asset, lookback):
 
 
     param_grid = {
-    'n_estimators': [500, 1000, 1500],
-    'max_features': ['auto', 'sqrt', 'log2', 8],
-    'max_depth': [10, 20, 30, 40, None],
-    'min_samples_split': [2, 5, 10, 15],
-    'min_samples_leaf': [1, 2, 5, 10],
-    'bootstrap': [True, False],
-    'criterion': ['gini', 'entropy']
+    'n_estimators': [1500],
+    'max_features': ['auto'],
+    'max_depth': [None],
+    'min_samples_split': [2],
+    'min_samples_leaf': [ 2],
+    
+    'criterion': ['entropy']
 }
 
     grid_search = GridSearchCV(n_jobs =-1,estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
