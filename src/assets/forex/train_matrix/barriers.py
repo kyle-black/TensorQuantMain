@@ -508,15 +508,32 @@ def calculate_barriers_R(df, lookback):
 '''
 def calculate_barriers_R(df, lookback):
     start_time = time.time()
-    # Calculate volatility
+    #new_bar_df['pips'] = new_bar_df['Close'] *10000
+    
+    # Ensure 'Date' is datetime
+    if not pd.api.types.is_datetime64_any_dtype(df['Date']):
+        df['Date'] = pd.to_datetime(df['Date'])
+    
+    # Set 'Date' as index for resampling
+    df.set_index('Date', inplace=True)
+    
+    # Calculate daily percentage change and daily volatility
     df['pct_change'] = df['Close'].pct_change()
-    volatility = df['pct_change'].std()
+    daily_volatility = df['pct_change'].resample('h').std().mean()
+
+    print(daily_volatility)
+    
+    # Merge daily volatility back into the original dataframe
+    #df = df.merge(daily_volatility.rename('daily_volatility'), left_index=True, right_index=True, how='left')
+    
+    # Reset index to restore original structure
+    df.reset_index(inplace=True)
     
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 + 2 * volatility)
-    df['lower_barrier'] = df['Close'] * (1 - 2 * volatility)
+    df['upper_barrier'] = df['Close'] * (1 + 1 * daily_volatility)
+    df['lower_barrier'] = df['Close'] * (1 - 1 * daily_volatility)
     
     # Calculate lookback in seconds
     lookback_seconds = lookback * 3600
@@ -541,30 +558,44 @@ def calculate_barriers_R(df, lookback):
         lower_barrier = row['lower_barrier']
         upper_barrier = row['upper_barrier']
         prices = row['prices_in_range']
+        pip_close = row['pips']
         
         # Use numpy to find the first occurrence of crossing the barriers
         if prices.size == 0:
-            return 0, np.nan
+            return 0, np.nan, np.nan
         
         upper_hits = np.where(prices > upper_barrier)[0]
         lower_hits = np.where(prices < lower_barrier)[0]
         
         if upper_hits.size == 0 and lower_hits.size == 0:
-            return 0, np.nan
+            print('prices end:', prices[-1])
+
+            end_pips = prices[-1] *10000
+            pct = pip_close / end_pips
+
+            return 0, prices[-1], pct
         
         if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
-            return 1, prices[upper_hits[0]]
+            #pct = close / prices[upper_hits[0]]
+            end_pips = prices[-1] *10000
+            pct = pip_close / end_pips
+            
+            
+            return 1, prices[upper_hits[0]], pct
         elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
-            return -1, prices[lower_hits[0]]
+            #pct = close / prices[lower_hits[0]]
+            end_pips = prices[lower_hits[0]] *10000
+            pct = pip_close / end_pips
+
+            return -1, prices[lower_hits[0]], pct
 
     # Apply the price_barrier_check function to each row
-    df[['label', 'touch_price']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
+    df[['label', 'touch_price','pct']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
     
-    #df.to_csv('updated_df.csv')
     end_time = time.time()
-
-    runtime =end_time - start_time
-    print(f'function runtime: {runtime}')
+    runtime = end_time - start_time
+    print(f'Function runtime: {runtime}')
+    
     return df
 
     

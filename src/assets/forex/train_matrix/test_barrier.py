@@ -74,7 +74,7 @@ data = {
     'Close': np.random.rand(period) * period
 }
 df = pd.DataFrame(data)
-lookback = 48  # 24 hours lookback period
+lookback = 8  # 24 hours lookback period
 result_df = calculate_barriers_R(df, lookback)
 #result_df.to_csv('barrier_pricecheck.csv')
 print(result_df)

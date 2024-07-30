@@ -98,20 +98,20 @@ from imblearn.over_sampling import SMOTE
 import joblib
 
 def ensemble_methods(df, asset, lookback):
-    
     if asset is not None:
         asset = asset
 
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
-    df  = df[lookback:]
+    df = df[lookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
-    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier']]
-    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'Volume', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range'], inplace=True)
+    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier','pct']]
+    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range','pct', 'Datehold'], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
+
     print('columns in training:', df.columns)
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     
@@ -129,9 +129,9 @@ def ensemble_methods(df, asset, lookback):
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
-
+    pct_change = prices['pct'].iloc[test_idx]
     startprice = prices['Close'].iloc[test_idx]
-    endprice = prices['touch_price']
+    endprice = prices['touch_price'].iloc[test_idx]
     Dates = prices['Date'].iloc[test_idx]
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
@@ -149,21 +149,21 @@ def ensemble_methods(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    sm = SMOTE(random_state=42)
-    X_train_res, y_train_res = sm.fit_resample(X_train, y_train)
-
     clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
 
-    param_grid = {
-        'n_estimators': [500],
-        'max_features':  [8],
-        'max_depth': [20],
-        'min_samples_split': [10],
-        'min_samples_leaf': [2],
-    }
 
-    grid_search = GridSearchCV(estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
-    grid_search.fit(X_train_res, y_train_res)
+    param_grid = {
+    'n_estimators': [500, 1000, 1500],
+    'max_features': ['auto', 'sqrt', 'log2', 8],
+    'max_depth': [10, 20, 30, 40, None],
+    'min_samples_split': [2, 5, 10, 15],
+    'min_samples_leaf': [1, 2, 5, 10],
+    'bootstrap': [True, False],
+    'criterion': ['gini', 'entropy']
+}
+
+    grid_search = GridSearchCV(n_jobs =-1,estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
+    grid_search.fit(X_train, y_train)
     
     best_clf = grid_search.best_estimator_
 
@@ -209,9 +209,10 @@ def ensemble_methods(df, asset, lookback):
     lower_ = []
     date_ = []
     enddate_ = []
+    pct_change_ =[]
 
-    for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate):
-        print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}')
+    for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date, pct_c in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate, pct_change):
+        print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}, pct change {pct_c}')
         actual_.append(actual)
         prediction_.append(prediction)
         dwn_.append(dwn)
@@ -223,7 +224,7 @@ def ensemble_methods(df, asset, lookback):
         lower_.append(lowerbarrier)
         date_.append(date)
         enddate_.append(end_date)
-
+        pct_change_.append(pct_c)
     predictions_df2 = pd.DataFrame({
         'Actual': actual_,
         'Predictions': prediction_,
@@ -235,7 +236,8 @@ def ensemble_methods(df, asset, lookback):
         'upper': upper_,
         'lower_': lower_,
         'Dates': date_,
-        'Endate': enddate_
+        'Endate': enddate_,
+        'pct_change': pct_change_
     })
 
     predictions_df2.to_csv('predictions_df.csv', index=False)

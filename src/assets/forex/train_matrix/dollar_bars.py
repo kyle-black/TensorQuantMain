@@ -11,7 +11,7 @@ def dollar_bar_creator(asset,df_,dollar_amt):
     #df_ = pd.read_csv('merged.csv')
     df_.sort_values('Date', inplace =True)
 
-    df_ = df_[-10000:]
+    df_ = df_[:]
     
     close = f'Close_{asset}'
     volume = f'Volume_{asset}'
@@ -60,6 +60,11 @@ def dollar_bar_creator(asset,df_,dollar_amt):
     new_bar_df['pips'] = new_bar_df['Close'] *10000
     new_bar_df['change'] = (new_bar_df['pips'].diff()) 
     new_bar_df['pct_change'] = new_bar_df['change'].pct_change()
+
+    new_bar_df['Datehold'] = pd.to_datetime(new_bar_df['Date'])
+    new_bar_df['day_of_week'] = new_bar_df['Datehold'].dt.dayofweek
+   # new_bar_df.drop('Datehold', inplace=True)
+
    
 
 
