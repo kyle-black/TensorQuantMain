@@ -212,7 +212,7 @@ def ensemble_methods(df, asset, lookback):
     pct_change_ =[]
 
     for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date, pct_c in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate, pct_change):
-        print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}, pct change {pct_c}')
+       # print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}, pct change {pct_c}')
         actual_.append(actual)
         prediction_.append(prediction)
         dwn_.append(dwn)
