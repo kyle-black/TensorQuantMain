@@ -106,13 +106,12 @@ def ensemble_methods(df, asset, lookback):
     xgb_clf = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
 
     param_grid = {
-        'n_estimators': [100],
+        'n_estimators': [100, 200, 300],
         'max_depth': [3],
-        'learning_rate': [0.1],
-        'subsample': [ 0.9],
-        'colsample_bytree': [ 0.9]
+        'learning_rate': [0.01],
+        'subsample': [0.9],
+        'colsample_bytree': [0.9]
     }
-
     grid_search_xgb = GridSearchCV(estimator=xgb_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
     grid_search_xgb.fit(X_train, y_train)
     best_xgb_clf = grid_search_xgb.best_estimator_
