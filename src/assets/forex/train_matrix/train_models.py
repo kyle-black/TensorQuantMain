@@ -107,8 +107,8 @@ def ensemble_methods(df, asset, lookback):
 
     param_grid = {
         'n_estimators': [200],
-        'max_depth': [3],
-        'learning_rate': [0.2],
+        'max_depth': [9],
+        'learning_rate': [0.1],
         'subsample': [ 0.9],
         'colsample_bytree': [ 0.9]
     }
