@@ -121,7 +121,7 @@ def ensemble_methods(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 15
+    n_components = 8
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]

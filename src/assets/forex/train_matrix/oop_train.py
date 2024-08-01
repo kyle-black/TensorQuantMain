@@ -196,7 +196,7 @@ class Model:
 def prepare_data():
     
     asset = 'EURUSD'
-    dollar_amount =1000
+    dollar_amount =10000
     lookback = 120
     
     # Use Dask to read the CSV file in chunks
@@ -235,6 +235,7 @@ def prepare_data():
    # df = pd.read_parquet('barrier_df.parquet')
     fm = FeatureMaker(df, lookback, asset)
     df= fm.feature_add()
+    
 
    # df.to_parquet('final_df.parquet')
 
