@@ -1,6 +1,6 @@
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import brier_score_loss
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.metrics import classification_report, confusion_matrix, brier_score_loss
 import pandas as pd
 # assuming crossvalidation and bootstrap are custom modules
@@ -121,7 +121,7 @@ def ensemble_methods(df, asset, lookback):
     all_predictions = []
     all_actuals = []
     all_preds = []
-    n_components = 8
+    n_components = 15
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -149,35 +149,43 @@ def ensemble_methods(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
-
+    rf_clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
+    gb_clf = GradientBoostingClassifier()
 
     param_grid = {
-    'n_estimators': [1500],
-    'max_features': ['sqrt'],
-    'max_depth': [None],
-    'min_samples_split': [2],
-    'min_samples_leaf': [ 2],
-    
-    'criterion': ['entropy']
-}
+        'n_estimators': [1500],
+        'max_features': ['sqrt'],
+        'max_depth': [None],
+        'min_samples_split': [2],
+        'min_samples_leaf': [2],
+    }
 
-    grid_search = GridSearchCV(n_jobs =-1,estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
-    grid_search.fit(X_train, y_train)
-    
-    best_clf = grid_search.best_estimator_
+    grid_search_rf = GridSearchCV(estimator=rf_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
+    grid_search_rf.fit(X_train, y_train)
+    best_rf_clf = grid_search_rf.best_estimator_
+
+    grid_search_gb = GridSearchCV(estimator=gb_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
+    grid_search_gb.fit(X_train, y_train)
+    best_gb_clf = grid_search_gb.best_estimator_
+
+    ensemble_clf = VotingClassifier(estimators=[
+        ('rf', best_rf_clf),
+        ('gb', best_gb_clf)
+    ], voting='soft', n_jobs=-1)
+
+    ensemble_clf.fit(X_train, y_train)
 
     dum = DummyClassifier(strategy='stratified', random_state=0)
     dum.fit(X_train, y_train)
     dum_score = dum.score(X_test, y_test)
     print('Dumb Score:', dum_score)
 
-    real_score = best_clf.score(X_test, y_test)
+    real_score = ensemble_clf.score(X_test, y_test)
     print('Real Score:', real_score)
 
-    probas = best_clf.predict_proba(X_test)
+    probas = ensemble_clf.predict_proba(X_test)
     max_proba_indices = np.argmax(probas, axis=1)
-    predicted_classes = best_clf.classes_[max_proba_indices]
+    predicted_classes = ensemble_clf.classes_[max_proba_indices]
     y_pred = predicted_classes
 
     print('######################')
@@ -242,7 +250,7 @@ def ensemble_methods(df, asset, lookback):
 
     predictions_df2.to_csv('predictions_df.csv', index=False)
 
-    joblib.dump(best_clf, 'random_forest_model.pkl')
+    joblib.dump(ensemble_clf, 'ensemble_model.pkl')
     joblib.dump(pca, 'pca.pkl')
     joblib.dump(scaler, 'scaler.pkl')
     print("Model and PCA saved successfully.")
