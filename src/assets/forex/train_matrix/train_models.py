@@ -153,7 +153,7 @@ def ensemble_methods(df, asset, lookback):
 
 
     param_grid = {
-    'n_estimators': [3000],
+    'n_estimators': [1500],
     'max_features': ['sqrt'],
     'max_depth': [None],
     'min_samples_split': [2],
@@ -162,7 +162,7 @@ def ensemble_methods(df, asset, lookback):
     'criterion': ['entropy']
 }
 
-    grid_search = GridSearchCV(n_jobs =-1,estimator=clf, param_grid=param_grid, cv=3, scoring='f1_macro')
+    grid_search = GridSearchCV(n_jobs =-1,estimator=clf, param_grid=param_grid, cv=3, scoring='precision')
     grid_search.fit(X_train, y_train)
     
     best_clf = grid_search.best_estimator_
