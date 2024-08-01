@@ -1,7 +1,7 @@
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import brier_score_loss
+from sklearn.model_selection import  GridSearchCV
+
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
-from sklearn.metrics import classification_report, confusion_matrix, brier_score_loss
+
 import pandas as pd
 # assuming crossvalidation and bootstrap are custom modules
 import crossvalidation
@@ -15,26 +15,16 @@ from sklearn.metrics import brier_score_loss
 #import tensorflow as tf
 
 import numpy as np
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
+
+
 from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.metrics import brier_score_loss
+
 #from sklearn.externals import joblib
 # Import necessary keras modules
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.neural_network import MLPClassifier
-from sklearn.ensemble import AdaBoostClassifier
 
-from sklearn.preprocessing import LabelBinarizer
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 from sklearn.metrics import log_loss
 from sklearn.dummy import DummyClassifier
 
-
-#from sklearn.experimental import enable_hist_gradient_boosting  # noqa
-#from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
 
 from sklearn.pipeline import make_pipeline
@@ -43,59 +33,25 @@ from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 from sklearn.model_selection import cross_validate
 from sklearn.utils import class_weight
-#import xgboost as xgb
-#from imblearn.over_sampling import SMOTE
-
-#from sklearn.tree import export_graphviz
-#import pydotplus
-
-#import neuralnet
-#from tensorflow.keras.utils import to_categorical
+import xgboost as xgb
 
 
-#from keras.models import Sequential
-#from keras.layers import Dense, Dropout
-
-#from keras.utils import to_categorical
-#from keras.optimizers import Adam
-#import tensorflow as tf
 import os 
 import random
 
-#os.environ['PYTHONHASHSEED']=str(0)
-#random.seed(0)
-#np.random.seed(0)
-#tf.random.set_seed(0)
 
-    # You might want to return something from this function, like t
   
 
 import joblib
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, log_loss
 from sklearn.dummy import DummyClassifier
 
 
-# Assuming you have a crossvalidation object and run_split_process method
-# and df is your dataframe
-# crossvalidation = CrossValidationClass()
-# ensemble_methods(df, asset, lookback)
 
-    
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, log_loss
-from sklearn.dummy import DummyClassifier
-from sklearn.model_selection import GridSearchCV
-from imblearn.over_sampling import SMOTE
-import joblib
+
+
 
 def ensemble_methods(df, asset, lookback):
     if asset is not None:
@@ -107,8 +63,8 @@ def ensemble_methods(df, asset, lookback):
     df = df[lookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
-    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier','pct']]
-    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range','pct', 'Datehold'], inplace=True)
+    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
+    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range', 'pct', 'Datehold'], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
@@ -118,9 +74,6 @@ def ensemble_methods(df, asset, lookback):
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    all_predictions = []
-    all_actuals = []
-    all_preds = []
     n_components = 15
     scaler = StandardScaler()
 
@@ -149,43 +102,34 @@ def ensemble_methods(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-   # rf_clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
-    gb_clf = GradientBoostingClassifier()
+    # Initialize XGBoost classifier
+    xgb_clf = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
 
     param_grid = {
         'n_estimators': [100],
-        'max_features': ['sqrt'],
-        'max_depth': [None],
-        'min_samples_split': [2],
-        'min_samples_leaf': [2],
+        'max_depth': [3],
+        'learning_rate': [0.1],
+        'subsample': [ 0.9],
+        'colsample_bytree': [ 0.9]
     }
 
-    #grid_search_rf = GridSearchCV(estimator=rf_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
-    #grid_search_rf.fit(X_train, y_train)
-    #best_rf_clf = grid_search_rf.best_estimator_
+    grid_search_xgb = GridSearchCV(estimator=xgb_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
+    grid_search_xgb.fit(X_train, y_train)
+    best_xgb_clf = grid_search_xgb.best_estimator_
 
-    grid_search_gb = GridSearchCV(estimator=gb_clf, param_grid=param_grid, cv=3, scoring='f1_macro', n_jobs=-1)
-    grid_search_gb.fit(X_train, y_train)
-    best_gb_clf = grid_search_gb.best_estimator_
-
-    #ensemble_clf = VotingClassifier(estimators=[
-    #    ('rf', best_rf_clf),
-    #    ('gb', best_gb_clf)
-    #], voting='soft', n_jobs=-1)
-
-    best_gb_clf.fit(X_train, y_train)
+    best_xgb_clf.fit(X_train, y_train)
 
     dum = DummyClassifier(strategy='stratified', random_state=0)
     dum.fit(X_train, y_train)
     dum_score = dum.score(X_test, y_test)
     print('Dumb Score:', dum_score)
 
-    real_score = best_gb_clf.score(X_test, y_test)
+    real_score = best_xgb_clf.score(X_test, y_test)
     print('Real Score:', real_score)
 
-    probas = best_gb_clf.predict_proba(X_test)
+    probas = best_xgb_clf.predict_proba(X_test)
     max_proba_indices = np.argmax(probas, axis=1)
-    predicted_classes = best_gb_clf.classes_[max_proba_indices]
+    predicted_classes = best_xgb_clf.classes_[max_proba_indices]
     y_pred = predicted_classes
 
     print('######################')
@@ -198,8 +142,8 @@ def ensemble_methods(df, asset, lookback):
     comparison_df = pd.DataFrame({'Y_true': y_test, 'Y_pred': y_pred})
     print(comparison_df)
 
-    all_actuals.extend(y_test.tolist())
-    all_preds.extend(y_pred.tolist())
+    all_actuals = y_test.tolist()
+    all_preds = y_pred.tolist()
     print('###########################')
 
     classes = np.unique(y_train)
@@ -217,10 +161,9 @@ def ensemble_methods(df, asset, lookback):
     lower_ = []
     date_ = []
     enddate_ = []
-    pct_change_ =[]
+    pct_change_ = []
 
     for actual, prediction, dwn, neutral, up, start, end, upperbarrier, lowerbarrier, date, end_date, pct_c in zip(y_test, y_pred, probas[:,0], probas[:,1], probas[:,2], startprice, endprice, upperbarrier, lowerbarrier, Dates, enddate, pct_change):
-       # print(f'actual {actual}, prediction {prediction}, dwn {dwn}, neutral {neutral}, up {up}, start {start}, end {end}, upperbarrier {upperbarrier}, lowerbarrier {lowerbarrier}, date {date}, end date {end_date}, pct change {pct_c}')
         actual_.append(actual)
         prediction_.append(prediction)
         dwn_.append(dwn)
@@ -233,6 +176,7 @@ def ensemble_methods(df, asset, lookback):
         date_.append(date)
         enddate_.append(end_date)
         pct_change_.append(pct_c)
+        
     predictions_df2 = pd.DataFrame({
         'Actual': actual_,
         'Predictions': prediction_,
@@ -242,7 +186,7 @@ def ensemble_methods(df, asset, lookback):
         'start': start_,
         'end': end_,
         'upper': upper_,
-        'lower_': lower_,
+        'lower': lower_,
         'Dates': date_,
         'Endate': enddate_,
         'pct_change': pct_change_
@@ -250,10 +194,9 @@ def ensemble_methods(df, asset, lookback):
 
     predictions_df2.to_csv('predictions_df.csv', index=False)
 
-    joblib.dump(best_gb_clf, 'ensemble_model.pkl')
+    joblib.dump(best_xgb_clf, 'xgb_model.pkl')
     joblib.dump(pca, 'pca.pkl')
     joblib.dump(scaler, 'scaler.pkl')
-    print("Model and PCA saved successfully.")
 
 # Example usage
 # df = pd.read_csv('your_data.csv')
