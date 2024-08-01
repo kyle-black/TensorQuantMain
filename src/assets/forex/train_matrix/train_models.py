@@ -56,11 +56,14 @@ from sklearn.dummy import DummyClassifier
 def ensemble_methods(df, asset, lookback):
     if asset is not None:
         asset = asset
-
+   
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7 
-    df = df[lookback:]
+    
+    startlookback =(lookback *10)
+    
+    df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
