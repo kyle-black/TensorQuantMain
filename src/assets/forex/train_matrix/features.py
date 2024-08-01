@@ -8,6 +8,8 @@ from statsmodels.tsa.statespace.tools import diff
 def add_price_features(df,asset, window_length):
     df =df.copy()
 
+    window_length =  window_length *10
+
     print('preauto:',df)
     print(df.columns)
 
