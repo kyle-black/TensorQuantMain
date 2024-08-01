@@ -153,7 +153,7 @@ def ensemble_methods(df, asset, lookback):
     gb_clf = GradientBoostingClassifier()
 
     param_grid = {
-        'n_estimators': [1500],
+        'n_estimators': [100],
         'max_features': ['sqrt'],
         'max_depth': [None],
         'min_samples_split': [2],
