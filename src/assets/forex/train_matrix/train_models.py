@@ -67,14 +67,15 @@ def ensemble_methods(df, asset, lookback):
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
-    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range', 'pct', 'Datehold'], inplace=True)
+    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range', 'pct', 'Datehold', 'pips'], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
-    print('columns in training:', df.columns)
+    #print('columns in training:', df.columns)
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     
     feature_cols = df.drop('label', axis=1).columns
+    print('columns in training:', feature_cols)
     target_col = 'label'
 
     n_components = 15
