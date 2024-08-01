@@ -107,11 +107,12 @@ class Analysis:
 
 
 class FeatureMaker:
-    def __init__(self, bars_df, window, asset):
+    def __init__(self, bars_df, window, asset, daily_volatility):
         # Store the bars dataframe regardless of its type (time, volume, dollar)
         self.bars_df = bars_df
         self.window =window
         self.asset= asset
+        self.daily_volatility
 
     def feature_add(self):
 
@@ -131,7 +132,7 @@ class FeatureMaker:
     
     def create_CUMSUM_filter(self):
         """Create dollar bars from asset data."""
-        self.tEvents = gte(self.bars_df, None)
+        self.tEvents = gte(self.bars_df, self.daily_volatility)
         return self.tEvents
 
     
@@ -220,7 +221,7 @@ def prepare_data():
     
     
     print('Applying Triple Barriers:')
-    df = L.triple_barriers()
+    df, daily_volatility = L.triple_barriers()
    # print(df)
     
    # return df
@@ -233,7 +234,7 @@ def prepare_data():
    # df.to_parquet('test_df.parquet')
     #print('testdf:',df)
    # df = pd.read_parquet('barrier_df.parquet')
-    fm = FeatureMaker(df, lookback, asset)
+    fm = FeatureMaker(df, lookback, asset,daily_volatility)
     df= fm.feature_add()
     
 

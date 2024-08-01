@@ -596,7 +596,7 @@ def calculate_barriers_R(df, lookback):
     runtime = end_time - start_time
     print(f'Function runtime: {runtime}')
     
-    return df
+    return df, daily_volatility
 
     
 
