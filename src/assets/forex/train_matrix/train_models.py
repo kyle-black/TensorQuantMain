@@ -150,7 +150,7 @@ def ensemble_methods(df, asset, lookback):
     X_test = pca.transform(X_test)
 
    # rf_clf = RandomForestClassifier(n_jobs=-1, random_state=44, n_estimators=1000, class_weight='balanced', criterion='entropy')
-    gb_clf = GradientBoostingClassifier()
+    gb_clf = GradientBoostingClassifier(n_jobs=-1)
 
     param_grid = {
         'n_estimators': [1500],
