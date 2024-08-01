@@ -2,7 +2,8 @@ import pandas as pd
 
 def gTEvents(gRaw, h=None):
 
-    h = gRaw['Close'].pct_change().std()
+    #h = gRaw['Close'].pct_change().std()
+    h = gRaw['pct_change'].resample('d').std().mean()
     tEvents,sPos,sNeg = [],0,0
     diff = gRaw
     
