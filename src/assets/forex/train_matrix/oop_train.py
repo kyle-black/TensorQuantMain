@@ -12,7 +12,7 @@ from pca_maker import pca_
 from weights import return_attribution
 from CUMSUM_filter import gTEvents as gte
 import pandas as pd
-from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
+#from train_models import ensemble_methods #random_forest_classifier, Hist_boosted
 
 from check_distro import create_plot as cp
 import numpy as np
@@ -21,6 +21,7 @@ from concurrent.futures import ProcessPoolExecutor
 import multiprocessing as mp
 import dask.dataframe as dd
 import send_email
+import neural_DNN
 
 
 
@@ -187,10 +188,12 @@ class Model:
         #output =adaboost_classifier(self.bars_df)
         #output = support_vector_classifier(self.bars_df)
        # output =neural_network_cnn(self.bars_df, self.asset)
-        output =ensemble_methods(self.bars_df, self.asset, self.lookback)
+        #output =ensemble_methods(self.bars_df, self.asset, self.lookback)
+        output =neural_DNN.run_model(self.bars_df, self.asset,self.lookback)
         #output= Hist_boosted(self.bars_df, self.asset, lookback)
         #output = neural_network_classifier(self.bars_df,self.asset)
         #output =random_forest_anomaly_detector(self.bars_df)
+        
         return output
 
 
@@ -243,11 +246,11 @@ def prepare_data():
 
     #df = pd.read_parquet('final_df.parquet')
    # fm = FeatureMaker(df, lookback, asset)
-    tEvents = fm.create_CUMSUM_filter()
-    filtered_df = df[df.index.isin(tEvents)]
+   # tEvents = fm.create_CUMSUM_filter()
+   # filtered_df = df[df.index.isin(tEvents)]
     
     #print('filtered_df:',filtered_df)
-   # filtered_df = df
+    filtered_df = df
     #filtered_df =df
     #filtered_df.dropna(inplace=True)
     
@@ -267,7 +270,7 @@ if __name__ == "__main__":
     asset = "EURUSD"
     df = prepare_data()
     
-    send_email.run_email()
+   # send_email.run_email()
 
     train_data(df, asset,48)
  #   send_email.run_email()
