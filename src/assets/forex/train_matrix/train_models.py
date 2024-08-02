@@ -67,11 +67,7 @@ def ensemble_methods(df, asset, lookback):
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
 
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
-    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range', 'pct', 'Datehold', 'pips','change','durableGoods', '15Yr_Fixed',
-       '30Yr_Fixed', 'CPI', 'GDP', 'Production_Total_Index', 'Yields_COD',
-       'consumerSentiment', 'federalFunds', 'inflation', 'inflationRate',
-       'initialClaims', 'nominalPotentialGDP', 'rates_CreditCards', 'realGDP',
-       'realGDPPerCapita', 'retailMoneyFunds', 'retailSales'], inplace=True)
+    df.drop(columns=['Date', 'unix', 'endbarrier_unix', 'Volume', 'Close', 'upper_barrier', 'lower_barrier', 'pct_change', 'Datetime', 'touch_price', 'prices_in_range', 'pct', 'Datehold', 'pips','change',], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
@@ -82,7 +78,7 @@ def ensemble_methods(df, asset, lookback):
     print('columns in training:', feature_cols)
     target_col = 'label'
 
-    n_components = 6
+    n_components = 15
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
