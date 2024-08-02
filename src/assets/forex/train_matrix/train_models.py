@@ -82,7 +82,7 @@ def ensemble_methods(df, asset, lookback):
     print('columns in training:', feature_cols)
     target_col = 'label'
 
-    n_components = 15
+    n_components = 6
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
