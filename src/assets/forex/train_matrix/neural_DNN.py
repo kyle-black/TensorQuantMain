@@ -32,7 +32,7 @@ def run_model(df, asset, lookback):
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     #print('traindatasets:',train_datasets)
-    print('testdatasets:',test_datasets[-7])
+    print('testdatasets:',test_datasets[-1])
     feature_cols = df.drop('label', axis=1).columns
     print('columns in training:', feature_cols)
     target_col = 'label'
@@ -40,8 +40,8 @@ def run_model(df, asset, lookback):
     n_components = 15
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-7]
-    test_idx = test_datasets[-7]
+    train_idx = train_datasets[-1]
+    test_idx = test_datasets[-1]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
