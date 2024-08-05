@@ -31,10 +31,7 @@ def run_model(df, asset, lookback):
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
-    #print('traindatasets:',train_datasets)
-    print('testdatasets:',test_datasets[-1])
     feature_cols = df.drop('label', axis=1).columns
-    print('columns in training:', feature_cols)
     target_col = 'label'
 
     n_components = 15
@@ -65,40 +62,45 @@ def run_model(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    # Convert labels to categorical one-hot encoding
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=3)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=3)
 
-    # Build the model
     model = models.Sequential()
-    model.add(layers.Dense(512, activation='relu', input_shape=(n_components,)))
-    model.add(layers.Dropout(0.2))
-    model.add(layers.Dense(512, activation='relu'))
-    model.add(layers.Dropout(0.2))
+    model.add(layers.Dense(128, activation='relu', input_shape=(n_components,)))
+    model.add(layers.Dropout(0.5))
+    model.add(layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dropout(0.5))
     model.add(layers.Dense(3, activation='softmax'))
 
-    # Compile the model with the categorical cross-entropy loss
     model.compile(
         optimizer='adam',
         loss='categorical_crossentropy',
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    # Train the model
-    model.fit(X_train, y_train, epochs=20, batch_size=128, validation_split=0.2)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    
+    model.fit(X_train, y_train, epochs=100, batch_size=128, validation_split=0.2, callbacks=[early_stopping])
 
-    # Evaluate the model
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
     print(f'Test precision: {test_precision}')
     print(f'Test recall: {test_recall}')
     print(f'Test AUC: {test_auc}')
 
-    # Get the predicted probabilities for the test set
     y_pred_proba = model.predict(X_test)
-
     log_loss_value = log_loss(y_test, y_pred_proba)
     print(f'Log Loss: {log_loss_value}')
 
-    # Return the predicted probabilities and true labels
-    return model, y_pred_proba, y_test
+    # Convert predicted probabilities to a DataFrame
+    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_0', 'Proba_Class_1', 'Proba_Class_2'])
+
+    # Add true labels and other relevant information from the test set
+    test_results = test_data.reset_index(drop=True)
+    test_results = pd.concat([test_results, proba_df], axis=1)
+    test_results['True_Label'] = np.argmax(y_test, axis=1)
+    test_results.to_csv('tester_df.csv')
+    # Print the test DataFrame with probabilities
+    print(test_results)
+
+    return model, y_pred_proba, y_test, test_results
