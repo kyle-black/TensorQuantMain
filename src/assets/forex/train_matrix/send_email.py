@@ -40,3 +40,5 @@ def run_email():
         server.send_message(msg)
 
 
+if __name__ in "__main__":
+    run_email()
