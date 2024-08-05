@@ -39,8 +39,8 @@ def run_model(df, asset, lookback):
     n_components = 15
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-1]
-    test_idx = test_datasets[-1]
+    train_idx = train_datasets[-5]
+    test_idx = test_datasets[-5]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
