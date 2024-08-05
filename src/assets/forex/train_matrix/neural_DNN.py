@@ -31,7 +31,8 @@ def run_model(df, asset, lookback):
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
-    
+    print('traindatasets:',train_datasets)
+    print('testdatasets:',test_datasets)
     feature_cols = df.drop('label', axis=1).columns
     print('columns in training:', feature_cols)
     target_col = 'label'
