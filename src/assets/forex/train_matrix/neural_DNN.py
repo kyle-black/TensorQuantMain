@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 import numpy as np
 
-
+from sklearn.metrics import log_loss
 
 def run_model(df, asset, lookback):
     if asset is not None:
@@ -96,6 +96,9 @@ def run_model(df, asset, lookback):
 
     # Get the predicted probabilities for the test set
     y_pred_proba = model.predict(X_test)
+
+    log_loss_value = log_loss(y_test, y_pred_proba)
+    print(f'Log Loss: {log_loss_value}')
 
     # Return the predicted probabilities and true labels
     return model, y_pred_proba, y_test
