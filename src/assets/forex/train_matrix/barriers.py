@@ -519,7 +519,7 @@ def calculate_barriers_R(df, lookback):
     
     # Calculate daily percentage change and daily volatility
     df['pct_change'] = df['Close'].pct_change()
-    daily_volatility = df['pct_change'].resample('d').std().mean()
+    daily_volatility = df['pct_change'].resample('m').std().mean()
 
     print(daily_volatility)
     
