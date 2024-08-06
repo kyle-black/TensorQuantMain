@@ -201,7 +201,7 @@ def prepare_data():
     
     asset = 'EURUSD'
     dollar_amount =10000
-    lookback = 8
+    lookback = 4
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
