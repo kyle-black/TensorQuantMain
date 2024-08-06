@@ -111,4 +111,4 @@ def run_model(df, asset, lookback):
     test_results.to_csv('tester_df.csv')
     print(test_results)
 
-    return model, y_pred_proba, y_test, test_result
+    return model, y_pred_proba, y_test, test_results
