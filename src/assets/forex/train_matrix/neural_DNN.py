@@ -2,15 +2,13 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 
 import pandas as pd
-# assuming crossvalidation and bootstrap are custom modules
 import crossvalidation
-#import bootstrap
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-import joblib
 import numpy as np
-
 from sklearn.metrics import log_loss
+from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
 
 def run_model(df, asset, lookback):
     if asset is not None:
@@ -26,10 +24,8 @@ def run_model(df, asset, lookback):
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     print('columns pre:', df.columns)
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
-    #df.drop(columns=[ 'Close_AUDUSD', 'Close_USDCAD','Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns','durableGoods', '15Yr_Fixed', '30Yr_Fixed', 'CPI', 'GDP','Production_Total_Index', 'Yields_COD', 'consumerSentiment','federalFunds', 'inflation', 'inflationRate', 'initialClaims','nominalPotentialGDP', 'rates_CreditCards', 'realGDP','realGDPPerCapita', 'retailMoneyFunds', 'retailSales', 'pips', 'change','pct_change', 'Datehold', 'day_of_week', 'Datetime', 'unix','upper_barrier', 'lower_barrier', 'endbarrier_unix', 'prices_in_range','touch_price', 'pct'], inplace=True)
-    df = df[[ 'label','Middle_Band', 'Upper_Band',
-       'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume' ]]
-    print('new_df',df.head())
+    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume']]
+    print('new_df', df.head())
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
@@ -65,15 +61,25 @@ def run_model(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    y_train = tf.keras.utils.to_categorical(y_train, num_classes=3)
+    # Apply SMOTE to the training set
+    smote = SMOTE()
+    X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+    # Convert the resampled labels to categorical
+    y_train_res = tf.keras.utils.to_categorical(y_train_res, num_classes=3)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=3)
 
+    # Build the model
     model = models.Sequential()
     model.add(layers.Dense(128, activation='relu', input_shape=(n_components,)))
     model.add(layers.Dropout(0.5))
     model.add(layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.Dropout(0.5))
     model.add(layers.Dense(3, activation='softmax'))
+
+    # Compute class weights
+    class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train_res, axis=1)), y=np.argmax(y_train_res, axis=1))
+    class_weights = dict(enumerate(class_weights))
 
     model.compile(
         optimizer='adam',
@@ -83,7 +89,7 @@ def run_model(df, asset, lookback):
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     
-    model.fit(X_train, y_train, epochs=100, batch_size=128, validation_split=0.2, callbacks=[early_stopping])
+    model.fit(X_train_res, y_train_res, epochs=100, batch_size=128, validation_split=0.2, callbacks=[early_stopping], class_weight=class_weights)
 
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
@@ -103,7 +109,6 @@ def run_model(df, asset, lookback):
     test_results = pd.concat([test_results, proba_df], axis=1)
     test_results['True_Label'] = np.argmax(y_test, axis=1)
     test_results.to_csv('tester_df.csv')
-    # Print the test DataFrame with probabilities
     print(test_results)
 
-    return model, y_pred_proba, y_test, test_results
+    return model, y_pred_proba, y_test, test_result
