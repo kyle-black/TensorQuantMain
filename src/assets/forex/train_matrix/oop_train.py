@@ -268,10 +268,10 @@ def train_data(filtered_df,asset,lookback):
 
 if __name__ == "__main__":
     asset = "EURUSD"
-    prepare_data()
+    #prepare_data()
     
    # send_email.run_email()
     df = pd.read_parquet('final_df.parquet')
-    train_data(df, asset,48)
+    train_data(df, asset,1)
  #   send_email.run_email()
     
