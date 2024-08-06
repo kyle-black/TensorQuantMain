@@ -35,7 +35,7 @@ def run_model(df, asset, lookback):
        'realGDPPerCapita', 'retailMoneyFunds', 'retailSales',
         'Datehold', 'day_of_week', 'Datetime', 'unix',
        'upper_barrier', 'lower_barrier', 'endbarrier_unix', 'prices_in_range',
-       'label', 'touch_price', 'pct'], inplace=True)
+        'touch_price', 'pct'], inplace=True)
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
