@@ -36,6 +36,8 @@ def run_model(df, asset, lookback):
        'pct_change', 'Datehold', 'day_of_week', 'Datetime', 'unix',
        'upper_barrier', 'lower_barrier', 'endbarrier_unix', 'prices_in_range',
         'touch_price', 'pct'], inplace=True)
+    
+    print('new_df',df.head())
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
 
