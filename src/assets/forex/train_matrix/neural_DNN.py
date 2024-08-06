@@ -36,7 +36,7 @@ def run_model(df, asset, lookback):
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 2
+    n_components = 3
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
