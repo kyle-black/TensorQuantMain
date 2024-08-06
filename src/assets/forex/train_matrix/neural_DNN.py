@@ -10,16 +10,27 @@ from sklearn.metrics import log_loss
 from sklearn.utils.class_weight import compute_class_weight
 from imblearn.over_sampling import SMOTE
 
-def run_model(df, asset, lookback):
+import tensorflow as tf
+from tensorflow.keras import layers, models
+import pandas as pd
+import crossvalidation
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+from sklearn.metrics import log_loss
+from sklearn.utils.class_weight import compute_class_weight
+from imblearn.combine import SMOTETomek
+
+def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
     if asset is not None:
         asset = asset
-   
+
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
-    threshold = 0.7 
-    
+    threshold = 0.7
+
     startlookback = lookback * 10
-    
+
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     print('columns pre:', df.columns)
@@ -61,35 +72,45 @@ def run_model(df, asset, lookback):
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    # Apply SMOTE to the training set
-    smote = SMOTE()
-    X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+    smote_tomek = SMOTETomek()
+    X_train_res, y_train_res = smote_tomek.fit_resample(X_train, y_train)
 
-    # Convert the resampled labels to categorical
     y_train_res = tf.keras.utils.to_categorical(y_train_res, num_classes=3)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=3)
 
-    # Build the model
     model = models.Sequential()
-    model.add(layers.Dense(128, activation='relu', input_shape=(n_components,)))
+    model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
+    
+    model.add(layers.Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Dropout(0.5))
+
     model.add(layers.Dense(64, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
+    
+    model.add(layers.Dense(32, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.BatchNormalization())
+    model.add(layers.Dropout(0.5))
+    
     model.add(layers.Dense(3, activation='softmax'))
 
-    # Compute class weights
     class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train_res, axis=1)), y=np.argmax(y_train_res, axis=1))
     class_weights = dict(enumerate(class_weights))
 
     model.compile(
-        optimizer='adam',
+        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
         loss='categorical_crossentropy',
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     
-    model.fit(X_train_res, y_train_res, epochs=100, batch_size=128, validation_split=0.2, callbacks=[early_stopping], class_weight=class_weights)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
+
+    model.fit(X_train_res, y_train_res, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
 
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
@@ -101,10 +122,8 @@ def run_model(df, asset, lookback):
     log_loss_value = log_loss(y_test, y_pred_proba)
     print(f'Log Loss: {log_loss_value}')
 
-    # Convert predicted probabilities to a DataFrame
     proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_0', 'Proba_Class_1', 'Proba_Class_2'])
 
-    # Add true labels and other relevant information from the test set
     test_results = test_data.reset_index(drop=True)
     test_results = pd.concat([test_results, proba_df], axis=1)
     test_results['True_Label'] = np.argmax(y_test, axis=1)
