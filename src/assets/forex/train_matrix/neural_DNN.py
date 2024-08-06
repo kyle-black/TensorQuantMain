@@ -44,7 +44,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 4
+    n_components = 6
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -72,10 +72,10 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    smote_tomek = SMOTETomek()
-    X_train_res, y_train_res = smote_tomek.fit_resample(X_train, y_train)
+  #  smote_tomek = SMOTETomek()
+  #  X_train_res, y_train_res = smote_tomek.fit_resample(X_train, y_train)
 
-    y_train_res = tf.keras.utils.to_categorical(y_train_res, num_classes=3)
+    y_train = tf.keras.utils.to_categorical(y_train, num_classes=3)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=3)
 
     model = models.Sequential()
@@ -110,7 +110,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
-    model.fit(X_train_res, y_train_res, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
 
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
