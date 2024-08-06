@@ -27,7 +27,7 @@ def run_model(df, asset, lookback):
 
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
     #df.drop(columns=[ 'Close_AUDUSD', 'Close_USDCAD','Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns','durableGoods', '15Yr_Fixed', '30Yr_Fixed', 'CPI', 'GDP','Production_Total_Index', 'Yields_COD', 'consumerSentiment','federalFunds', 'inflation', 'inflationRate', 'initialClaims','nominalPotentialGDP', 'rates_CreditCards', 'realGDP','realGDPPerCapita', 'retailMoneyFunds', 'retailSales', 'pips', 'change','pct_change', 'Datehold', 'day_of_week', 'Datetime', 'unix','upper_barrier', 'lower_barrier', 'endbarrier_unix', 'prices_in_range','touch_price', 'pct'], inplace=True)
-    df = df[[ 'label','Close_AUDUSD', 'Close_USDCAD','Close_USDCHF']]
+    df = df[[ 'label','Close_AUDUSD', 'Close_USDCAD','Close_USDCHF','AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns' ]]
     print('new_df',df.head())
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
