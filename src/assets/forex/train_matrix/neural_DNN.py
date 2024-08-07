@@ -21,7 +21,7 @@ from sklearn.metrics import log_loss
 from sklearn.utils.class_weight import compute_class_weight
 from imblearn.combine import SMOTETomek
 
-def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
+def run_model(df, asset, lookback, learning_rate=0.01, batch_size=128, epochs=100):
     if asset is not None:
         asset = asset
 
