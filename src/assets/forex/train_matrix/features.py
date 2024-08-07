@@ -70,11 +70,38 @@ def add_price_features(df,asset, window_length):
     rs = avg_gain / avg_loss
     df['RSI'] = 100 - (100 / (1 + rs))
 
+    low_min  = df['Close'].rolling(window=window_length).min()
+    high_max = df['Close'].rolling(window=window_length).max()
 
-   # df = add_stochastic_oscillator(df, window_length)
+    df['%K'] = (df['Close'] - low_min) / (high_max - low_min) * 100
+    df['%D'] = df['%K'].rolling(window=window_length).mean()
 
-   # df = calculate_OBV(df)
-   # df = add_ichimoku(df)
+    df['daily_return'] = df['Close'].diff()
+    df['direction'] = np.where(df['daily_return'] > 0, 1, -1)
+    df['direction'][df['daily_return'] == 0] = 0
+    df['volume_direction'] = df['Volume'] * df['direction']
+    df['OBV'] = df['volume_direction'].cumsum()
+
+    period9_high = df['Close'].rolling(window=9).max()
+    period9_low = df['Close'].rolling(window=9).min()
+    df['tenkan_sen'] = (period9_high + period9_low) / 2
+
+    # Kijun-sen (Base Line): (26-period high + 26-period low)/2
+    period26_high = df['Close'].rolling(window=26).max()
+    period26_low = df['Close'].rolling(window=26).min()
+    df['kijun_sen'] = (period26_high + period26_low) / 2
+
+    # Senkou Span A (Leading Span A): (Conversion Line + Base Line)/2
+    df['senkou_span_a'] = ((df['tenkan_sen'] + df['kijun_sen']) / 2).shift(26)
+
+    # Senkou Span B (Leading Span B): (52-period high + 52-period low)/2
+    period52_high = df['Close'].rolling(window=52).max()
+    period52_low = df['Close'].rolling(window=52).min()
+    df['senkou_span_b'] = ((period52_high + period52_low) / 2).shift(26)
+
+    # Chikou Span (Lagging Span): 'Close' shifted back 26 periods
+    df['chikou_span'] = df['Close'].shift(-26)
+
 
 
 
