@@ -42,7 +42,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df.dropna(inplace=True)
     print('new_df', df.head())
     df.dropna(how='all', inplace=True)
-    df['label'] = df['label'].map({-1: 1, 0: 1, 1: 2})
+    df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
