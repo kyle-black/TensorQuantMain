@@ -549,7 +549,8 @@ def calculate_barriers_R(df, lookback):
 
     # Function to find prices between unix and endbarrier_unix
     def find_prices_in_range(start_unix, end_unix):
-        mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
+        #mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
+        mask = (price_df_values[:, 0]) & (price_df_values[:, 0])
         return price_df_values[mask, 1]
 
     # Apply the function to each row
@@ -575,7 +576,7 @@ def calculate_barriers_R(df, lookback):
             end_pips = prices[-1] *10000
             pct = pip_close / end_pips
 
-            return 0, prices[-1], pct
+            return np.nan, prices[-1], pct
         
         if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
             #pct = close / prices[upper_hits[0]]
