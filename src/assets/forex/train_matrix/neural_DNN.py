@@ -42,7 +42,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df.dropna(inplace=True)
     print('new_df', df.head())
     df.dropna(how='all', inplace=True)
-    df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
+    df['label'] = df['label'].map({-1: 1, 0: 1, 1: 2})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
@@ -79,8 +79,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
   #  smote_tomek = SMOTETomek()
   #  X_train_res, y_train_res = smote_tomek.fit_resample(X_train, y_train)
 
-    y_train = tf.keras.utils.to_categorical(y_train, num_classes=3)
-    y_test = tf.keras.utils.to_categorical(y_test, num_classes=3)
+    y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
+    y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
     model = models.Sequential()
     model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
@@ -126,7 +126,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     log_loss_value = log_loss(y_test, y_pred_proba)
     print(f'Log Loss: {log_loss_value}')
 
-    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_0', 'Proba_Class_1', 'Proba_Class_2'])
+    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_1', 'Proba_Class_2'])
 
     test_results = test_data.reset_index(drop=True)
     test_results = pd.concat([test_results, proba_df], axis=1)
