@@ -201,7 +201,7 @@ def prepare_data():
     
     asset = 'EURUSD'
     dollar_amount =10000
-    lookback = 6
+    lookback = 4
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
@@ -271,10 +271,10 @@ def train_data(filtered_df,asset,lookback):
 
 if __name__ == "__main__":
     asset = "EURUSD"
-   # prepare_data()
+    prepare_data()
     
    # send_email.run_email()
     df = pd.read_parquet('final_df.parquet')
-    train_data(df, asset,6)
+    train_data(df, asset,4)
  #   send_email.run_email()
     
