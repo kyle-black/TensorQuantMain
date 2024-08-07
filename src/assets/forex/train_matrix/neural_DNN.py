@@ -48,7 +48,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 12
+    n_components = 7
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
