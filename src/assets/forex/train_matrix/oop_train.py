@@ -249,10 +249,11 @@ def prepare_data():
     tEvents = fm.create_CUMSUM_filter()
 
     print('tEvents:',len(tEvents))
-    filtered_df = df[df.index.isin(tEvents)]
+   # filtered_df = df[df.index.isin(tEvents)]
+    filtered_df =df
     filtered_df.to_parquet('final_df.parquet')
     #print('filtered_df:',filtered_df)
-    filtered_df = df
+   # filtered_df = df
     #filtered_df =df
     #filtered_df.dropna(inplace=True)
     
