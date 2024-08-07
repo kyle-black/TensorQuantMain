@@ -99,7 +99,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
-    model.add(layers.Dense(3, activation='softmax'))
+    model.add(layers.Dense(2, activation='softmax'))
 
     class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train, axis=1)), y=np.argmax(y_train, axis=1))
     class_weights = dict(enumerate(class_weights))
