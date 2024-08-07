@@ -538,7 +538,7 @@ def calculate_barriers_R(df, lookback):
     df['lower_barrier'] = df['Close'] * (1 - 2 * daily_volatility)
     
     # Calculate lookback in seconds
-    lookback_seconds = lookback * 3600
+    lookback_seconds = (lookback*5) * 3600
     df['endbarrier_unix'] = df['unix'] + lookback_seconds
 
     # Copy df to price_df and keep only 'unix' and 'Close'
@@ -549,9 +549,9 @@ def calculate_barriers_R(df, lookback):
 
     # Function to find prices between unix and endbarrier_unix
     def find_prices_in_range(start_unix, end_unix):
-        #mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
+        mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
       #  mask = (price_df_values[:, 0])
-        return price_df_values[:, 1]
+        return price_df_values[mask, 1]
 
     # Apply the function to each row
     df['prices_in_range'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
