@@ -35,7 +35,10 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     print('columns pre:', df.columns)
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
-    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume']]
+    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
+       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
+       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
+       'chikou_span']]
     print('new_df', df.head())
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 1, 1: 2})
@@ -44,7 +47,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 6
+    n_components = 12
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
