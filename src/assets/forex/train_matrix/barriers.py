@@ -598,6 +598,8 @@ def calculate_barriers_R(df, lookback):
     end_time = time.time()
     runtime = end_time - start_time
     print(f'Function runtime: {runtime}')
+
+    df.to_csv('barriers_results.csv')
     
     return df, daily_volatility
 
