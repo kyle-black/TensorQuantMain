@@ -1,25 +1,12 @@
+import pandas as pd
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers, models
-
-import pandas as pd
-import crossvalidation
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-import numpy as np
-from sklearn.metrics import log_loss
 from sklearn.utils.class_weight import compute_class_weight
-from imblearn.over_sampling import SMOTE
-
-import tensorflow as tf
-from tensorflow.keras import layers, models
-import pandas as pd
+from sklearn.metrics import log_loss
 import crossvalidation
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-from sklearn.metrics import log_loss
-from sklearn.utils.class_weight import compute_class_weight
-from imblearn.combine import SMOTETomek
 
 def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
     if asset is not None:
@@ -28,19 +15,16 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     start_date = pd.to_datetime('2010-01-01')
     end_date = pd.to_datetime('2023-01-01')
     threshold = 0.7
-    print('################### cols:',df.columns)
     startlookback = lookback * 10
 
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    print('columns pre:', df.columns)
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
     df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span']]
     df.dropna(inplace=True)
-    print('new_df', df.head())
     df.dropna(how='all', inplace=True)
     df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -75,9 +59,6 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     pca = PCA(n_components=n_components)
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
-
-  #  smote_tomek = SMOTETomek()
-  #  X_train_res, y_train_res = smote_tomek.fit_resample(X_train, y_train)
 
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
@@ -126,11 +107,21 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     log_loss_value = log_loss(y_test, y_pred_proba)
     print(f'Log Loss: {log_loss_value}')
 
-    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_1', 'Proba_Class_2'])
+    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_0', 'Proba_Class_1'])
 
+    # Add back the selected columns to the test results
     test_results = test_data.reset_index(drop=True)
     test_results = pd.concat([test_results, proba_df], axis=1)
     test_results['True_Label'] = np.argmax(y_test, axis=1)
+
+    # Adding back the columns from the prices DataFrame
+    test_results['Close'] = startprice.reset_index(drop=True)
+    test_results['touch_price'] = endprice.reset_index(drop=True)
+    test_results['Date'] = Dates.reset_index(drop=True)
+    test_results['endbarrier_unix'] = enddate.reset_index(drop=True)
+    test_results['upper_barrier'] = upperbarrier.reset_index(drop=True)
+    test_results['lower_barrier'] = lowerbarrier.reset_index(drop=True)
+
     test_results.to_csv('tester_df.csv')
     print(test_results)
 
