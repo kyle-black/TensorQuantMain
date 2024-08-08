@@ -565,7 +565,7 @@ def calculate_barriers_R(df, lookback):
         
         # Use numpy to find the first occurrence of crossing the barriers
         if prices.size == 0:
-            return 0, np.nan, np.nan
+            return np.nan, np.nan, np.nan
         
         upper_hits = np.where(prices > upper_barrier)[0]
         lower_hits = np.where(prices < lower_barrier)[0]

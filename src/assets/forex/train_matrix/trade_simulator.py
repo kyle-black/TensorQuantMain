@@ -25,6 +25,9 @@ make_trade(account, None, random_trade)
 
 # Create a new DataFrame from the selected trades
 new_df = pd.DataFrame(selected_trades)
-
+new_df['pct_change'] = new_df['Close']/new_df['touch_price']
 # Show the new DataFrame
+print(new_df.columns)
+
+new_df = new_df[['Close','touch_price', 'upper_barrier', 'lower_barrier','pct_change', 'Proba_Class_0', 'Proba_Class_1','True_Label']]
 print(new_df.head())
