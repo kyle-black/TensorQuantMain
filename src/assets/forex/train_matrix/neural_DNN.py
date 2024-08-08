@@ -47,6 +47,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
+    pricetouch = prices['prices_in_range'].iloc[test_idx]
 
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
@@ -121,6 +122,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     test_results['endbarrier_unix'] = enddate.reset_index(drop=True)
     test_results['upper_barrier'] = upperbarrier.reset_index(drop=True)
     test_results['lower_barrier'] = lowerbarrier.reset_index(drop=True)
+    test_results['price_in_range'] = pricetouch.reset_index(drop=True)
 
     test_results.to_csv('tester_df.csv')
     print(test_results)
