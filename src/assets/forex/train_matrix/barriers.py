@@ -578,14 +578,14 @@ def calculate_barriers_R(df, lookback):
 
             return np.nan, prices[-1], pct
         
-        if upper_hits.size > 0 and (lower_hits.size == 0 or upper_hits[0] < lower_hits[0]):
+        if upper_hits.size > 0 and (lower_hits.size == 0 or price_df_values[upper_hits[0], 0] < price_df_values[lower_hits[0], 0]):
             #pct = close / prices[upper_hits[0]]
             end_pips = prices[-1] *10000
             pct = pip_close / end_pips
             
             
             return 1, prices[upper_hits[0]], pct
-        elif lower_hits.size > 0 and (upper_hits.size == 0 or lower_hits[0] < upper_hits[0]):
+        elif lower_hits.size > 0 and (upper_hits.size == 0 or price_df_values[lower_hits[0], 0] < price_df_values[upper_hits[0], 0]):
             #pct = close / prices[lower_hits[0]]
             end_pips = prices[lower_hits[0]] *10000
             pct = pip_close / end_pips
