@@ -590,7 +590,7 @@ def calculate_barriers_R(df, lookback):
             end_pips = prices[lower_hits[0]] *10000
             pct = pip_close / end_pips
 
-            return -1, prices[lower_hits[0]], pct
+            return 0, prices[lower_hits[0]], pct
 
     # Apply the price_barrier_check function to each row
     df[['label', 'touch_price','pct']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
