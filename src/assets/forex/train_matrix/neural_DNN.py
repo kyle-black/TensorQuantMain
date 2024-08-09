@@ -24,8 +24,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span']]
-    df.dropna(inplace=True)
-    df.dropna(how='all', inplace=True)
+    
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
@@ -48,6 +47,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
     pricetouch = prices['prices_in_range'].iloc[test_idx]
+
+    df.dropna(inplace=True)
+    df.dropna(how='all', inplace=True)
 
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
