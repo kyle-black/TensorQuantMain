@@ -1,33 +1,124 @@
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('tester_df.csv')
 
-print(df.head())
+# Define the function to simulate trades
+def trade_dataframe_creator(df):
+    
+    data_length = len(df)
 
-account = 10000
-random_trade = np.random.randint(4000, size=(100))
-
-random_trade =np.sort(random_trade)
-
-# Initialize an empty list to store the selected trades
-selected_trades = []
-
-def make_trade(account, ledger, randomizer):
-    ### create trade randomizer
+    #Randomize Trading sequence
+    random_trade = np.sort(np.random.randint(data_length, size=(100)))
+    
+    selected_trades = []
     for i in random_trade:
         trade = df.iloc[i]
         selected_trades.append(trade)
-        print(trade)
+       # print(trade)
 
-# Call the function
-make_trade(account, None, random_trade)
+    # Create a new DataFrame from the selected trades
+    new_df = pd.DataFrame(selected_trades)
 
-# Create a new DataFrame from the selected trades
-new_df = pd.DataFrame(selected_trades)
-new_df['pct_change'] = new_df['Close']/new_df['touch_price']
-# Show the new DataFrame
-print(new_df.columns)
+    # Calculate the percentage change
+    new_df['pct_change'] = new_df['Close'] / new_df['touch_price']
 
-new_df = new_df[['Close','touch_price', 'upper_barrier', 'lower_barrier','pct_change', 'Proba_Class_0', 'Proba_Class_1','True_Label']]
-print(new_df.head())
+    # Initialize the 'Choice' column
+    new_df['Choice'] = np.nan
+    new_df['Accurate'] = np.nan
+    new_df['Accurate'] = new_df['Accurate'].astype(bool)
+    # Iterate over the DataFrame and set 'Choice' based on the probabilities
+    for idx, row in new_df.iterrows():
+        if row['Proba_Class_0'] >= 0.50:
+            new_df.at[idx, 'Choice'] = 0
+        elif row['Proba_Class_1'] >= 0.50:
+            new_df.at[idx, 'Choice'] = 1
+
+    for idx, row in new_df.iterrows():
+        if row['Choice'] == row['True_Label']:
+            new_df.at[idx, 'Accurate'] = True
+        else:   new_df.at[idx, 'Accurate'] = False
+
+    new_df = new_df[['Close','touch_price', 'upper_barrier', 'lower_barrier', 'pct_change', 'Proba_Class_0', 'Proba_Class_1', 'True_Label', 'Choice', 'Accurate']]
+
+    return new_df
+
+
+
+
+def trade_calculate(df,leverage, lot_size):
+
+    # Calculate total trade size (e.g., 10000 * 1.07672)
+    total_trade_size = lot_size * df['Close']
+
+    # Calculate required margin (e.g., (10,767.20 / 50) for 50:1 leverage)
+    required_margin = total_trade_size / leverage
+
+    # Calculate starting pip value
+    start_pip_value = 0.0001 * lot_size / df['Close']
+    df['start_pip_value'] = start_pip_value
+
+    # Calculate end pip value (based on touch price)
+    end_pip_value = 0.0001 * lot_size / df['touch_price']
+    df['end_pip_value'] = end_pip_value
+
+    # Initialize 'net_pips' column
+    df['net_pip_value'] = np.nan
+    df['net_trade_value'] = np.nan
+    df['Profit_Loss'] = np.nan
+    # Iterate through each row to calculate 'net_pips'
+    for idx, row in df.iterrows():
+        net_pips = row['end_pip_value'] - row['start_pip_value']
+        df.at[idx, 'net_pip_value'] = net_pips
+        net_trade_value = net_pips * lot_size
+        df.at[idx,'net_trade_value'] = net_trade_value
+        if row['Accurate'] == True:
+            if net_trade_value > 0:
+                profit_loss = net_trade_value
+                df.at[idx,'Profit_Loss'] = profit_loss
+            else:
+                profit_loss = abs(net_trade_value)
+                df.at[idx,'Profit_Loss'] = profit_loss
+        elif row['Accurate'] ==False:
+            if net_trade_value > 0:
+                profit_loss = -net_trade_value
+                df.at[idx,'Profit_Loss'] = profit_loss
+            else:
+                profit_loss = net_trade_value
+                df.at[idx,'Profit_Loss'] = profit_loss
+
+
+    return df
+   
+def trade_simulate(df,account):
+
+    for idx, row in df.iterrows():
+        account += row['Profit_Loss']
+
+        print('current_account balance',account) 
+    return account
+
+
+
+#if __name__ in "_main__":
+
+df = pd.read_csv('tester_df.csv')
+
+# Set initial account balance
+account = 1000
+
+### Simple
+new_df = trade_dataframe_creator(df)
+print(new_df)
+leverage =50
+lot_size =10000
+
+new_df = trade_calculate(new_df, leverage, lot_size)
+print(new_df)
+print(trade_simulate(new_df, account))
+
+
+
+
+        
+
+
