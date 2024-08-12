@@ -17,9 +17,6 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     threshold = 0.7
     startlookback = lookback * 10
 
-    df.dropna(inplace=True)
-    df.dropna(how='all', inplace=True)
-
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
@@ -53,7 +50,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
     pricetouch = prices['prices_in_range'].iloc[test_idx]
 
-    
+    df.dropna(inplace=True)
+    df.dropna(how='all', inplace=True)
 
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
