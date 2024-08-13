@@ -4,27 +4,19 @@ import pandas as pd
 import numpy as np
 import features
 import bar_creation as bc
-
-
-
-#Load TF model
-model = tf.keras.models.load_model('models/EURUSD/saved_models/EURUSD_1024_1.h5')
-
-# Load scaler
-scaler = joblib.load('models/EURUSD/saved_models/EURUSD_1024_1_scaler.pkl')
-
-# Load PCA
-pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_1_pca.pkl')
+import live_data
 
 
 
 
 
-def get_live_data():
-    pass
 
 
-def prepare_data(df, dollar_threshold, asset, window_length):
+
+
+
+def prepare_data( dollar_threshold, asset, window_length):
+    df = live_data.latest_data()
     dollar_df = bc.get_dollar_bars(df,dollar_threshold)
     feature_df = features.add_price_features(df,asset, window_length)
 
@@ -32,8 +24,11 @@ def prepare_data(df, dollar_threshold, asset, window_length):
 
 
 
-def make_predictions(pca,scaler, model, df, dollar_threshold, asset, window_length):
-    df = prepare_data(df, dollar_threshold, asset, window_length)
+def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length):
+    df = prepare_data(dollar_threshold, asset, window_length)
+    
+    return df
+    '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
@@ -46,9 +41,23 @@ def make_predictions(pca,scaler, model, df, dollar_threshold, asset, window_leng
     predictions = model.predict(pca_df)
 
     return predictions
-    
-    
+    '''
     
 
+if __name__ in "__main__":
+    #Load TF model
+    model = tf.keras.models.load_model('models/EURUSD/saved_models/EURUSD_1024_1.h5')
+
+    # Load scaler
+    scaler = joblib.load('models/EURUSD/saved_models/EURUSD_1024_1_scaler.pkl')
+
+    # Load PCA
+    pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_1_pca.pkl')
+    
+    dollar_threshold =10000
+    asset ='EURUSD'
+    window_length = 6
+
+    print(make_predictions(pca, scaler, model, dollar_threshold, asset, window_length))
 
 

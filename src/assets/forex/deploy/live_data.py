@@ -5,7 +5,7 @@ import datetime
 
 
 
-def latest_data_60():
+def latest_data():
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
 
@@ -35,5 +35,5 @@ def latest_data_60():
 
 
 
-if __name__ in "__main__":
-    print(latest_data_60())
+#if __name__ in "__main__":
+#    print(latest_data_60())
