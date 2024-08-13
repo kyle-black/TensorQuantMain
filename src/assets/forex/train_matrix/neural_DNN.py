@@ -98,9 +98,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=10, restore_best_weights=True)
     
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
 
