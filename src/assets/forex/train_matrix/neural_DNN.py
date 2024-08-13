@@ -71,7 +71,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
     model = models.Sequential()
-    model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dense(256, activation='relu', input_shape=(20,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
