@@ -38,8 +38,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     n_components = 16
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-1]
-    test_idx = test_datasets[-1]
+    train_idx = train_datasets[-2]
+    test_idx = test_datasets[-2]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
