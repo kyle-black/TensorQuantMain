@@ -35,7 +35,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 20
+    n_components = 16
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -63,9 +63,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    pca = PCA(n_components=n_components)
-    X_train = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
+   # pca = PCA(n_components=n_components)
+   # X_train = pca.fit_transform(X_train)
+   # X_test = pca.transform(X_test)
 
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
@@ -136,7 +136,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
+   # joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
 
 
     model.save('EURUSD_1024_1.h5')
