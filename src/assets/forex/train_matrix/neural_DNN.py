@@ -63,15 +63,15 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-   # pca = PCA(n_components=n_components)
-   # X_train = pca.fit_transform(X_train)
-   # X_test = pca.transform(X_test)
+    pca = PCA(n_components=n_components)
+    X_train = pca.fit_transform(X_train)
+    X_test = pca.transform(X_test)
 
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
     model = models.Sequential()
-    model.add(layers.Dense(256, activation='relu', input_shape=(20,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
@@ -94,7 +94,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
 
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
-        loss='categorical_crossentropy',
+        loss='binary_crossentropy',
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
