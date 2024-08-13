@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import log_loss
 import crossvalidation
+import joblib
 
 def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
     if asset is not None:
@@ -131,5 +132,15 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
 
     test_results.to_csv('tester_df.csv')
     print(test_results)
+    # Save the scaler
+    joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
+
+    # Save the PCA
+    joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
+
+
+    model.save('EURUSD_1024_1.h5')
+
+
 
     return model, y_pred_proba, y_test, test_results
