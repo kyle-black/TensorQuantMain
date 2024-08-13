@@ -20,7 +20,7 @@ def upload_file_to_spaces(file_path, space_name, region, access_key, secret_key)
         client.upload_fileobj(data, space_name, file_path)
 
 # Parameters
-file_path = 'test_data.csv'  # Path to your file
+file_path = 'saved_models/EURUSD_1024_1.h5'  # Path to your file
 space_name = 'financedata'  # Name of your Space
 region = 'nyc3'  # Region of your Space, e.g., 'nyc3'
 access_key = os.environ['access_key']  
