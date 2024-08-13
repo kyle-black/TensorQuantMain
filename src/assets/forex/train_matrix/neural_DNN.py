@@ -9,6 +9,21 @@ from sklearn.metrics import log_loss
 import crossvalidation
 import joblib
 
+
+
+
+class MonitorActivation(layers.Layer):
+    def __init__(self, **kwargs):
+        super(MonitorActivation, self).__init__(**kwargs)
+        self.activation_values = []
+
+    def call(self, inputs):
+        self.activation_values.append(tf.reduce_mean(inputs))
+        return tf.nn.relu(inputs)
+
+
+
+
 def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
     if asset is not None:
         asset = asset
@@ -103,7 +118,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
-
+    print("Mean activation values:", MonitorActivation.activation_values)
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
     print(f'Test precision: {test_precision}')
