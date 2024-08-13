@@ -26,8 +26,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
     df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
-       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span']]
+       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -133,13 +132,13 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     test_results.to_csv('tester_df.csv')
     print(test_results)
     # Save the scaler
-    joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
+    #joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
+    #joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
 
 
-    model.save('EURUSD_1024_1.h5')
+    #model.save('EURUSD_1024_1.h5')
 
 
 
