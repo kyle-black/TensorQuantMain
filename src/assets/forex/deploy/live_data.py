@@ -36,4 +36,4 @@ def latest_data_60():
 
 
 if __name__ in "__main__":
-    latest_data_60()
+    print(latest_data_60())
