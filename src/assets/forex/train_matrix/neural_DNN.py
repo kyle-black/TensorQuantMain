@@ -29,8 +29,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span']]
     
-    # Convert labels to single column with 0 or 1
-    # Assuming 'label' column is already 0 or 1. If not, you might need to map it accordingly.
+    #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
@@ -44,7 +43,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
-
+  #  prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
+    
     pct_change = prices['pct'].iloc[test_idx]
     startprice = prices['Close'].iloc[test_idx]
     endprice = prices['touch_price'].iloc[test_idx]
@@ -53,6 +53,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
     pricetouch = prices['prices_in_range'].iloc[test_idx]
+
 
     X_train = train_data[feature_cols]
     y_train = train_data[target_col]
@@ -66,12 +67,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
-    # No need to convert to categorical if using sigmoid activation
-    # y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
-    # y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
-
-    y_train = y_train.values
-    y_test = y_test.values
+    y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
+    y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
     model = models.Sequential()
     model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
@@ -90,10 +87,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
-    # Use sigmoid activation for binary classification
-    model.add(layers.Dense(1, activation='sigmoid'))
+    model.add(layers.Dense(2, activation='softmax'))
 
-    class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(y_train), y=y_train)
+    class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train, axis=1)), y=np.argmax(y_train, axis=1))
     class_weights = dict(enumerate(class_weights))
 
     model.compile(
@@ -102,9 +98,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=10, restore_best_weights=True)
     
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
 
@@ -118,12 +114,12 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     log_loss_value = log_loss(y_test, y_pred_proba)
     print(f'Log Loss: {log_loss_value}')
 
-    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_1'])
+    proba_df = pd.DataFrame(y_pred_proba, columns=['Proba_Class_0', 'Proba_Class_1'])
 
     # Add back the selected columns to the test results
     test_results = test_data.reset_index(drop=True)
     test_results = pd.concat([test_results, proba_df], axis=1)
-    test_results['True_Label'] = y_test
+    test_results['True_Label'] = np.argmax(y_test, axis=1)
 
     # Adding back the columns from the prices DataFrame
     test_results['Close'] = startprice.reset_index(drop=True)
@@ -140,8 +136,11 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
+   # joblib.dump(pca, 'EURUSD_1024_1_pca.pkl')
+
 
     model.save('EURUSD_1024_1.h5')
+
+
 
     return model, y_pred_proba, y_test, test_results
