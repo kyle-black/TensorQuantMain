@@ -23,7 +23,7 @@ def upload_file_to_spaces(file_path, space_name, region, access_key, secret_key)
 file_path = 'test_data.csv'  # Path to your file
 space_name = 'financedata'  # Name of your Space
 region = 'nyc3'  # Region of your Space, e.g., 'nyc3'
-access_key = os.envion['access_key']  
+access_key = os.environ['access_key']  
 secret_key = os.access_key.environ['secret_key']  # Your Spaces Secret Key
 
 # Upload the file
