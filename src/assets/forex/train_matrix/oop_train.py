@@ -275,6 +275,6 @@ if __name__ == "__main__":
     
    # send_email.run_email()
     df = pd.read_parquet('final_df.parquet')
-    train_data(df, asset,6)
+    train_data(df, asset,20)
  #   send_email.run_email()
     
