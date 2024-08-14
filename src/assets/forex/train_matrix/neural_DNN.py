@@ -43,12 +43,8 @@ def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close_USDCAD',
-       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns', 'durableGoods', '15Yr_Fixed', '30Yr_Fixed', 'CPI', 'GDP',
-       'Production_Total_Index', 'Yields_COD', 'consumerSentiment',
-       'federalFunds', 'inflation', 'inflationRate', 'initialClaims',
-       'nominalPotentialGDP', 'rates_CreditCards', 'realGDP',
-       'realGDPPerCapita', 'retailMoneyFunds', 'retailSales', 'pips', 'change',
-       'pct_change', 'day_of_week', ]]
+       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns',
+        'pct_change', 'day_of_week', ]]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
