@@ -24,7 +24,7 @@ class MonitorActivation(layers.Layer):
 
 
 
-def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=100):
+def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=200):
     if asset is not None:
         asset = asset
 
@@ -51,7 +51,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 12
+    n_components = 14
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -114,9 +114,9 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=10, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10, restore_best_weights=True)
     
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='accuracy', factor=0.5, patience=5, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
     #print("Mean activation values:", MonitorActivation.activation_values)
