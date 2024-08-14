@@ -5,7 +5,7 @@ import numpy as np
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
 
-    df = df.query('Proba_Class_0 > 0.95 or Proba_Class_1 > 0.95')
+    df = df.query('Proba_Class_0 > 0.90 or Proba_Class_1 > 0.90')
     
     data_length = len(df)
     print('data_length',data_length)
