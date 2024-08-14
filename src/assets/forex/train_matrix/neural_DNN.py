@@ -120,7 +120,7 @@ def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=
     
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1, callbacks=[early_stopping], class_weight=class_weights)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping])
     #print("Mean activation values:", MonitorActivation.activation_values)
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
