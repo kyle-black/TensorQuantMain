@@ -5,12 +5,12 @@ import numpy as np
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
 
-    df = df.query('Proba_Class_0 > 0.90 or Proba_Class_1 > 0.90')
+    df = df.query('Proba_Class_0 > 0.50 or Proba_Class_1 > 0.50')
     
     data_length = len(df)
     print('data_length',data_length)
     #Randomize Trading sequence
-    random_trade = np.sort(np.random.randint(data_length, size=(50)))
+    random_trade = np.sort(np.random.randint(data_length, size=(500)))
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
     for i in random_trade:
@@ -50,54 +50,49 @@ def trade_dataframe_creator(df):
 
 
 
-def trade_calculate(df,leverage, lot_size):
+def trade_calculate(df, leverage, base_lot_size):
+
+    # Calculate adjusted lot size based on probability
+    df['adjusted_lot_size'] = df['major_proba'] * base_lot_size
 
     # Calculate total trade size (e.g., 10000 * 1.07672)
-    
-   # for idx,row in df.iterrows():
-
-
-    total_trade_size = lot_size * df['Close']
+    total_trade_size = df['adjusted_lot_size'] * df['Close']
 
     # Calculate required margin (e.g., (10,767.20 / 50) for 50:1 leverage)
     required_margin = total_trade_size / leverage
 
     # Calculate starting pip value
-    start_pip_value = 0.0001 * lot_size / df['Close']
-    df['start_pip_value'] = start_pip_value
+    df['start_pip_value'] = 0.0001 * df['adjusted_lot_size'] / df['Close']
 
     # Calculate end pip value (based on touch price)
-    end_pip_value = 0.0001 * lot_size / df['touch_price']
-    df['end_pip_value'] = end_pip_value
+    df['end_pip_value'] = 0.0001 * df['adjusted_lot_size'] / df['touch_price']
 
     # Initialize 'net_pips' column
     df['net_pip_value'] = np.nan
     df['net_trade_value'] = np.nan
     df['Profit_Loss'] = np.nan
+
     # Iterate through each row to calculate 'net_pips'
     for idx, row in df.iterrows():
         
         net_pips = row['end_pip_value'] - row['start_pip_value']
         df.at[idx, 'net_pip_value'] = net_pips
 
-        lot_size =  lot_size
-        net_trade_value = net_pips * lot_size
-        df.at[idx,'net_trade_value'] = net_trade_value
-        if row['Accurate'] == True:
+        net_trade_value = net_pips * row['adjusted_lot_size']
+        df.at[idx, 'net_trade_value'] = net_trade_value
+        
+        if row['Accurate']:
             if net_trade_value > 0:
                 profit_loss = net_trade_value
-                df.at[idx,'Profit_Loss'] = profit_loss
             else:
                 profit_loss = abs(net_trade_value)
-                df.at[idx,'Profit_Loss'] = profit_loss
-        elif row['Accurate'] ==False:
+        else:
             if net_trade_value > 0:
                 profit_loss = -net_trade_value
-                df.at[idx,'Profit_Loss'] = profit_loss
             else:
                 profit_loss = net_trade_value
-                df.at[idx,'Profit_Loss'] = profit_loss
-
+                
+        df.at[idx, 'Profit_Loss'] = profit_loss
 
     return df
    
@@ -113,10 +108,10 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('testscaler.csv')
+df = pd.read_csv('tester_df3.csv')
 
 # Set initial account balance
-account = 30000
+account = 10000
 
 ### Simple
 new_df = trade_dataframe_creator(df)
