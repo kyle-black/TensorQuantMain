@@ -24,7 +24,7 @@ class MonitorActivation(layers.Layer):
 
 
 
-def run_model(df, asset, lookback, learning_rate=0.001, batch_size=32, epochs=200):
+def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=200):
     if asset is not None:
         asset = asset
 
@@ -83,6 +83,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=32, epochs=20
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
+    
+
     y_train = tf.keras.utils.to_categorical(y_train, num_classes=2)
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
@@ -118,7 +120,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=32, epochs=20
     
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler], class_weight=class_weights)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping], class_weight=class_weights)
     #print("Mean activation values:", MonitorActivation.activation_values)
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
@@ -148,6 +150,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=32, epochs=20
 
     test_results.to_csv('tester_df.csv')
     print(test_results)
+    print('length of train data:',len(X_train))
     # Save the scaler
     joblib.dump(scaler, 'EURUSD_1024_1_scaler.pkl')
 
