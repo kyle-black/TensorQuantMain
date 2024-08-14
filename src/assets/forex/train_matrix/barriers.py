@@ -538,7 +538,7 @@ def calculate_barriers_R(df, lookback):
     df['lower_barrier'] = df['Close'] * (1 - 2 * daily_volatility)
     
     # Calculate lookback in seconds
-    lookback_seconds = (lookback*10) * 3600
+    lookback_seconds = (lookback*2) * 3600
     df['endbarrier_unix'] = df['unix'] + lookback_seconds
 
     # Copy df to price_df and keep only 'unix' and 'Close'
