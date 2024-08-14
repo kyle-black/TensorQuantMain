@@ -43,7 +43,12 @@ def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close_USDCAD',
-       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
+       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns', 'durableGoods', '15Yr_Fixed', '30Yr_Fixed', 'CPI', 'GDP',
+       'Production_Total_Index', 'Yields_COD', 'consumerSentiment',
+       'federalFunds', 'inflation', 'inflationRate', 'initialClaims',
+       'nominalPotentialGDP', 'rates_CreditCards', 'realGDP',
+       'realGDPPerCapita', 'retailMoneyFunds', 'retailSales', 'pips', 'change',
+       'pct_change', 'day_of_week', ]]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -51,11 +56,11 @@ def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 14
+    n_components = 20
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-3]
-    test_idx = test_datasets[-3]
+    train_idx = train_datasets[-1]
+    test_idx = test_datasets[-1]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
