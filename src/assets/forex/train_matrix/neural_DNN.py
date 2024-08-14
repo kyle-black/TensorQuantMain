@@ -24,7 +24,7 @@ class MonitorActivation(layers.Layer):
 
 
 
-def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=500):
+def run_model(df, asset, lookback, learning_rate=0.001, batch_size=32, epochs=200):
     if asset is not None:
         asset = asset
 
