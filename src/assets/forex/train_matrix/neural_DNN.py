@@ -39,10 +39,11 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
-    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
+    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span']]
+       'chikou_span', 'Close_AUDUSD', 'Close_USDCAD',
+       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
