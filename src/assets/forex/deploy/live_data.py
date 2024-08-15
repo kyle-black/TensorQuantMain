@@ -23,7 +23,7 @@ def latest_data(securities):
         nifty_index_data = tv.get_hist(symbol=f'{i}',exchange='OANDA',interval=Interval.in_1_minute,n_bars=10000)
 
         df= nifty_index_data
-
+        print(df)
         df =df.reset_index()
         df.rename(columns = {'datetime':f'{i}_Date','open': f'{i}_Open', 'high':f'{i}_High', 'low':f'{i}_Low', 'close':f'{i}_Close','volume':f'{i}_Volume'}, inplace=True)
 
