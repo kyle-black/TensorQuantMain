@@ -205,11 +205,11 @@ def prepare_data():
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
-    raw = raw[:3799300]
+    raw = raw[:]
 
     # Compute the result and convert to a pandas DataFrame
     raw = raw.compute()
-    raw = raw[:-1000]
+    raw = raw[:3799300]
     print(raw)
     cb = CreateBars(asset,raw, dollar_amount)
     print('Creating Dollar Bars')
