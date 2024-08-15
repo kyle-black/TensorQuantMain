@@ -202,14 +202,14 @@ def prepare_data():
     asset = 'EURUSD'
     dollar_amount = 20000
     lookback = 10
-   # '''
+    
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
     raw = raw[:]
 
     # Compute the result and convert to a pandas DataFrame
     raw = raw.compute()
-    raw = raw[:-1000]
+    raw = raw[:3799300]
     print(raw)
     cb = CreateBars(asset,raw, dollar_amount)
     print('Creating Dollar Bars')
@@ -240,24 +240,24 @@ def prepare_data():
     fm = FeatureMaker(df, lookback, asset,dv)
     df= fm.feature_add()
     
-  #  '''
+
     
 
 
-   # df = pd.read_parquet('final_df.parquet')
-    fm = FeatureMaker(df, lookback, asset)
-   # tEvents = fm.create_CUMSUM_filter()
+    #df = pd.read_parquet('final_df.parquet')
+   # fm = FeatureMaker(df, lookback, asset)
+    tEvents = fm.create_CUMSUM_filter()
 
-   # print('tEvents:',len(tEvents))
+    print('tEvents:',len(tEvents))
    # filtered_df = df[df.index.isin(tEvents)]
-    #filtered_df =df
-    df.to_parquet('final_df.parquet')
+    filtered_df =df
+    filtered_df.to_parquet('final_df.parquet')
     #print('filtered_df:',filtered_df)
    # filtered_df = df
     #filtered_df =df
     #filtered_df.dropna(inplace=True)
     
-    return df
+    return filtered_df
     
     
     
