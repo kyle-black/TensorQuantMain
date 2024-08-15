@@ -202,7 +202,7 @@ def prepare_data():
     asset = 'EURUSD'
     dollar_amount = 20000
     lookback = 10
-    
+    '''
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
     raw = raw[:]
@@ -240,15 +240,15 @@ def prepare_data():
     fm = FeatureMaker(df, lookback, asset,dv)
     df= fm.feature_add()
     
-
+    '''
     
 
 
     #df = pd.read_parquet('final_df.parquet')
    # fm = FeatureMaker(df, lookback, asset)
-    tEvents = fm.create_CUMSUM_filter()
+   # tEvents = fm.create_CUMSUM_filter()
 
-    print('tEvents:',len(tEvents))
+   # print('tEvents:',len(tEvents))
    # filtered_df = df[df.index.isin(tEvents)]
     filtered_df =df
     filtered_df.to_parquet('final_df.parquet')
