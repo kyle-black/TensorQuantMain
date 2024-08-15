@@ -151,13 +151,13 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=3
     print(test_results)
     print('length of train data:',len(X_train))
     # Save the scaler
-    joblib.dump(scaler, '../deploy/models/EURUSD/EURUSD_1024_4_scaler.pkl')
+    joblib.dump(scaler, '../deploy/models/EURUSD/EURUSD_1024_5_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, '../deploy/models/EURUSD/EURUSD_1024_4_pca.pkl')
+    joblib.dump(pca, '../deploy/models/EURUSD/EURUSD_1024_5_pca.pkl')
 
 
-    model.save('../deploy/models/EURUSD/EURUSD_1024_4.h5')
+    model.save('../deploy/models/EURUSD/EURUSD_1024_5.h5')
 
 
 

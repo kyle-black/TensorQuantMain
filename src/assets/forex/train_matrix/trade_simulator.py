@@ -5,14 +5,14 @@ import numpy as np
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
 
-    df = df.query('Proba_Class_0 > 0.50 or Proba_Class_1 > 0.50')
+    df = df.query('Proba_Class_0 > 0.60 or Proba_Class_1 > 0.60')
     
     data_length = len(df)
     print('data_length',data_length)
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=400, replace=False)
+    random_trade = np.random.choice(data_length, size=408, replace=False)
     random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
@@ -121,7 +121,7 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('tester_df13.csv')
+df = pd.read_csv('tester_df21.csv')
 
 # Set initial account balance
 account = 10000
