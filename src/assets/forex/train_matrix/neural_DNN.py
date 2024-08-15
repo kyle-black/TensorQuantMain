@@ -43,7 +43,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close_USDCAD',
-       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
+        'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
