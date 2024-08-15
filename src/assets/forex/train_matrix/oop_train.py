@@ -231,12 +231,12 @@ def prepare_data():
     
    # return df
     
-    df.to_parquet('barrier_df.parquet')
+   # df.to_parquet('barrier_df.parquet')
     #return df
     
    # df.to_parquet('test_df.parquet')
     #print('testdf:',df)
-    df = pd.read_parquet('barrier_df.parquet')
+   # df = pd.read_parquet('barrier_df.parquet')
     fm = FeatureMaker(df, lookback, asset,dv)
     df= fm.feature_add()
     
