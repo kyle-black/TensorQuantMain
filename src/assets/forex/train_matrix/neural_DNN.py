@@ -39,10 +39,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
-    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
-       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
-       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span', 'Close_AUDUSD']]
+    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -50,7 +47,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 14
+    n_components = 3
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
