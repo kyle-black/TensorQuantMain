@@ -31,14 +31,14 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length):
 
 
     ##### Fit scaler
-    scaled_df = scaler.transform(prediction_df)
-    pca_df = pca.transform(scaled_df)
+    #scaled_df = scaler.transform(prediction_df)
+    #pca_df = pca.transform(scaled_df)
 
     ##### Fit Model
 
-    prediction_probas = model.fit(pca_df)
+    #prediction_probas = model.fit(pca_df)
     
-    return prediction_probas
+    return prediction_df.columns
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
