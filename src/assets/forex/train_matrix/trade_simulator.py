@@ -12,7 +12,7 @@ def trade_dataframe_creator(df):
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=500, replace=False)
+    random_trade = np.random.choice(data_length, size=400, replace=False)
     random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
@@ -58,10 +58,10 @@ def trade_calculate(df, leverage, base_lot_size, epsilon=1e-6):
     # Apply logarithmic scaling to the probability
     #df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
 
-   # df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
+    df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
 
     # Normalize the log-scaled probabilities to a reasonable range
-   # df['log_scaled_proba'] = df['log_scaled_proba'] / df['log_scaled_proba'].max()
+    df['log_scaled_proba'] = df['log_scaled_proba'] / df['log_scaled_proba'].max()
 
     # Calculate adjusted lot size based on the log-scaled probability
     df['adjusted_lot_size'] = df['major_proba'] * base_lot_size
@@ -136,7 +136,7 @@ new_df = trade_calculate(new_df, leverage, lot_size)
 print(new_df)
 print(trade_simulate(new_df, account))
 
-new_df.to_csv('traded_df12.csv')
+new_df.to_csv('traded_df20.csv')
 
 
 
