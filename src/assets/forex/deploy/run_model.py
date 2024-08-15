@@ -27,7 +27,7 @@ def prepare_data( dollar_threshold, asset, window_length):
 def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length):
     df = prepare_data(dollar_threshold, asset, window_length)
     
-    return df
+    return df.columns
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
@@ -54,7 +54,7 @@ if __name__ in "__main__":
     # Load PCA
     pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_1_pca.pkl')
     
-    dollar_threshold =10000
+    dollar_threshold =20000
     asset ='EURUSD'
     window_length = 6
 
