@@ -209,7 +209,7 @@ def prepare_data():
 
     # Compute the result and convert to a pandas DataFrame
     raw = raw.compute()
-    raw = raw[:-1000]
+    raw = raw[:-50]
     print(raw)
     cb = CreateBars(asset,raw, dollar_amount)
     print('Creating Dollar Bars')
