@@ -43,7 +43,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close_USDCAD',
-        'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
+       'Close_USDCHF', 'AUDUSD_Returns', 'USDCAD_Returns', 'USDCHF_Returns']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -54,8 +54,8 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     n_components = 24
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-3]
-    test_idx = test_datasets[-3]
+    train_idx = train_datasets[-1]
+    test_idx = test_datasets[-1]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
