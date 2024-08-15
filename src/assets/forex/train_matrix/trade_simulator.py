@@ -12,8 +12,8 @@ def trade_dataframe_creator(df):
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=400, replace=False)
-    #random_trade = np.sort(random_trade)
+    random_trade = np.random.choice(data_length, size=500, replace=False)
+    random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
     for i in random_trade:
@@ -21,7 +21,8 @@ def trade_dataframe_creator(df):
         selected_trades.append(trade)
         print(i)
 
-    # Create a new DataFrame from the selected trades
+    # Create a new DataFrame from the sele
+    # cted trades
     new_df = pd.DataFrame(selected_trades)
 
     # Calculate the percentage change
@@ -55,13 +56,15 @@ def trade_dataframe_creator(df):
 def trade_calculate(df, leverage, base_lot_size, epsilon=1e-6):
 
     # Apply logarithmic scaling to the probability
-    df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
+    #df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
+
+   # df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
 
     # Normalize the log-scaled probabilities to a reasonable range
-    df['log_scaled_proba'] = df['log_scaled_proba'] / df['log_scaled_proba'].max()
+   # df['log_scaled_proba'] = df['log_scaled_proba'] / df['log_scaled_proba'].max()
 
     # Calculate adjusted lot size based on the log-scaled probability
-    df['adjusted_lot_size'] = df['log_scaled_proba'] * base_lot_size
+    df['adjusted_lot_size'] = df['major_proba'] * base_lot_size
 
     # Calculate total trade size (e.g., 10000 * 1.07672)
     total_trade_size = df['adjusted_lot_size'] * df['Close']
@@ -118,7 +121,7 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('tester_df12.csv')
+df = pd.read_csv('tester_df13.csv')
 
 # Set initial account balance
 account = 10000
@@ -127,7 +130,7 @@ account = 10000
 new_df = trade_dataframe_creator(df)
 print(new_df)
 leverage =50
-lot_size =1000
+lot_size =10000
 
 new_df = trade_calculate(new_df, leverage, lot_size)
 print(new_df)
