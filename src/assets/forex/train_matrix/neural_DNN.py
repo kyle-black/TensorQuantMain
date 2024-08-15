@@ -39,7 +39,10 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
     prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
-    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns']]
+    df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
+       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
+       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
+       'chikou_span', 'Close_AUDUSD']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
@@ -47,7 +50,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 3
+    n_components = 14
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -112,7 +115,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=1
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
