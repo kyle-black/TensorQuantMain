@@ -24,7 +24,7 @@ class MonitorActivation(layers.Layer):
 
 
 
-def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=120):
+def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=300):
     if asset is not None:
         asset = asset
 
@@ -42,7 +42,7 @@ def run_model(df, asset, lookback, learning_rate=0.00025, batch_size=32, epochs=
     df = df[['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span', 'Close_AUDUSD','Close_USDCAD', 'Close_USDCHF']]
+       'chikou_span', 'Close_AUDUSD', 'Close', 'Close_USDCAD', 'Close_USDCHF']]
     
     #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
 
