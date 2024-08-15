@@ -250,14 +250,14 @@ def prepare_data():
 
    # print('tEvents:',len(tEvents))
    # filtered_df = df[df.index.isin(tEvents)]
-    filtered_df =df
-    filtered_df.to_parquet('final_df.parquet')
+    #filtered_df =df
+    df.to_parquet('final_df.parquet')
     #print('filtered_df:',filtered_df)
    # filtered_df = df
     #filtered_df =df
     #filtered_df.dropna(inplace=True)
     
-    return filtered_df
+    return df
     
     
     
