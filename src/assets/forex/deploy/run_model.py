@@ -27,9 +27,18 @@ def prepare_data( dollar_threshold, asset, window_length):
 def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length):
     df = prepare_data(dollar_threshold, asset, window_length)
 
-    df = df.dropna()
+    prediction_df = df.dropna()
+
+
+    ##### Fit scaler
+    scaled_df = scaler.transform(prediction_df)
+    pca_df = pca.transform(scaled_df)
+
+    ##### Fit Model
+
+    prediction_probas = model.fit(pca_df)
     
-    return df
+    return prediction_probas
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
