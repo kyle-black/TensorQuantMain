@@ -12,8 +12,8 @@ def trade_dataframe_creator(df):
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=600, replace=False)
-    random_trade = np.sort(random_trade)
+    random_trade = np.random.choice(data_length, size=400, replace=False)
+    #random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
     for i in random_trade:
@@ -118,7 +118,7 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('tester_df6.csv')
+df = pd.read_csv('tester_df12.csv')
 
 # Set initial account balance
 account = 10000
@@ -127,13 +127,13 @@ account = 10000
 new_df = trade_dataframe_creator(df)
 print(new_df)
 leverage =50
-lot_size =10000
+lot_size =1000
 
 new_df = trade_calculate(new_df, leverage, lot_size)
 print(new_df)
 print(trade_simulate(new_df, account))
 
-new_df.to_csv('traded_df10.csv')
+new_df.to_csv('traded_df12.csv')
 
 
 
