@@ -12,7 +12,7 @@ def trade_dataframe_creator(df):
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=100, replace=False)
+    random_trade = np.random.choice(data_length, size=400, replace=False)
     random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
@@ -133,7 +133,7 @@ new_df = trade_calculate(new_df, leverage, lot_size)
 print(new_df)
 print(trade_simulate(new_df, account))
 
-new_df.to_csv('traded_df.csv')
+new_df.to_csv('traded_df10.csv')
 
 
 
