@@ -31,6 +31,7 @@ import neural_DNN
 
 
 
+
 class CreateBars:
     """Class to create dollar bars from asset data."""
 
@@ -108,12 +109,12 @@ class Analysis:
 
 
 class FeatureMaker:
-    def __init__(self, bars_df, window, asset, dv):
+    def __init__(self, bars_df, window, asset):
         # Store the bars dataframe regardless of its type (time, volume, dollar)
         self.bars_df = bars_df
         self.window =window
         self.asset= asset
-        self.dv =dv
+        
 
     def feature_add(self):
 
@@ -132,9 +133,11 @@ class FeatureMaker:
         return elbow_plot.plot_pca(result)
     
     def create_CUMSUM_filter(self):
+        
+        pass       
         """Create dollar bars from asset data."""
-        self.tEvents = gte(self.bars_df, self.dv)
-        return self.tEvents
+#        self.tEvents = gte(self.bars_df, self.dv)
+#        return self.tEvents
 
     
 
@@ -219,16 +222,14 @@ def prepare_data(dollar_amount, lookback):
     
     
     print('Applying Triple Barriers:')
-    df, dv = L.triple_barriers()
+    df = L.triple_barriers()
  
-    fm = FeatureMaker(df, lookback, asset,dv)
+    fm = FeatureMaker(df, lookback, asset)
     df= fm.feature_add()
     
 
     
-    tEvents = fm.create_CUMSUM_filter()
-
-    print('tEvents:',len(tEvents))
+  
 
     filtered_df =df
     filtered_df.to_parquet('final_df.parquet')
@@ -248,7 +249,7 @@ def train_data(df, asset,lookback,n_components,training_cols,model_num,learning_
 
 if __name__ == "__main__":
     #hyperparameter for experiment and model creation
-    model_num ='EURUSD_0816-2'
+    model_num ='EURUSD_0816-4'
     asset = "EURUSD"
     dollar_amount =10000
     lookback =10

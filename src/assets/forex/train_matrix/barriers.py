@@ -21,13 +21,15 @@ def calculate_barriers_R(df, lookback):
     # Set 'Date' as index for resampling
     df.set_index('Date', inplace=True)
     
-    # Calculate daily percentage change and daily volatility
     df['pct_change'] = df['Close'].pct_change()
-    #daily_volatility = df['pct_change'].resample('m').std().mean()
 
-    daily_volatility = df['pct_change'].std()
+# Calculate rolling standard deviation (volatility)
+    df['volatility'] = df['pct_change'].rolling(window=lookback).std()
 
-    print(daily_volatility)
+# Fill NaN values (for the initial period where there's no rolling window data)
+    df['volatility'].fillna(method='backfill', inplace=True)
+
+    #print(volatility)
     
     # Merge daily volatility back into the original dataframe
     #df = df.merge(daily_volatility.rename('daily_volatility'), left_index=True, right_index=True, how='left')
@@ -38,8 +40,8 @@ def calculate_barriers_R(df, lookback):
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 + 2 * daily_volatility)
-    df['lower_barrier'] = df['Close'] * (1 - 2 * daily_volatility)
+    df['upper_barrier'] = df['Close'] * (1 + 2 * df['volatility'])
+    df['lower_barrier'] = df['Close'] * (1 - 2 * df['volatility'])
     
     # Calculate lookback in seconds
     lookback_seconds = (lookback*10) * 3600
@@ -105,7 +107,7 @@ def calculate_barriers_R(df, lookback):
     df1 = df[4000:5000]
     df1.to_csv('barriers_results.csv')
     
-    return df, daily_volatility
+    return df
 
     
 
