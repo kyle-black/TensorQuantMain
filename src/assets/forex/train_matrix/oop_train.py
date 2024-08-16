@@ -257,7 +257,7 @@ def prepare_data():
     #filtered_df =df
     #filtered_df.dropna(inplace=True)
     
-    return filtered_dfgit 
+    return filtered_df 
     
     
     
