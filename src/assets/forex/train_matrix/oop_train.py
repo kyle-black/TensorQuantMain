@@ -283,7 +283,7 @@ if __name__ == "__main__":
     e_df['epochs']  =epochs
     e_df['training_cols'] =str(training_cols)
     
-    e_df.to_csv('experiment_tracker.csv', mode='a', index=False, header=False)
+    e_df.to_csv('experiment_tracker.csv', index=False, header=False)
  
     send_email.run_email(model_num)
     
