@@ -6,14 +6,14 @@ import mimetypes
 
 
 
-def run_email():
+def run_email(model_num):
 # Email setup
     sender_email = "kpblack87@gmail.com"
     receiver_email = "kpblack87@gmail.com"
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
-    file_path = "tester_df.csv"
+    file_path = f"test_result_{model_num}.csv"
 
     # Create the email message
     msg = EmailMessage()
@@ -40,5 +40,5 @@ def run_email():
         server.send_message(msg)
 
 
-if __name__ in "__main__":
-    run_email()
+#if __name__ in "__main__":
+#    run_email(model_num)
