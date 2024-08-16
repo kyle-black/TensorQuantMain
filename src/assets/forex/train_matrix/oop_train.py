@@ -239,8 +239,8 @@ def prepare_data(dollar_amount, lookback):
     
     
     
-def train_data(**kwargs):
-    m = Model(**kwargs)
+def train_data(df, asset,lookback,n_components,training_cols,model_num,learning_rate,batch_size,epochs):
+    m = Model(df, asset,lookback,n_components,training_cols,model_num,learning_rate,batch_size,epochs)
     print(m.train_model())
 
 
