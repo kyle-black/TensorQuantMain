@@ -24,13 +24,11 @@ class MonitorActivation(layers.Layer):
 
 
 
-def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=300):
+def run_model(df, asset, lookback,n_components,training_cols,model_num, learning_rate=0.001, batch_size=128, epochs=300 ):
     if asset is not None:
         asset = asset
 
-    start_date = pd.to_datetime('2010-01-01')
-    end_date = pd.to_datetime('2023-01-01')
-    threshold = 0.7
+    
     startlookback = lookback * 10
 
     df.dropna(inplace=True)
@@ -44,7 +42,7 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=3
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close', 'Close_USDCAD', 'Close_USDCHF']]
     
-    #df['label'] = df['label'].map({-1: 0, 0: 0, 1: 1})
+    
 
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
@@ -147,17 +145,17 @@ def run_model(df, asset, lookback, learning_rate=0.001, batch_size=128, epochs=3
     test_results['lower_barrier'] = lowerbarrier.reset_index(drop=True)
     test_results['price_in_range'] = pricetouch.reset_index(drop=True)
 
-    test_results.to_csv('tester_df.csv')
+    test_results.to_csv(f'test_result_{model_num}.csv')
     print(test_results)
     print('length of train data:',len(X_train))
     # Save the scaler
-    joblib.dump(scaler, '../deploy/models/EURUSD/EURUSD_1024_5_scaler.pkl')
+    joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, '../deploy/models/EURUSD/EURUSD_1024_5_pca.pkl')
+    joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
 
 
-    model.save('../deploy/models/EURUSD/EURUSD_1024_5.h5')
+    model.save(f'../deploy/models/EURUSD/{model_num}.h5')
 
 
 

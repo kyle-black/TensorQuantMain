@@ -154,13 +154,10 @@ class Labeling:
         
     def triple_barriers(self):
         self.triple_result =barriers.calculate_barriers_R(self.bars_df, self.lookback)
-      #  print(self.triple_barriers.columns)
-      #  print(self.barrierss)
+      
         self.bars_df = self.triple_result
 
-      #  print(self.bars_df.columns)
-        #self.bars_df = pd.concat([self.bars_df, self.triple_result], axis=1)
-       # self.triple_result = self.new_apply_triple_barrier(self.bars_df, [1,1,1], self.lookback, self.asset)
+      
         return self.bars_df
     
     def sample_weights(self):
@@ -177,31 +174,29 @@ class Labeling:
     
 
 class Model:
-    def __init__(self, bars_df, asset,lookback):
+    def __init__(self, bars_df, asset,lookback,n_components,training_cols,model_num, learning_rate,batch_size,epochs):
         self.bars_df = bars_df
         self.bar_shape = bars_df.shape
         self.asset = asset
         self.lookback = lookback
+        self.learning_rate = learning_rate
+        self.batch_size = batch_size
+        self.epochs = epochs
+        self.n_components =n_components
+        self.training_cols =training_cols
+        self.model_num = model_num
         #self.weights =weights
 
     def train_model(self):
-        #output =adaboost_classifier(self.bars_df)
-        #output = support_vector_classifier(self.bars_df)
-       # output =neural_network_cnn(self.bars_df, self.asset)
-        #output =ensemble_methods(self.bars_df, self.asset, self.lookback)
-        output =neural_DNN.run_model(self.bars_df, self.asset,self.lookback)
-        #output= Hist_boosted(self.bars_df, self.asset, lookback)
-        #output = neural_network_classifier(self.bars_df,self.asset)
-        #output =random_forest_anomaly_detector(self.bars_df)
+      
+        output =neural_DNN.run_model(self.bars_df, self.asset,self.lookback,self.n_components,self.training_cols,self.model_num, self.learning_rate,self.batch_size, self.epochs)
+        
         
         return output
 
 
-def prepare_data():
-    
-    asset = 'EURUSD'
-    dollar_amount = 10000
-    lookback = 10
+def prepare_data(dollar_amount, lookback):
+   
     
     # Use Dask to read the CSV file in chunks
     raw = dd.read_csv('merged.csv')
@@ -225,56 +220,69 @@ def prepare_data():
     
     print('Applying Triple Barriers:')
     df, dv = L.triple_barriers()
-   # print(df)
-    
-   # return df
-    
-   # return df
-    
-   # df.to_parquet('barrier_df.parquet')
-    #return df
-    
-   # df.to_parquet('test_df.parquet')
-    #print('testdf:',df)
-   # df = pd.read_parquet('barrier_df.parquet')
+ 
     fm = FeatureMaker(df, lookback, asset,dv)
     df= fm.feature_add()
     
 
     
-
-
-    #df = pd.read_parquet('final_df.parquet')
-   # fm = FeatureMaker(df, lookback, asset)
     tEvents = fm.create_CUMSUM_filter()
 
     print('tEvents:',len(tEvents))
-   # filtered_df = df[df.index.isin(tEvents)]
+
     filtered_df =df
     filtered_df.to_parquet('final_df.parquet')
-    #print('filtered_df:',filtered_df)
-   # filtered_df = df
-    #filtered_df =df
-    #filtered_df.dropna(inplace=True)
+   
     
     return filtered_df 
     
     
     
     
-def train_data(filtered_df,asset,lookback):
-    m = Model(filtered_df, asset,lookback)
+def train_data(**kwargs):
+    m = Model(**kwargs)
     print(m.train_model())
 
 
 
 
 if __name__ == "__main__":
+    #hyperparameter for experiment and model creation
+    model_num ='EURUSD_0816-1'
     asset = "EURUSD"
-    prepare_data()
+    dollar_amount =10000
+    lookback =10
+    n_components = 16
+    learning_rate =.001
+    batch_size =128
+    epochs =300
+
+    training_cols = ['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
+       '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
+       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
+       'chikou_span', 'Close_AUDUSD', 'Close', 'Close_USDCAD', 'Close_USDCHF']
+
+
+
+
+    prepare_data(dollar_amount, lookback)
     
    # send_email.run_email()
     df = pd.read_parquet('final_df.parquet')
-    train_data(df, asset,10)
+    train_data(df, asset,lookback,n_components,training_cols,model_num,learning_rate,batch_size,epochs)
+
+    e_df = pd.DataFrame()
+
+    e_df['model_num'] = model_num
+    e_df['asset'] = asset
+    e_df['dollar_amount'] = dollar_amount
+    e_df['n_components'] = n_components
+    e_df['lookback'] = lookback
+    e_df['learning_rate'] = learning_rate
+    e_df['batch_size'] = batch_size
+    e_df['epochs']  =epochs
+    
+    e_df.to_csv('experiment_tracker.csv', mode='a', index=False, header=False)
+ 
  #   send_email.run_email()
     
