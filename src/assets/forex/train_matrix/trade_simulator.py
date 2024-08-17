@@ -12,7 +12,7 @@ def trade_dataframe_creator(df):
     #Randomize Trading sequence
    # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=600, replace=False)
+    random_trade = np.random.choice(data_length, size=300, replace=False)
     random_trade = np.sort(random_trade)
    # random_trade = np.random.randint(data_length, size=(100))
     selected_trades = []
@@ -121,7 +121,7 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('testfiles/test_result_EURUSD_0816-6.csv')
+df = pd.read_csv('testfiles/test_result_EURUSD_0816-8.csv')
 
 # Set initial account balance
 account = 1000

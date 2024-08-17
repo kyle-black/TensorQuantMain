@@ -249,7 +249,7 @@ def train_data(df, asset,lookback,n_components,training_cols,model_num,learning_
 
 if __name__ == "__main__":
     #hyperparameter for experiment and model creation
-    model_num ='EURUSD_0816-8'
+    model_num ='EURUSD_0816-9'
     asset = "EURUSD"
     dollar_amount =10000
     lookback =10
@@ -261,7 +261,7 @@ if __name__ == "__main__":
     training_cols = ['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span', 'Close_AUDUSD', 'Close','volatility']
+       'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']
 
 
 
