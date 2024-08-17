@@ -8,7 +8,7 @@ from pandarallel import pandarallel
 pandarallel.initialize()
 
 
-''''
+
 
 def calculate_barriers_R(df, lookback):
     start_time = time.time()
@@ -40,8 +40,8 @@ def calculate_barriers_R(df, lookback):
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 + 2 * df['volatility'])
-    df['lower_barrier'] = df['Close'] * (1 - 2 * df['volatility'])
+    df['upper_barrier'] = df['Close'] * (1 + 3 * df['volatility'])
+    df['lower_barrier'] = df['Close'] * (1 - 3 * df['volatility'])
     
     # Calculate lookback in seconds
     lookback_seconds = (lookback*10) * 3600
@@ -108,9 +108,9 @@ def calculate_barriers_R(df, lookback):
     df1.to_csv('barriers_results.csv')
     
     return df
+
+
 '''
-
-
 def calculate_barriers_R(df, lookback):
     start_time = time.time()
     #new_bar_df['pips'] = new_bar_df['Close'] *10000
@@ -210,4 +210,4 @@ def calculate_barriers_R(df, lookback):
     
     return df
 
-
+'''
