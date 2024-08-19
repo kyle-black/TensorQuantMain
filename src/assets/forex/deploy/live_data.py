@@ -22,10 +22,12 @@ def latest_data(securities):
 
         df_list.append(df)
     
-    print(df_list)
+   # print(df_list)
     # Combine the data for all securities along the columns
     df_all = pd.concat(df_list, axis=1)
   #  df_all = df_all.dropna()
+
+    df_all = df_all.set_index('EURUSD_Date')
     
     return df_all
 
