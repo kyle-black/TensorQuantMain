@@ -9,14 +9,15 @@ from scipy.stats import boxcox
 def dollar_bar_creator(asset,df_,dollar_amt):
 
     #df_ = pd.read_csv('merged.csv')
-    df_.sort_values('Date', inplace =True)
+    #df_.sort_values('Date', inplace =True)
+    df_.sort_index()
 
     df_ = df_[:]
     
-    close = f'Close_{asset}'
-    volume = f'Volume_{asset}'
+    close = f'{asset}_Close'
+    volume = f'{asset}_Volume'
     
-    df_ = df_.set_index('Date')
+   # df_ = df_.set_index('Date')
 
     #for i in ['AUDUSD','USDCAD','USDCHF']:
     #    df_[f'{i}_Returns'] = df_[f'Close_{asset}'].pct_change()

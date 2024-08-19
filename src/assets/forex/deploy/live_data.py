@@ -31,7 +31,7 @@ def latest_data(securities):
     
     df_all = pd.concat(df_list, ignore_index =True)
 
-   # df.set_index('EURUSD_Date', inplace=True)
+    df.set_index('EURUSD_Date', inplace=True)
     return df
 
 
