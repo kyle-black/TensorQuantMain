@@ -14,7 +14,7 @@ def latest_data(securities):
     df_list = []
 
     for i in securities:
-        nifty_index_data = tv.get_hist(symbol=f'{i}', exchange='OANDA', interval=Interval.in_1_minute, n_bars=5000)
+        nifty_index_data = tv.get_hist(symbol=f'{i}', exchange='OANDA', interval=Interval.in_1_minute, n_bars=8000)
 
         df = nifty_index_data
         df = df.reset_index()
