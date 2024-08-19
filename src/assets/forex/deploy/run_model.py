@@ -24,8 +24,8 @@ def prepare_data( dollar_threshold, asset, window_length):
 
 
 
-def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length):
-    df = prepare_data(dollar_threshold, asset, window_length)
+def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, securities):
+    df = prepare_data(dollar_threshold, asset, window_length,securities)
 
     prediction_df = df.dropna()
 
@@ -70,7 +70,8 @@ if __name__ in "__main__":
     dollar_threshold =10000
     asset ='EURUSD'
     window_length = 10
+    securities = ['EURUSD', 'AUDUSD']
 
-    print(make_predictions(pca, scaler, model, dollar_threshold, asset, window_length))
+    print(make_predictions(pca, scaler, model, dollar_threshold, asset, window_length, securities))
 
 
