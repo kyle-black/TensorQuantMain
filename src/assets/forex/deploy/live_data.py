@@ -28,6 +28,6 @@ def latest_data(securities):
     return df_all
 
 if __name__ == "__main__":
-    security_list = ['EURUSD', 'AUDUSD']
+    security_list = ['AUDUSD']
     df = latest_data(security_list)
     print(df)
