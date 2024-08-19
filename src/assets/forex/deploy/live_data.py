@@ -22,6 +22,7 @@ def latest_data(securities):
 
         df_list.append(df)
     
+    print(df_list)
     # Combine the data for all securities along the columns
     df_all = pd.concat(df_list, axis=1)
   #  df_all = df_all.dropna()
@@ -29,6 +30,6 @@ def latest_data(securities):
     return df_all
 
 if __name__ == "__main__":
-    security_list = ['AUDUSD']
+    security_list = ['EURUSD','AUDUSD']
     df = latest_data(security_list)
     print(df)
