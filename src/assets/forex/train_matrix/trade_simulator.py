@@ -121,7 +121,7 @@ def trade_simulate(df,account):
 
 #if __name__ in "_main__":
 
-df = pd.read_csv('testfiles/test_result_EURUSD_0816-123.csv')
+df = pd.read_csv('testfiles/test_result_EURUSD_0816-15.csv')
 
 # Set initial account balance
 account = 1000

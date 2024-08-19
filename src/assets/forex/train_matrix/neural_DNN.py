@@ -48,8 +48,8 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     n_components = 14
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-2]
-    test_idx = test_datasets[-2]
+    train_idx = train_datasets[-1]
+    test_idx = test_datasets[-1]
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
