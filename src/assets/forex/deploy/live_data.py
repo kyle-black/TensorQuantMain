@@ -38,5 +38,5 @@ def latest_data(securities):
 
 if __name__ in "__main__":
     security_list = ['EURUSD','AUDUSD', 'USDCAD', 'USDCHF']
-    latest_data(security_list)
-    print(latest_data)
+    df =latest_data(security_list)
+    print(df)
