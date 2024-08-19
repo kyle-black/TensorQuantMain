@@ -18,9 +18,9 @@ import live_data
 def prepare_data( dollar_threshold, asset, window_length, securities):
     df = live_data.latest_data(securities)
     dollar_df = dbc(asset,df,dollar_threshold)
-    feature_df = features.add_price_features(df,asset, window_length)
+   # feature_df = features.add_price_features(df,asset, window_length)
 
-    return feature_df
+    return dollar_df
 
 
 
