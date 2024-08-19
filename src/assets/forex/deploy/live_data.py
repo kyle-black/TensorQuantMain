@@ -24,7 +24,7 @@ def latest_data(securities):
     
     # Combine the data for all securities along the columns
     df_all = pd.concat(df_list, axis=1)
-    df_all = df_all.dropna()
+  #  df_all = df_all.dropna()
     
     return df_all
 
