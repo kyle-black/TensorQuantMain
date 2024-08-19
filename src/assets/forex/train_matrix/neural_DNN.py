@@ -101,8 +101,8 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     
     model.add(layers.Dense(2, activation='softmax'))
 
-    class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train, axis=1)), y=np.argmax(y_train, axis=1))
-    class_weights = dict(enumerate(class_weights))
+   # class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(np.argmax(y_train, axis=1)), y=np.argmax(y_train, axis=1))
+   # class_weights = dict(enumerate(class_weights))
 
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
@@ -114,7 +114,7 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, class_weight=class_weights, callbacks=[early_stopping, lr_scheduler])
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler])
     #print("Mean activation values:", MonitorActivation.activation_values)
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test)
     print(f'Test accuracy: {test_acc}')
