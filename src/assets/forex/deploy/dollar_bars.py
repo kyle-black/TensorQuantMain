@@ -40,7 +40,7 @@ def dollar_bar_creator(asset,df_,dollar_amt):
         #vol_count += d[volume]
 
         if dollar_count >= dollar_amt:
-            bar ={'Date':i,'Close':d[close],'Volume':d[volume],'Close_AUDUSD':d['Close_AUDUSD']}
+            bar ={'Date':i,'Close':d[close],'Volume':d[volume],'AUDUSD_Close':d['AUDUSD_Close']}
             new_bar.append(bar)
          #   vol_count = 0 
             dollar_count = 0
