@@ -8,7 +8,7 @@ from pandarallel import pandarallel
 pandarallel.initialize()
 
 
-'''
+
 
 def calculate_barriers_R(df, lookback):
     start_time = time.time()
@@ -210,4 +210,4 @@ def calculate_barriers_R(df, lookback):
     
     return df
 
-
+'''

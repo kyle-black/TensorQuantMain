@@ -124,13 +124,13 @@ def trade_simulate(df,account):
 df = pd.read_csv('testfiles/test_result_EURUSD_0816-9.csv')
 
 # Set initial account balance
-account = 1000
+account = 10000
 
 ### Simple
 new_df = trade_dataframe_creator(df)
 print(new_df)
 leverage =50
-lot_size =10000
+lot_size =20000
 
 new_df = trade_calculate(new_df, leverage, lot_size)
 print(new_df)
