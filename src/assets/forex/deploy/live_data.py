@@ -29,15 +29,6 @@ def latest_data(securities):
 
     df_all = df_all.set_index('EURUSD_Date')
 
-    df_all.rename(columns={'Close_AUDUSD': 'AUDUSD_Close'},inplace=True)
-
-    df_all['pct_change'] = df_all['EURUSD_Close'].pct_change()
-
-# Calculate rolling standard deviation (volatility)
-    df_all['volatility'] = df_all['pct_change'].rolling(window=10).std()
-
-# Fill NaN values (for the initial period where there's no rolling window data)
-    df_all['volatility'].fillna(method='backfill', inplace=True)
     
     return df_all
 

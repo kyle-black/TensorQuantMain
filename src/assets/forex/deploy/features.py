@@ -104,6 +104,18 @@ def add_price_features(df,asset, window_length):
 
 
 
+    df.rename(columns={'Close_AUDUSD': 'AUDUSD_Close'},inplace=True)
+
+    df['pct_change'] = df['Close'].pct_change()
+
+# Calculate rolling standard deviation (volatility)
+    df['volatility'] = df['pct_change'].rolling(window=10).std()
+
+# Fill NaN values (for the initial period where there's no rolling window data)
+    df['volatility'].fillna(method='backfill', inplace=True)
+
+
+
 
    
 
