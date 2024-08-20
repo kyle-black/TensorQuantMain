@@ -29,7 +29,7 @@ def latest_data(securities):
 
     df_all = df_all.set_index('EURUSD_Date')
 
-    df_all.rename(columns={'AUDUSD_Close':'Close_AUDUSD'})
+    df_all.rename(columns={'Close_AUDUSD': 'AUDUSD_Close'},inplace=True)
 
     df_all['pct_change'] = df_all['EURUSD_Close'].pct_change()
 
