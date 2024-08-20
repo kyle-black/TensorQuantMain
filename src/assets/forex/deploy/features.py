@@ -104,7 +104,7 @@ def add_price_features(df,asset, window_length):
 
 
 
-    df = df.rename(columns={'Close_AUDUSD': 'AUDUSD_Close'})
+    df = df.rename(columns={'Close_AUDUSD':'AUDUSD_Close'})
 
     df['pct_change'] = df['Close'].pct_change()
 
@@ -123,7 +123,7 @@ def add_price_features(df,asset, window_length):
 
 
 
-
+    print('feature cols######', df.columns)
 
     return df
 
