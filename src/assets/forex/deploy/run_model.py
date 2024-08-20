@@ -31,14 +31,14 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
 
     ##### Fit scaler
-    #scaled_df = scaler.transform(prediction_df)
-    #pca_df = pca.transform(scaled_df)
+    scaled_df = scaler.transform(prediction_df)
+    pca_df = pca.transform(scaled_df)
 
     ##### Fit Model
 
-    #prediction_probas = model.fit(pca_df)
+    prediction_probas = model.fit(pca_df)
     
-    return prediction_df.columns
+    return prediction_probas
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
@@ -46,7 +46,7 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
        'chikou_span']]
     
 
-    scaled_df = scaler.transform(df)
+    scaled_df = scaler.transform(df)python3 
     pca_df = pca.transform(scaled_df)
 
     predictions = model.predict(pca_df)
@@ -57,16 +57,16 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
 if __name__ in "__main__":
     #Load TF model
-    #model = tf.keras.models.load_model('models/EURUSD/saved_models/EURUSD_1024_9.h5')
+    model = tf.keras.models.load_model('models/EURUSD/saved_models/EURUSD_1024_20.h5')
 
     # Load scaler
-    #scaler = joblib.load('models/EURUSD/saved_models/EURUSD_1024_9_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/saved_models/EURUSD_1024_20_scaler.pkl')
 
     # Load PCA
-    #pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_9_pca.pkl')
-    pca =None
-    scaler =None
-    model =None
+    pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_20_pca.pkl')
+    #pca =None
+    #scaler =None
+    #model =None
     dollar_threshold =10000
     asset ='EURUSD'
     window_length = 10
