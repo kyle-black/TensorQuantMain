@@ -31,7 +31,7 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
     print('pre prediction df:', df.columns)
    # prediction_df = df.dropna()
 
-    prediction_df = prediction_df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
+    prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
 
     prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
         '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
