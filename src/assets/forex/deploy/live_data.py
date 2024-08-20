@@ -31,7 +31,7 @@ def latest_data(securities):
 
     df_all.rename(columns={'AUDUSD_Close':'Close_AUDUSD'})
 
-    df_all['pct_change'] = df_all['EUR_Close'].pct_change()
+    df_all['pct_change'] = df_all['EURUSD_Close'].pct_change()
 
 # Calculate rolling standard deviation (volatility)
     df_all['volatility'] = df_all['pct_change'].rolling(window=10).std()
