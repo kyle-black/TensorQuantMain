@@ -29,7 +29,7 @@ def prepare_data( dollar_threshold, asset, window_length, securities):
 def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, securities):
     df = prepare_data(dollar_threshold, asset, window_length,securities)
     print('pre prediction df:', df.columns)
-    prediction_df = df.dropna()
+   # prediction_df = df.dropna()
 
     prediction_df = prediction_df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
 
