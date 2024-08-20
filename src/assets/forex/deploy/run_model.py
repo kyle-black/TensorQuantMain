@@ -57,13 +57,13 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
 if __name__ in "__main__":
     #Load TF model
-    model = tf.keras.models.load_model('models/EURUSD/saved_models/EURUSD_1024_20.h5')
+    model = tf.keras.models.load_model('models/EURUSD/EURUSD_1024_20.h5')
 
     # Load scaler
-    scaler = joblib.load('models/EURUSD/saved_models/EURUSD_1024_20_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/EURUSD_1024_20_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/saved_models/EURUSD_1024_20_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_1024_20_pca.pkl')
     #pca =None
     #scaler =None
     #model =None
