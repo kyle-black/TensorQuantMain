@@ -31,6 +31,8 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
     print('pre prediction df:', df.columns)
     prediction_df = df.dropna()
 
+    prediction_df = prediction_df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
+
 
     ##### Fit scaler
     scaled_df = scaler.transform(prediction_df)
