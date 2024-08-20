@@ -5,6 +5,7 @@ import numpy as np
 import features
 from dollar_bars import dollar_bar_creator as dbc
 import live_data
+import barriers
 
 
 
@@ -18,6 +19,7 @@ import live_data
 def prepare_data( dollar_threshold, asset, window_length, securities):
     df = live_data.latest_data(securities)
     dollar_df = dbc(asset,df,dollar_threshold)
+  #  barrier_df =barriers.calculate_barriers_R(dollar_df)
     feature_df = features.add_price_features(dollar_df,asset, window_length)
 
     return feature_df
