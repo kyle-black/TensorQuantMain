@@ -28,6 +28,8 @@ def latest_data(securities):
   #  df_all = df_all.dropna()
 
     df_all = df_all.set_index('EURUSD_Date')
+
+    df_all.rename(columns={'AUDUSD_Close':'Close_AUDUSD'})
     
     return df_all
 
