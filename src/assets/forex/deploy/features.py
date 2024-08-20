@@ -100,7 +100,7 @@ def add_price_features(df,asset, window_length):
     df['senkou_span_b'] = ((period52_high + period52_low) / 2).shift(26)
 
     # Chikou Span (Lagging Span): 'Close' shifted back 26 periods
-    df['chikou_span'] = df['Close'].shift(26)
+    df['chikou_span'] = df['Close'].shift(-26)
 
 
 
