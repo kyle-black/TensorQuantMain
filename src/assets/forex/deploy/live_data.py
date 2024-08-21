@@ -47,7 +47,10 @@ def latest_data(symbol):
     print(response.json())
     data = response.json()
 
-    print('length of data:', len(data))            
+
+    df =pd.DataFrame(data)
+
+    print('length of data:', df)            
  
     
 
