@@ -1,10 +1,12 @@
 from tvDatafeed import TvDatafeed, Interval
 import pandas as pd
 import datetime
+import requests
+import json
 
 
  # Make sure you have the required import for TvDatafeed
-
+'''
 def latest_data(securities):
     username = 'StoCASHtic-ML'
     password = 'Biobio9034!'
@@ -33,8 +35,28 @@ def latest_data(securities):
     return df_all
 
 '''
+
+
+
+def latest_data(symbol):
+    url ='https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-15&to=2024-08-20&apikey=3e17d2b777a13feee4c1243985cdc7c4'
+
+    response = requests.get(url)
+
+       
+    print(response.json())            
+ 
+    data = response.json()
+
+        
+        
+            
+    with open(f'updated_data/econ/{symbol}.json', 'a') as f:
+        json.dump(data, f)
+
 if __name__ == "__main__":
-    security_list = ['EURUSD','AUDUSD']
-    df = latest_data(security_list)
+    #security_list = ['EURUSD','AUDUSD']
+    
+    
+    df = latest_data('EURUSD')
     print(df)
-'''
