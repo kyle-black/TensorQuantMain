@@ -44,14 +44,17 @@ def latest_data(symbol):
     response = requests.get(url)
 
        
-    print(response.json())            
- 
+    print(response.json())
     data = response.json()
+
+    print('length of data:', len(data))            
+ 
+    
 
         
         
             
-    with open(f'updated_data/econ/{symbol}.json', 'a') as f:
+    with open(f'{symbol}.json', 'a') as f:
         json.dump(data, f)
 
 if __name__ == "__main__":
