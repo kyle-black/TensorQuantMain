@@ -125,6 +125,8 @@ def add_price_features(df,asset, window_length):
 
     print('feature cols######', df.columns)
 
+    print(df.isna())
+
     return df
 
 
