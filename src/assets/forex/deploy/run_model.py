@@ -31,8 +31,8 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
     print('pre prediction df:', df)
    # prediction_df = df.dropna()
 
-    prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
-    prediction_df = prediction_df.dropna()
+   # prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
+   # prediction_df = prediction_df.dropna()
     prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
         '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
@@ -65,13 +65,13 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
 if __name__ in "__main__":
     #Load TF model
-    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-20.h5')
+    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-21.h5')
 
     # Load scaler
-    scaler = joblib.load('models/EURUSD/EURUSD_0816-20_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/EURUSD_0816-21_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/EURUSD_0816-20_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_0816-21_pca.pkl')
     #pca =None
     #scaler =None
     #model =None
