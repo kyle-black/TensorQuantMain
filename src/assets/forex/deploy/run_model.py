@@ -33,7 +33,7 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
   #  print('df maker',df)
     prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
     print('predictiondf check',prediction_df) 
-    prediction_df = prediction_df.dropna()
+    prediction_df.dropna(inplace=True)
     prediction_df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
         '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
