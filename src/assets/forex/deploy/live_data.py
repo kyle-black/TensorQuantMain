@@ -69,6 +69,8 @@ def latest_data(symbol):
 
     aud_df =pd.DataFrame(aud_data)
 
+    aud_df.rename(columns={'datetime': f'AUDUSD_Date', 'open': f'AUDUSD_Open', 'high': f'AUDUSD_High', 'low': f'AUDUSD_Low', 'close': f'AUDUSD_Close', 'volume': f'AUDUSD_Volume'}, inplace=True)
+
     print('length of data:', aud_df)
 
 
