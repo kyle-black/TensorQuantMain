@@ -39,6 +39,8 @@ def latest_data(securities):
 
 
 def latest_data(symbol):
+
+    dflist = []
     
     ###EURUSD #############
    # for i in secur
@@ -55,6 +57,7 @@ def latest_data(symbol):
 
     df.rename(columns={'datetime': f'EURUSD_Date', 'open': f'EURUSD_Open', 'high': f'EURUSD_High', 'low': f'EURUSD_Low', 'close': f'EURUSD_Close', 'volume': f'EURUSD_Volume'}, inplace=True)
 
+    dflist.append(df)
     print('length of data:', df)            
     
     ### AUDUSD ##########
@@ -70,12 +73,14 @@ def latest_data(symbol):
     aud_df =pd.DataFrame(aud_data)
 
     aud_df.rename(columns={'datetime': f'AUDUSD_Date', 'open': f'AUDUSD_Open', 'high': f'AUDUSD_High', 'low': f'AUDUSD_Low', 'close': f'AUDUSD_Close', 'volume': f'AUDUSD_Volume'}, inplace=True)
+    dflist.append(aud_df)
+
 
     print('length of data:', aud_df)
 
 
     
-    df_all = pd.concat([df,aud_df], keys=['EURUSD_Date','AUDUSD_Date'],axis=1)
+    df_all = pd.concat(dflist,axis=1)
         
     df_all = df_all.set_index('EURUSD_Date')
             
