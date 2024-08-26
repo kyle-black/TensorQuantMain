@@ -9,8 +9,8 @@ from scipy.stats import boxcox
 def dollar_bar_creator(asset,df_,dollar_amt):
 
     #df_ = pd.read_csv('merged.csv')
-    #df_.sort_values('Date', inplace =True)
-    df_.sort_index()
+    df_.sort_values('Date', inplace =True)
+    #df_.sort_index()
 
     df_ = df_[:]
     
