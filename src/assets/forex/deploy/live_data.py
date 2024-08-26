@@ -82,7 +82,8 @@ def latest_data(symbol):
     with open(f'{symbol}.json', 'a') as f:
         json.dump(data, f)
 
-    return df
+    print('df_all:', df_all)
+    return df_all
 '''
 if __name__ == "__main__":
     #security_list = ['EURUSD','AUDUSD']
