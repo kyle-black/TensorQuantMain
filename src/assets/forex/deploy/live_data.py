@@ -40,7 +40,7 @@ def latest_data(securities):
 
 def latest_data(symbol):
     
-    
+    ###EURUSD #############
    # for i in secur
     url ='https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-15&to=2024-08-21&apikey=3e17d2b777a13feee4c1243985cdc7c4'
 
@@ -53,12 +53,29 @@ def latest_data(symbol):
 
     df =pd.DataFrame(data)
 
-    print('length of data:', df)            
- 
-    
+    df.rename(columns={'datetime': f'EURUSD_Date', 'open': f'EURUSD_Open', 'high': f'EURUSD_High', 'low': f'EURUSD_Low', 'close': f'EURUSD_Close', 'volume': f'EURUSD_Volume'}, inplace=True)
 
+    print('length of data:', df)            
+    
+    ### AUDUSD ##########
+    aud_url ='https://financialmodelingprep.com/api/v3/historical-chart/1min/AUDUSD?from=2024-08-15&to=2024-08-21&apikey=3e17d2b777a13feee4c1243985cdc7c4'
+
+    aud_response = requests.get(aud_url)
+
+       
+    print(aud_response.json())
+    aud_data = aud_response.json()
+
+
+    aud_df =pd.DataFrame(aud_data)
+
+    print('length of data:', aud_df)
+
+
+    
+    df_all = pd.concat([df,aud_df], keys=['EURUSD_Date','AUDUSD_Date'],axis=1)
         
-        
+    df_all = df_all.set_index('EURUSD_Date')
             
     with open(f'{symbol}.json', 'a') as f:
         json.dump(data, f)
