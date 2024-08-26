@@ -55,7 +55,7 @@ def latest_data(symbol):
 
     df =pd.DataFrame(data)
 
-    df.rename(columns={'datetime': f'EURUSD_Date', 'open': f'EURUSD_Open', 'high': f'EURUSD_High', 'low': f'EURUSD_Low', 'close': f'EURUSD_Close', 'volume': f'EURUSD_Volume'}, inplace=True)
+    df.rename(columns={'date': f'EURUSD_Date', 'open': f'EURUSD_Open', 'high': f'EURUSD_High', 'low': f'EURUSD_Low', 'close': f'EURUSD_Close', 'volume': f'EURUSD_Volume'}, inplace=True)
 
     dflist.append(df)
     print('length of data:', df)            
@@ -72,7 +72,7 @@ def latest_data(symbol):
 
     aud_df =pd.DataFrame(aud_data)
 
-    aud_df.rename(columns={'datetime': f'AUDUSD_Date', 'open': f'AUDUSD_Open', 'high': f'AUDUSD_High', 'low': f'AUDUSD_Low', 'close': f'AUDUSD_Close', 'volume': f'AUDUSD_Volume'}, inplace=True)
+    aud_df.rename(columns={'date': f'AUDUSD_Date', 'open': f'AUDUSD_Open', 'high': f'AUDUSD_High', 'low': f'AUDUSD_Low', 'close': f'AUDUSD_Close', 'volume': f'AUDUSD_Volume'}, inplace=True)
     dflist.append(aud_df)
 
 
