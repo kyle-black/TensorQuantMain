@@ -7,7 +7,7 @@ from multiprocessing import Value
 import os
 import pandas as pd
 import json
-import mysql
+#import mysql
 execution_counter = Value('i', 0)
 
 
@@ -61,7 +61,7 @@ def get_json_from_url(symbol):
            # print(data)    
             #return data
 
-
+'''
 def data_pull():
     cnx = mysql.connector.connect(user='doadmin', password='AVNS_oW0kYA-LJsBz5pksVi4',
                               host='tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com',
@@ -103,6 +103,6 @@ if __name__ == "__main__":
     #df = pd.DataFrame(data_dict)
 
     #df.to_csv('commod.csv')
-
+'''
 
     
