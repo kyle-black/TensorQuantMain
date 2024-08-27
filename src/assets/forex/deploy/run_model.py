@@ -43,9 +43,9 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
         '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']]
-    print('prescaled ####',prediction_df[-100:])
+    print('prescaled ####',prediction_df[-200:])
 
-    prediction_df = prediction_df[-100:]
+    prediction_df = prediction_df[-200:]
     ##### Fit scaler
     scaled_df = scaler.transform(prediction_df)
 
@@ -75,13 +75,13 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
 if __name__ in "__main__":
     #Load TF model
-    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-20.h5')
+    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-18.h5')
 
     # Load scaler
-    scaler = joblib.load('models/EURUSD/EURUSD_0816-20_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/EURUSD_0816-18_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/EURUSD_0816-20_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_0816-18_pca.pkl')
    # pca =None
    # scaler =None
    # model =None
