@@ -79,7 +79,7 @@ def data_pull():
     merged['Close_usdchf'] = merged['close'].fillna(method='ffill')
 
     return merged     
-
+'''
 if __name__ == "__main__":
 
     get_json_from_url('EURUSD')
@@ -103,6 +103,6 @@ if __name__ == "__main__":
     #df = pd.DataFrame(data_dict)
 
     #df.to_csv('commod.csv')
-'''
+
 
     
