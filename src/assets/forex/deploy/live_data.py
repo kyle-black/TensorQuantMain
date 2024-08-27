@@ -96,8 +96,8 @@ def combine_data():
 
     df_live = latest_data('EURUSD')
     
-    df_all = df_all.append(df_live)
-    
+    #df_all = df_all.append(df_live)
+    df_all = pd.concat([df_all, df_live])
     
     df_all.to_csv('updated_data/combined_df.csv')
 
