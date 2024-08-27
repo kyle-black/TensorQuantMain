@@ -105,5 +105,5 @@ if __name__ == "__main__":
     #security_list = ['EURUSD','AUDUSD']
     
     
-    df = latest_data()
+    df = combine_data()
     print(df)
