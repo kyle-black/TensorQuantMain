@@ -92,7 +92,17 @@ def combine_data():
     df_all = df_all.set_index('EURUSD_Date')
     df_all = df_all.dropna()
 
+    ########### Latest data
+
+    df_live = latest_data('EURUSD')
+    
+    df_all = df_all.append(df_live)
+    
+    
     df_all.to_csv('updated_data/combined_df.csv')
+
+
+
 
     return df_all
 
