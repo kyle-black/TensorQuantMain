@@ -68,7 +68,7 @@ def latest_data(symbol):
     return df_all
 
 
-def combine_data(symbol,live_df):
+def combine_data():
     
     dflist = []
     eur_df = pd.read_json('updated_data/EURUSD.json')
@@ -84,14 +84,14 @@ def combine_data(symbol,live_df):
     
     #live_df = pd.read_json('updated_data/EURUSD_live.json')
     
-    dflist.append(live_df)
+   # dflist.append(live_df)
 
 
     df_all = pd.concat(dflist, axis=1)
 
     df_all = df_all.set_index('EURUSD_Date')
 
-    
+    df_all.to_csv('updated_data/combined_df.csv')
 
     return df_all
 
@@ -100,11 +100,10 @@ def combine_data(symbol,live_df):
 
 
 
-'''
+
 if __name__ == "__main__":
     #security_list = ['EURUSD','AUDUSD']
     
     
-    df = latest_data('EURUSD')
+    df = latest_data()
     print(df)
-'''
