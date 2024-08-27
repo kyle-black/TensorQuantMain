@@ -68,7 +68,7 @@ def latest_data(symbol):
     return df_all
 
 
-def combine_data(symbol):
+def combine_data(symbol,live_df):
     
     dflist = []
     eur_df = pd.read_json('updated_data/EURUSD.json')
@@ -82,7 +82,8 @@ def combine_data(symbol):
     dflist.append(aud_df)
 
     
-    live_df = pd.read_json('updated_data/EURUSD_live.json')
+    #live_df = pd.read_json('updated_data/EURUSD_live.json')
+    
     dflist.append(live_df)
 
 
