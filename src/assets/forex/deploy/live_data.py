@@ -44,7 +44,7 @@ def latest_data(symbol):
     
     ###EURUSD #############
    # for i in secur
-    url ='https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-15&to=2024-08-21&apikey=3e17d2b777a13feee4c1243985cdc7c4'
+    url ='https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-10&to=2024-08-21&apikey=3e17d2b777a13feee4c1243985cdc7c4'
 
     response = requests.get(url)
 
