@@ -68,34 +68,30 @@ def latest_data(symbol):
     return df_all
 
 
-def combine_data(symbol, live_df):
+def combine_data(symbol,live_df):
+    
     dflist = []
-
-    # Load and prepare EURUSD DataFrame
     eur_df = pd.read_json('updated_data/EURUSD.json')
-    eur_df['Date'] = pd.to_datetime(eur_df['date'])  # Assuming 'date' needs conversion
-    eur_df.set_index('Date', inplace=True)
-    eur_df.rename(columns={'open': 'EURUSD_Open', 'high': 'EURUSD_High', 'low': 'EURUSD_Low', 'close': 'EURUSD_Close', 'volume': 'EURUSD_Volume'}, inplace=True)
+
+    eur_df.rename(columns={'date': f'EURUSD_Date', 'open': f'EURUSD_Open', 'high': f'EURUSD_High', 'low': f'EURUSD_Low', 'close': f'EURUSD_Close', 'volume': f'EURUSD_Volume'}, inplace=True)
     dflist.append(eur_df)
 
-    # Load and prepare AUDUSD DataFrame
+
     aud_df = pd.read_json('updated_data/AUDUSD.json')
-    aud_df['Date'] = pd.to_datetime(aud_df['date'])  # Assuming 'date' needs conversion
-    aud_df.set_index('Date', inplace=True)
-    aud_df.rename(columns={'open': 'AUDUSD_Open', 'high': 'AUDUSD_High', 'low': 'AUDUSD_Low', 'close': 'AUDUSD_Close', 'volume': 'AUDUSD_Volume'}, inplace=True)
+    aud_df.rename(columns={'date': f'AUDUSD_Date', 'open': f'AUDUSD_Open', 'high': f'AUDUSD_High', 'low': f'AUDUSD_Low', 'close': f'AUDUSD_Close', 'volume': f'AUDUSD_Volume'}, inplace=True)
     dflist.append(aud_df)
 
-    # Assuming live_df is already a DataFrame and has a 'Date' column to set as index
-    if 'Date' in live_df.columns:
-        live_df['Date'] = pd.to_datetime(live_df['Date'])
-        live_df.set_index('Date', inplace=True)
+    
+    #live_df = pd.read_json('updated_data/EURUSD_live.json')
+    
     dflist.append(live_df)
 
-    # Concatenate all dataframes along columns
-    if all(df.index.is_unique for df in dflist):  # Check if all indices are unique
-        df_all = pd.concat(dflist, axis=1)
-    else:
-        raise ValueError("One or more DataFrames have non-unique indices.")
+
+    df_all = pd.concat(dflist, axis=1)
+
+    df_all = df_all.set_index('EURUSD_Date')
+
+    
 
     return df_all
 
