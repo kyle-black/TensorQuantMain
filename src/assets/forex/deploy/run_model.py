@@ -54,7 +54,7 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
 
     ##### Fit Model
 
-    prediction_probas = model.fit(pca_df)
+    prediction_probas = model.predict(pca_df)
     
     return prediction_probas
     '''
