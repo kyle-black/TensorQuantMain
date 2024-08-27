@@ -90,6 +90,7 @@ def combine_data():
     df_all = pd.concat(dflist, axis=1)
 
     df_all = df_all.set_index('EURUSD_Date')
+    df_all = df_all.dropna()
 
     df_all.to_csv('updated_data/combined_df.csv')
 
