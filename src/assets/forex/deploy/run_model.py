@@ -17,8 +17,8 @@ import barriers
 
 
 def prepare_data( dollar_threshold, asset, window_length, securities):
-    df = live_data.latest_data(securities)
-    df = live_data.combine_data(securities,df)
+   #df = live_data.latest_data(securities)
+    df = live_data.combine_data()
 
     dollar_df = dbc(asset,df,dollar_threshold)
   #  barrier_df =barriers.calculate_barriers_R(dollar_df)
