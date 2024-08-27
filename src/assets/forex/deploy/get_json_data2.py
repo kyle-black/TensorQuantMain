@@ -45,7 +45,7 @@ def get_json_from_url(symbol):
             response = requests.get(url)
 
             execution_counter += 1
-            print(response.json())            
+           # print(response.json())            
         
             #if response.content:
             data = response.json()
