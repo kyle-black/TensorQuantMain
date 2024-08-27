@@ -48,6 +48,8 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
     prediction_df = prediction_df[-10:]
     ##### Fit scaler
     scaled_df = scaler.transform(prediction_df)
+
+    print(scaled_df)
     pca_df = pca.transform(scaled_df)
 
     ##### Fit Model
