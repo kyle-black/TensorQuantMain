@@ -45,8 +45,8 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
        'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']]
     print(prediction_df)
     ##### Fit scaler
-    scaled_df = scaler.transform(prediction_df)
-    pca_df = pca.transform(scaled_df)
+    scaled_df = scaler.transform(prediction_df[-10:])
+    pca_df = pca.transform(scaled_df[-10:])
 
     ##### Fit Model
 
