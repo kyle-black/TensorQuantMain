@@ -8,13 +8,14 @@ from scipy.stats import boxcox
 
 def dollar_bar_creator(asset, df_, dollar_amt):
     # Convert the date column to datetime format to avoid sorting issues
-    df_['EURUSD_Date'] = pd.to_datetime(df_['EURUSD_Date'], errors='coerce')
+    df_.index = pd.to_datetime(df_.index, errors='coerce')
     
     # Drop rows where the conversion failed (i.e., rows with invalid dates)
-    df_.dropna(subset=['EURUSD_Date'], inplace=True)
+    #df_.dropna(subset=['EURUSD_Date'], inplace=True)
 
     # Sort the DataFrame by date
-    df_.sort_values('EURUSD_Date', inplace=True)
+    #df_.sort_values('EURUSD_Date', inplace=True)
+    df_ = df_.sort_index()
 
     close = f'{asset}_Close'
     volume = f'{asset}_Volume'
