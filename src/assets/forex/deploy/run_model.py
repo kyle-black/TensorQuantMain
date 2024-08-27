@@ -43,7 +43,7 @@ def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, 
         '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']]
-    print(prediction_df)
+    print('prescaled ####',prediction_df[-10:])
     ##### Fit scaler
     scaled_df = scaler.transform(prediction_df[-10:])
     pca_df = pca.transform(scaled_df)
