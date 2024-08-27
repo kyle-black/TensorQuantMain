@@ -8,7 +8,7 @@ from scipy.stats import boxcox
 
 def dollar_bar_creator(asset,df_,dollar_amt):
 
-    df_.rename(columns={'date':'Date','open':'Open','low':'Low','high':'High','close':'Close','volume':'Volume'}, inplace=True)
+   # df_.rename(columns={'date':'Date','open':'Open','low':'Low','high':'High','close':'Close','volume':'Volume'}, inplace=True)
     print('dollar bar df:', df_)
     #df_ = pd.read_csv('merged.csv')
     df_.sort_values('EURUSD_Date', inplace =True)
