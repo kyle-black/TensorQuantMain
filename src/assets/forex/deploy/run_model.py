@@ -33,7 +33,17 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     print('pre prediction df:', df)
 
     df.to_csv('prediction.csv')
+
+    df['volatility'] = df['pct_change'].rolling(window=10).std()
+    df['pct_change'] = df['Close'].pct_change()
+    df['upper_barrier'] = df['Close'] * (1 + 4 * df['volatility'])
+    df['lower_barrier'] = df['Close'] * (1 - 4 * df['volatility'])
     preprediction_df = df[-200:]
+
+    
+
+# Calculate rolling standard deviation (volatility)
+    
     # Drop unnecessary columns
     prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
     print('predictiondf check', prediction_df) 
