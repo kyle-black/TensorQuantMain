@@ -40,7 +40,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     
     # Drop rows with missing values
     prediction_df.dropna(inplace=True)
-    
+    preprediction_df = prediction_df[-200:]
     # Select only relevant columns for prediction
     prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
                                    '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
@@ -64,13 +64,13 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     negative_class_proba = prediction_probas[:, 0]
     positive_class_proba = prediction_probas[:, 1]
     # Add prediction probabilities to the DataFrame
-    prediction_df['prediction_proba_dwn'] = negative_class_proba
-    prediction_df['prediction_proba_up'] = positive_class_proba
+    preprediction_df['prediction_proba_dwn'] = negative_class_proba
+    preprediction_df['prediction_proba_up'] = positive_class_proba
 
 
-    prediction_df.to_csv('prediction_df.csv')
+    preprediction_df.to_csv('prediction_df.csv')
     
-    return prediction_df
+    return preprediction_df
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
