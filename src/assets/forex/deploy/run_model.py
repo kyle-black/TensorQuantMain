@@ -33,14 +33,14 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     print('pre prediction df:', df)
 
     df.to_csv('prediction.csv')
-
+    preprediction_df = df[-200:]
     # Drop unnecessary columns
     prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
     print('predictiondf check', prediction_df) 
     
     # Drop rows with missing values
     prediction_df.dropna(inplace=True)
-    preprediction_df = prediction_df[-200:]
+    
     # Select only relevant columns for prediction
     prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
                                    '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
