@@ -6,7 +6,7 @@ import mimetypes
 
 
 
-def run_email(model_num):
+def run_email():
 # Email setup
     sender_email = "kpblack87@gmail.com"
     receiver_email = "kpblack87@gmail.com"
@@ -40,5 +40,5 @@ def run_email(model_num):
         server.send_message(msg)
 
 
-#if __name__ in "__main__":
-#    run_email(model_num)
+if __name__ in "__main__":
+    run_email()
