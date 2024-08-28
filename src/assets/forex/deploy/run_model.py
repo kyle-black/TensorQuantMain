@@ -61,10 +61,11 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     
     # Make predictions using the model
     prediction_probas = model.predict(pca_df)
-    
+    negative_class_proba = prediction_probas[:, 0]
+    positive_class_proba = prediction_probas[:, 1]
     # Add prediction probabilities to the DataFrame
-    prediction_df['prediction_proba_dwn'] = prediction_probas[:][0]
-    prediction_df['prediction_proba_up'] = prediction_probas[:][1]
+    prediction_df['prediction_proba_dwn'] = negative_class_proba
+    prediction_df['prediction_proba_up'] = positive_class_proba
 
 
     prediction_df.to_csv('prediction_df.csv')
