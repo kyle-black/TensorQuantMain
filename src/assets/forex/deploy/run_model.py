@@ -28,35 +28,46 @@ def prepare_data( dollar_threshold, asset, window_length, securities):
 
 
 
-def make_predictions(pca,scaler, model, dollar_threshold, asset, window_length, securities):
-    df = prepare_data(dollar_threshold, asset, window_length,securities)
+def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length, securities):
+    df = prepare_data(dollar_threshold, asset, window_length, securities)
     print('pre prediction df:', df)
 
     df.to_csv('prediction.csv')
-    #prediction_df = df.dropna()
-  #  print('df maker',df)
+
+    # Drop unnecessary columns
     prediction_df = df.drop(columns=['Date', 'Datehold', 'change', 'pct_change', 'pips'])
-    print('predictiondf check',prediction_df) 
+    print('predictiondf check', prediction_df) 
+    
+    # Drop rows with missing values
     prediction_df.dropna(inplace=True)
-    print(prediction_df.isna())
-    prediction_df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
-        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
-       'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-       'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']]
-    print('prescaled ####',prediction_df[-200:])
-
+    
+    # Select only relevant columns for prediction
+    prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
+                                   '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
+                                   'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
+                                   'chikou_span', 'Close_AUDUSD', 'Close', 'volatility', 'day_of_week']]
+    
+    print('prescaled ####', prediction_df[-200:])
+    
+    # Use the last 200 rows for prediction
     prediction_df = prediction_df[-200:]
-    ##### Fit scaler
+    
+    # Scale the data
     scaled_df = scaler.transform(prediction_df)
-
     print(scaled_df)
+    
+    # Apply PCA transformation
     pca_df = pca.transform(scaled_df)
-
-    ##### Fit Model
-
+    
+    # Make predictions using the model
     prediction_probas = model.predict(pca_df)
     
-    return prediction_probas
+    # Add prediction probabilities to the DataFrame
+    prediction_df['prediction_proba'] = prediction_probas
+
+    prediction_df.to_csv('prediction_df.csv')
+    
+    return prediction_df
     '''
     df = df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Close', 'Volume', '%K',
        '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
