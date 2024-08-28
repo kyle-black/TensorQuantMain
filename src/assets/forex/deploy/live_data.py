@@ -42,7 +42,7 @@ def latest_data(symbol):
     dflist = []
 
     # EURUSD
-    url = 'https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-27&to=2024-08-27&apikey=3e17d2b777a13feee4c1243985cdc7c4'
+    url = 'https://financialmodelingprep.com/api/v3/historical-chart/1min/EURUSD?from=2024-08-28&to=2024-08-28&apikey=3e17d2b777a13feee4c1243985cdc7c4'
     response = requests.get(url)
     data = response.json()
     df = pd.DataFrame(data)
