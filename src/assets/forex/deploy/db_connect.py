@@ -22,7 +22,7 @@ def insert_data(name):
                                             Volume FLOAT,
                                             Close_AUDUSD FLOAT,
                                             pips FLOAT,
-                                            change FLOAT,
+                                            `change` FLOAT,
                                             pct_change FLOAT,
                                             Datehold DATE,
                                             day_of_week VARCHAR(10),
