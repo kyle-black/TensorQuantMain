@@ -3,7 +3,7 @@ import json
 import mysql.connector
 import pandas as pd
 from sqlalchemy import create_engine
-import datetime
+from datetime import datetime
 
 def insert_data(name):
     # Load JSON data
