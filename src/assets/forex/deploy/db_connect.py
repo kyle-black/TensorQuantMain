@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 def insert_data(name):
     # Load JSON data
-    with open(os.path.join('updated_data', 'econ', f'{name}.json'), 'r') as f:
+    with open(os.path.join('prediction', 'prediction_df.json'), 'r') as f:
         data = json.load(f)
 
     # Connect to MySQL
