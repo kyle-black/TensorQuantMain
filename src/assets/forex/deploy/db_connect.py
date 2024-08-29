@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 def insert_data(name):
     # Load JSON data
-    with open(os.path.join('updated_data', 'econ', f'{name}.json'), 'r') as f:
+    with open(os.path.join('prediction', f'prediction_df.json'), 'r') as f:
         data = json.load(f)
 
     # Connect to MySQL
@@ -134,9 +134,6 @@ def insert_data(name):
     except mysql.connector.Error as err:
         print(f"Something went wrong: {err}")
 
-# Example usage
-insert_data('EURUSD_Live')
-
 
 def data_pull():
     '''
@@ -211,8 +208,12 @@ def add_merged():
 if __name__ == "__main__":
 
     #print(data_pull())
+
+    # Example usage
+    insert_data('EURUSD_Live')
+
     
-    print(add_merged())
+    #print(add_merged())
     
     '''
     path = 'updated_data/econ'

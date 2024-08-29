@@ -77,8 +77,11 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     preprediction_df['prediction_proba_dwn'] = negative_class_proba
     preprediction_df['prediction_proba_up'] = positive_class_proba
 
+    preprediction_df.rename(columns={'%K':'K_percent','%D':'D_percent'})
+
 
     preprediction_df.to_csv('prediction_df.csv')
+    preprediction_df.to_json('prediction/prediction_df.json')
     
     return preprediction_df
     '''
