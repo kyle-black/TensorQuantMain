@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 def insert_data(name):
     # Load JSON data
-    with open(os.path.join('prediction', f'prediction_df.json'), 'r') as f:
+    with open(os.path.join('updated_data', 'econ', f'{name}.json'), 'r') as f:
         data = json.load(f)
 
     # Connect to MySQL
@@ -15,47 +15,12 @@ def insert_data(name):
                                      host='tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com',
                                      database='defaultdb', port=25060) as cnx:
             with cnx.cursor() as cursor:
-                # Create table EURUSD_Live
-                create_table_query = """CREATE TABLE IF NOT EXISTS EURUSD_Live (
-                                            Date DATE PRIMARY KEY,
-                                            Close FLOAT,
-                                            Volume FLOAT,
-                                            Close_AUDUSD FLOAT,
-                                            pips FLOAT,
-                                            `change` FLOAT,
-                                            pct_change FLOAT,
-                                            Datehold DATE,
-                                            day_of_week VARCHAR(10),
-                                            Middle_Band FLOAT,
-                                            Upper_Band FLOAT,
-                                            Lower_Band FLOAT,
-                                            Log_Returns FLOAT,
-                                            MACD FLOAT,
-                                            Signal_Line_MACD FLOAT,
-                                            RSI FLOAT,
-                                            `K_percent` FLOAT,
-                                            `D_percent` FLOAT,
-                                            daily_return FLOAT,
-                                            direction FLOAT,
-                                            volume_direction FLOAT,
-                                            OBV FLOAT,
-                                            tenkan_sen FLOAT,
-                                            kijun_sen FLOAT,
-                                            senkou_span_a FLOAT,
-                                            senkou_span_b FLOAT,
-                                            chikou_span FLOAT,
-                                            volatility FLOAT,
-                                            upper_barrier FLOAT,
-                                            lower_barrier FLOAT,
-                                            prediction_proba_dwn FLOAT,
-                                            prediction_proba_up FLOAT
-                                        )"""
-                cursor.execute(create_table_query)
-
+                # Create table EURUSD_Live (omitted for brevity)
+                
                 # Insert data into EURUSD_Live
                 for record in data:
                     query = """INSERT INTO EURUSD_Live (
-                                    Date, Close, Volume, Close_AUDUSD, pips, change, pct_change, Datehold, day_of_week, 
+                                    Date, Close, Volume, Close_AUDUSD, pips, `change`, pct_change, Datehold, day_of_week, 
                                     Middle_Band, Upper_Band, Lower_Band, Log_Returns, MACD, Signal_Line_MACD, RSI, 
                                     `K_percent`, `D_percent`, daily_return, direction, volume_direction, OBV, tenkan_sen, 
                                     kijun_sen, senkou_span_a, senkou_span_b, chikou_span, volatility, upper_barrier, 
@@ -67,7 +32,7 @@ def insert_data(name):
                                Volume = VALUES(Volume), 
                                Close_AUDUSD = VALUES(Close_AUDUSD), 
                                pips = VALUES(pips), 
-                               change = VALUES(change), 
+                               `change` = VALUES(`change`), 
                                pct_change = VALUES(pct_change), 
                                Datehold = VALUES(Datehold),
                                day_of_week = VALUES(day_of_week),
@@ -133,6 +98,9 @@ def insert_data(name):
                 cnx.commit()
     except mysql.connector.Error as err:
         print(f"Something went wrong: {err}")
+
+# Example usage
+
 
 
 def data_pull():
