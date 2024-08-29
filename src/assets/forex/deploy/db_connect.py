@@ -3,7 +3,6 @@ import json
 import mysql.connector
 import pandas as pd
 from sqlalchemy import create_engine
-from datetime import datetime
 
 def insert_data(name):
     # Load JSON data
@@ -16,12 +15,10 @@ def insert_data(name):
                                      host='tq-training-data-do-user-13042543-0.c.db.ondigitalocean.com',
                                      database='defaultdb', port=25060) as cnx:
             with cnx.cursor() as cursor:
+                # Create table EURUSD_Live (omitted for brevity)
+                
                 # Insert data into EURUSD_Live
                 for record in data:
-                    # Convert timestamp to MySQL date format
-                    date_value = datetime.utcfromtimestamp(record['Date'] / 1000).strftime('%Y-%m-%d')
-                    datehold_value = datetime.utcfromtimestamp(record['Datehold'] / 1000).strftime('%Y-%m-%d')
-                    
                     query = """INSERT INTO EURUSD_Live (
                                     Date, Close, Volume, Close_AUDUSD, pips, `change`, pct_change, Datehold, day_of_week, 
                                     Middle_Band, Upper_Band, Lower_Band, Log_Returns, MACD, Signal_Line_MACD, RSI, 
@@ -63,17 +60,15 @@ def insert_data(name):
                                prediction_proba_dwn = VALUES(prediction_proba_dwn),
                                prediction_proba_up = VALUES(prediction_proba_up)
                                """
-                    
-                    # Ensure all fields are correctly passed
                     cursor.execute(query, (
-                        date_value,  # Converted from timestamp to date string
+                        record['Date'], 
                         record['Close'], 
                         record['Volume'], 
                         record['Close_AUDUSD'], 
                         record['pips'], 
                         record['change'], 
                         record['pct_change'], 
-                        datehold_value,  # Converted from timestamp to date string
+                        record['Datehold'], 
                         record['day_of_week'],
                         record['Middle_Band'],
                         record['Upper_Band'],

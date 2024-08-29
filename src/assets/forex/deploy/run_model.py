@@ -81,7 +81,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
 
 
     preprediction_df.to_csv('prediction_df.csv')
-    preprediction_df.to_json('prediction/prediction_df.json', orient='records', lines=False)
+    preprediction_df.to_json('prediction/prediction_df.json', orient='columns', lines=False)
     
     return preprediction_df
     '''
