@@ -6,6 +6,7 @@ import features
 from dollar_bars import dollar_bar_creator as dbc
 import live_data
 import barriers
+from insertdb import insert_dataframe_to_mysql as idfmysql
 
 
 
@@ -79,6 +80,9 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
 
     preprediction_df.rename(columns={'%K':'K_percent','%D':'D_percent'}, inplace=True)
     preprediction_df.set_index('Date')
+
+
+    idfmysql(prediction_df, 'EURUSDLive')
 
     preprediction_df.to_csv('prediction_df.csv')
     preprediction_df.to_json('prediction/prediction_df.json', orient='records', lines=False)
