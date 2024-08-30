@@ -82,7 +82,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     preprediction_df.set_index('Date')
 
 
-    idfmysql(prediction_df, 'EURUSD_Live')
+    idfmysql(preprediction_df, 'EURUSD_Live')
 
     preprediction_df.to_csv('prediction_df.csv')
     preprediction_df.to_json('prediction/prediction_df.json', orient='records', lines=False)
