@@ -39,9 +39,9 @@ def get_json_from_url(symbol):
 
             #start_date = ('2014-01-01', '%Y-%m-%d')
            # start_date =start_date.strftime('%Y-%m-%d')
-            #url = f"https://financialmodelingprep.com/api/v3/historical-chart/1min/{symbol}?from={start_date.strftime('%Y-%m-%d')}&to={end_date.strftime('%Y-%m-%d')}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
+            url = f"https://financialmodelingprep.com/api/v3/historical-chart/1min/{symbol}?from={start_date.strftime('%Y-%m-%d')}&to={end_date.strftime('%Y-%m-%d')}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
             
-            url =f"https://financialmodelingprep.com/api/v3/historical-chart/1min/{symbol}?from={start_date}&to={end_date}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
+            #url =f"https://financialmodelingprep.com/api/v3/historical-chart/1min/{symbol}?from={start_date}&to={end_date}&apikey=3e17d2b777a13feee4c1243985cdc7c4"
             response = requests.get(url)
 
             execution_counter += 1
@@ -52,14 +52,14 @@ def get_json_from_url(symbol):
 
             start_date += timedelta(days=3)
             end_date += timedelta(days=3)
-           # data_list.append(data)
-            for i in data:
+            data_list.append(data)
+           # for i in data:
                 
-                with open(f'updated_data/commod/{symbol}.json', 'a') as f:
-                    json.dump(i, f)
+            #    with open(f'updated_data/commod/{symbol}.json', 'a') as f:
+            #        json.dump(i, f)
                    # f.write('\n')
-           # print(data)    
-            #return data
+            print('datalist:',data_list)    
+            return data_list
 
 '''
 def data_pull():
@@ -84,23 +84,23 @@ if __name__ == "__main__":
 
 #print(data_pull())
     #get_json_from_url(symbol_list=['EURUSD, AUDUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
-    get_json_from_url('EURUSD')
+    #get_json_from_url('EURUSD')
     #commod = ['PLUSD','GCUSD','SIUSD','NGUSD', 'CLUSD','HGUSD','PAUSD','ALIUSD']
     #symbol_list = ['ALIUSD']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
-    #symbol_list = ['']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
-#data_dict = {}
-    #for symbol in commod:
+    symbol_list = ['EURUSD']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
+    data_dict = {}
+    for symbol in symbol_list:
 
         
-     #   print(f'adding {symbol}')
-     #   data = get_json_from_url(symbol)
+        print(f'adding {symbol}')
+        data = get_json_from_url(symbol)
 
-       # data_dict[symbol] = data
+        data_dict[symbol] = data
 
         # Save the dictionary to a JSON file
-      #  with open(f'{symbol}.json', 'w') as f:
-       #     json.dump(data, f)
-    #df = pd.DataFrame(data_dict)
+        with open(f'{symbol}.json', 'w') as f:
+            json.dump(data, f)
+    df = pd.DataFrame(data_dict)
 
     #df.to_csv('commod.csv')
 

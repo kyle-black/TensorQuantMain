@@ -11,7 +11,7 @@ def get_json_from_url(symbol):
     try:
         start_date = datetime.strptime('2024-01-01', '%Y-%m-%d')
         end_date = start_date + timedelta(days=3)
-        final_date = datetime.strptime('2024-08-26', '%Y-%m-%d')
+        final_date = datetime.strptime('2024-09-01', '%Y-%m-%d')
         
         global execution_counter
 
