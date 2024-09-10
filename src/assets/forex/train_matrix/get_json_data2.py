@@ -79,7 +79,7 @@ def data_pull():
     merged['Close_usdchf'] = merged['close'].fillna(method='ffill')
 
     return merged     
-
+'''
 if __name__ == "__main__":
 
 #print(data_pull())
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     #commod = ['PLUSD','GCUSD','SIUSD','NGUSD', 'CLUSD','HGUSD','PAUSD','ALIUSD']
     #symbol_list = ['ALIUSD']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
     #symbol_list = ['']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']
-    data_dict = {}
+#data_dict = {}
     #for symbol in commod:
 
         
@@ -104,5 +104,5 @@ if __name__ == "__main__":
 
     #df.to_csv('commod.csv')
 
-'''
+
     
