@@ -19,9 +19,9 @@ execution_counter = Value('i', 0)
 
 def get_json_from_url(symbol):
     
-        start_date = datetime.strptime('2014-01-01', '%Y-%m-%d')
+        start_date = datetime.strptime('2024-04-01', '%Y-%m-%d')
         end_date = start_date + timedelta(days=3)
-        final_date = datetime.strptime('2014-03-01', '%Y-%m-%d')
+        final_date = datetime.strptime('2024-09-01', '%Y-%m-%d')
         
         #global execution_counter
 
@@ -82,8 +82,8 @@ def data_pull():
 
 if __name__ == "__main__":
 
-    print(data_pull())
-   #get_json_from_url(symbol_list=['EURUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
+#print(data_pull())
+    get_json_from_url(symbol_list=['EURUSD, AUDUSD'])#'GBPUSD','USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD'])
 
     #commod = ['PLUSD','GCUSD','SIUSD','NGUSD', 'CLUSD','HGUSD','PAUSD','ALIUSD']
     #symbol_list = ['ALIUSD']#,'USDJPY','USDCHF','USDCAD','AUDUSD','NZDUSD','EURGBP','EURJPY','GBPJPY','AUDJPY','NZDJPY','USDHKD']

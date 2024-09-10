@@ -1,146 +1,115 @@
 import pandas as pd
 import numpy as np
-
-
+pd.set_option('display.float_format', '{:.2f}'.format)
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
-
+    # Filter the trades based on the probability classes
     df = df.query('Proba_Class_0 > 0.55 or Proba_Class_1 > 0.55')
-    
-    data_length = len(df)
-    print('data_length',data_length)
-    #Randomize Trading sequence
-   # random_trade = np.sort(np.random.randint(data_length, size=(600)))
 
-    random_trade = np.random.choice(data_length, size=data_length, replace=False)
+    # Randomize Trading sequence
+    random_trade = np.random.choice(len(df), size=len(df), replace=False)
     random_trade = np.sort(random_trade)
-   # random_trade = np.random.randint(data_length, size=(100))
-    selected_trades = []
-    for i in random_trade:
-        trade = df.iloc[i]
-        selected_trades.append(trade)
-        print(i)
 
-    # Create a new DataFrame from the sele
-    # cted trades
-    new_df = pd.DataFrame(selected_trades)
+    # Select the randomized trades
+    selected_trades = df.iloc[random_trade].copy()
 
     # Calculate the percentage change
-    new_df['pct_change'] = new_df['Close'] / new_df['touch_price']
+    selected_trades['pct_change'] = selected_trades['Close'] / selected_trades['touch_price']
 
-    # Initialize the 'Choice' column
-    new_df['Choice'] = np.nan
-    new_df['Accurate'] = np.nan
-    new_df['major_proba'] = np.nan
-    new_df['Accurate'] = new_df['Accurate'].astype(bool)
-    # Iterate over the DataFrame and set 'Choice' based on the probabilities
-    for idx, row in new_df.iterrows():
+    # Initialize columns
+    selected_trades['Choice'] = np.nan
+    selected_trades['Accurate'] = np.nan
+    selected_trades['major_proba'] = np.nan
+
+    # Set 'Choice' and 'major_proba' based on probabilities
+    for idx, row in selected_trades.iterrows():
         if row['Proba_Class_0'] >= 0.50:
-            new_df.at[idx, 'Choice'] = 0
-            new_df.at[idx,'major_proba'] = row['Proba_Class_0']
+            selected_trades.at[idx, 'Choice'] = 0
+            selected_trades.at[idx, 'major_proba'] = row['Proba_Class_0']
         elif row['Proba_Class_1'] >= 0.50:
-            new_df.at[idx, 'Choice'] = 1
-            new_df.at[idx,'major_proba'] = row['Proba_Class_1']
+            selected_trades.at[idx, 'Choice'] = 1
+            selected_trades.at[idx, 'major_proba'] = row['Proba_Class_1']
 
-    for idx, row in new_df.iterrows():
-        if row['Choice'] == row['True_Label']:
-            new_df.at[idx, 'Accurate'] = True
-        else:   new_df.at[idx, 'Accurate'] = False
+    # Set 'Accurate' based on whether the choice matches the true label
+    selected_trades['Accurate'] = selected_trades['Choice'] == selected_trades['True_Label']
 
-    new_df = new_df[['Close','touch_price', 'upper_barrier', 'lower_barrier', 'pct_change', 'Proba_Class_0', 'Proba_Class_1', 'True_Label', 'Choice', 'Accurate', 'major_proba']]
-
-    return new_df
+    return selected_trades
 
 
+# Calculate trades and adjust based on the account balance
+def trade_calculate(df, leverage, base_lot_size):
+    # Apply min-max scaling to probabilities
+    df['scaled_proba'] = (df['major_proba'] - df['major_proba'].min()) / (df['major_proba'].max() - df['major_proba'].min())
 
-def trade_calculate(df, leverage, base_lot_size, epsilon=1e-6):
-
-    # Apply logarithmic scaling to the probability
-    #df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
-
-    df['log_scaled_proba'] = np.log(df['major_proba'] + epsilon)
-
-    # Normalize the log-scaled probabilities to a reasonable range
-    df['log_scaled_proba'] = df['log_scaled_proba'] / df['log_scaled_proba'].max()
-
-    # Calculate adjusted lot size based on the log-scaled probability
-    df['adjusted_lot_size'] = df['major_proba'] * base_lot_size
-
-    # Calculate total trade size (e.g., 10000 * 1.07672)
-    total_trade_size = df['adjusted_lot_size'] * df['Close']
-
-    # Calculate required margin (e.g., (10,767.20 / 50) for 50:1 leverage)
-    required_margin = total_trade_size / leverage
-
-    # Calculate starting pip value
-    df['start_pip_value'] = 0.0001 * df['adjusted_lot_size'] / df['Close']
-
-    # Calculate end pip value (based on touch price)
-    df['end_pip_value'] = 0.0001 * df['adjusted_lot_size'] / df['touch_price']
-
-    # Initialize 'net_pips' column
-    df['net_pip_value'] = np.nan
-    df['net_trade_value'] = np.nan
-    df['Profit_Loss'] = np.nan
-
-    # Iterate through each row to calculate 'net_pips'
-    for idx, row in df.iterrows():
-        
-        net_pips = row['end_pip_value'] - row['start_pip_value']
-        df.at[idx, 'net_pip_value'] = net_pips
-
-        net_trade_value = net_pips * row['adjusted_lot_size']
-        df.at[idx, 'net_trade_value'] = net_trade_value
-        
-        if row['Accurate']:
-            if net_trade_value > 0:
-                profit_loss = net_trade_value
-            else:
-                profit_loss = abs(net_trade_value)
-        else:
-            if net_trade_value > 0:
-                profit_loss = -net_trade_value
-            else:
-                profit_loss = net_trade_value
-                
-        df.at[idx, 'Profit_Loss'] = profit_loss
+    # Calculate adjusted lot size based on the scaled probability and base lot size
+    df['adjusted_lot_size'] = df['scaled_proba'] * base_lot_size
+    
+    # Calculate pip movement (difference between touch_price and Close)
+    df['pip_movement'] = (df['touch_price'] - df['Close']) / 0.0001  # 0.0001 represents 1 pip in forex
+    
+    # Calculate the pip value based on the adjusted lot size and Close price
+    df['pip_value'] = (0.0001 * df['adjusted_lot_size']) / df['Close']
+    
+    # Calculate profit or loss in real dollars (pip movement multiplied by pip value)
+    df['net_dollar_value'] = df['pip_movement'] * df['pip_value']
+    
+    # Calculate Profit/Loss based on whether the trade was accurate
+    df['Profit_Loss'] = np.where(df['Accurate'], df['net_dollar_value'], df['net_dollar_value'])
 
     return df
 
 
-   
-def trade_simulate(df,account):
+# Simulate trades and adjust account balance and lot size
+def trade_append(df, initial_balance, leverage, base_lot_size):
+    # Initialize account balance column
+    df.reset_index(inplace=True)
+    df['account_balance'] = initial_balance
 
-    for idx, row in df.iterrows():
-        account += row['Profit_Loss']
+    # Loop through each row, calculate the new balance and adjust lot size
+    for i in range(len(df)):
+        if i == 0:
+            # First row, initialize account balance and calculate profit/loss
+            df.at[i, 'account_balance'] = initial_balance + df.at[i, 'Profit_Loss']
+        else:
+            # Adjust the account balance based on previous balance and current Profit/Loss
+            df.at[i, 'account_balance'] = df.at[i - 1, 'account_balance'] + df.at[i, 'Profit_Loss']
 
-        print('current_account balance',account) 
-    return account
+        # Adjust the base lot size based on the curre
+        # nt account balance
+        current_balance = df.at[i, 'account_balance']
 
+        print('Current Balance:', current_balance)
+        adjusted_lot_size = (current_balance / initial_balance) * base_lot_size
 
-
-#if __name__ in "_main__":
-
-df = pd.read_csv('testfiles/test_result_EURUSD_0816-18.csv')
-
-# Set initial account balance
-account = 1000
-
-### Simple
-new_df = trade_dataframe_creator(df)
-print(new_df)
-leverage =50
-lot_size =10000
-
-new_df = trade_calculate(new_df, leverage, lot_size)
-print(new_df)
-print(trade_simulate(new_df, account))
-
-new_df.to_csv('traded_df20.csv')
+        #adjusted_lot_size = base_lot_size 
+        # Recalculate adjusted lot size based on the updated account balance
+        df = trade_calculate(df, leverage, adjusted_lot_size)
+    
+    df = df.round({'Profit_Loss': 2, 'account_balance': 0})
 
 
+    return df
 
 
-        
+# Main logic
+if __name__ == "__main__":
+    df = pd.read_csv('testfiles/test_result_EURUSD_0816-18.csv')
 
+    # Set initial parameters
+    initial_balance = 1000
+    leverage = 50
+    base_lot_size = 10000
 
+    # Step 1: Create the trade DataFrame
+    new_df = trade_dataframe_creator(df)
+
+    # Step 2: Calculate the trades based on initial lot size
+    new_df = trade_calculate(new_df, leverage, base_lot_size)
+
+    # Step 3: Append account balance and adjust lot size based on account growth or contraction
+    new_df = trade_append(new_df, initial_balance, leverage, base_lot_size)
+
+    # Save the result
+    new_df.to_csv('traded_df20.csv')
+
+    print(new_df)
