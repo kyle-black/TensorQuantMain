@@ -207,7 +207,7 @@ def prepare_data(dollar_amount, lookback):
 
     # Compute the result and convert to a pandas DataFrame
     raw = raw.compute()
-    raw = raw[:-10]
+    raw = raw[:-50]
     print(raw)
     cb = CreateBars(asset,raw, dollar_amount)
     print('Creating Dollar Bars')
@@ -249,7 +249,7 @@ def train_data(df, asset,lookback,n_components,training_cols,model_num,learning_
 
 if __name__ == "__main__":
     #hyperparameter for experiment and model creation
-    model_num ='EURUSD_0816-21'
+    model_num ='EURUSD_0816-22'
     asset = "EURUSD"
     dollar_amount =10000
     lookback =10
