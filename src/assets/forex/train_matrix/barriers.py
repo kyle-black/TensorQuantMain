@@ -57,7 +57,7 @@ def calculate_barriers_R(df, lookback):
     def find_prices_in_range(start_unix, end_unix):
         mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
       #  mask = (price_df_values[:, 0])
-        return price_df_values[mask, 1], price_df_values[mask, 0]
+        return price_df_values[mask, 1], mask[:]
 
     # Apply the function to each row
     df['prices_in_range'], df['touch_time_unix'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
