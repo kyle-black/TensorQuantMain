@@ -57,10 +57,10 @@ def calculate_barriers_R(df, lookback):
     def find_prices_in_range(start_unix, end_unix):
         mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
       #  mask = (price_df_values[:, 0])
-        return price_df_values[mask, 1]
+        return price_df_values[mask, 1], price_df_values[mask, 0]
 
     # Apply the function to each row
-    df['prices_in_range'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
+    df['prices_in_range'], df['touch_time_unix'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
 
     # Function to check if prices hit barriers and which hits first
     def price_barrier_check(row):
@@ -99,7 +99,7 @@ def calculate_barriers_R(df, lookback):
             return 0, prices[lower_hits[0]], pct
 
     # Apply the price_barrier_check function to each row
-    df[['label', 'touch_price','pct']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
+    df[['label', 'touch_price','pct', 'touch_time_unix', 'unix']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
     
     end_time = time.time()
     runtime = end_time - start_time

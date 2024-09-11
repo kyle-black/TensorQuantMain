@@ -4,7 +4,7 @@ pd.set_option('display.float_format', '{:.2f}'.format)
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
     # Filter the trades based on the probability classes
-    df = df.query('Proba_Class_0 > 0.55 or Proba_Class_1 > 0.55')
+    df = df.query('Proba_Class_0 > 0.60 or Proba_Class_1 > 0.60')
 
     # Randomize Trading sequence
     random_trade = np.random.choice(len(df), size=len(df), replace=False)
@@ -79,9 +79,9 @@ def trade_append(df, initial_balance, leverage, base_lot_size):
         current_balance = df.at[i, 'account_balance']
 
         print('Current Balance:', current_balance)
-        adjusted_lot_size = (current_balance / initial_balance) * base_lot_size
+        #adjusted_lot_size = (current_balance / initial_balance) * base_lot_size
 
-        #adjusted_lot_size = base_lot_size 
+        adjusted_lot_size = base_lot_size 
         # Recalculate adjusted lot size based on the updated account balance
         df = trade_calculate(df, leverage, adjusted_lot_size)
     
@@ -93,7 +93,7 @@ def trade_append(df, initial_balance, leverage, base_lot_size):
 
 # Main logic
 if __name__ == "__main__":
-    df = pd.read_csv('testfiles/test_result_EURUSD_0816-21.csv')
+    df = pd.read_csv('testfiles/test_result_EURUSD_0816-22.csv')
 
     # Set initial parameters
     initial_balance = 1000
@@ -110,6 +110,6 @@ if __name__ == "__main__":
     new_df = trade_append(new_df, initial_balance, leverage, base_lot_size)
 
     # Save the result
-    new_df.to_csv('traded_df21.csv')
+    new_df.to_csv('traded_df22.csv')
 
     print(new_df)
