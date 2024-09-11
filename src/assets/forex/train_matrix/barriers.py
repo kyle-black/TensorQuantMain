@@ -102,7 +102,7 @@ def calculate_barriers_R(df, lookback):
             return 0, prices[lower_hits[0]], pct, times[lower_hits[0]]
 
     # Apply the price_barrier_check function to each row
-    df[['label', 'touch_price','pct', 'touch_time_unix']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
+    df[['label', 'touch_price','pct']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
     
     end_time = time.time()
     runtime = end_time - start_time
