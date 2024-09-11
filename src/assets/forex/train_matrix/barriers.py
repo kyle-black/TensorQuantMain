@@ -57,16 +57,19 @@ def calculate_barriers_R(df, lookback):
     def find_prices_in_range(start_unix, end_unix):
         mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
       #  mask = (price_df_values[:, 0])
-        return price_df_values[mask, 1], mask[:]
+        price_df_values[mask, 1], mask
+
+        return price_df_values[mask, 1], mask
 
     # Apply the function to each row
-    df['prices_in_range'], df['touch_time_unix'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
+    df['prices_in_range'], df['unix_times_in_range'] = zip(*df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1))
 
     # Function to check if prices hit barriers and which hits first
     def price_barrier_check(row):
         lower_barrier = row['lower_barrier']
         upper_barrier = row['upper_barrier']
         prices = row['prices_in_range']
+        times = row['unix_times_in_range']
         pip_close = row['pips']
         
         # Use numpy to find the first occurrence of crossing the barriers
@@ -82,7 +85,7 @@ def calculate_barriers_R(df, lookback):
             end_pips = prices[-1] *10000
             pct = pip_close / end_pips
 
-            return np.nan, prices[-1], pct
+            return np.nan, prices[-1], pct, np.nan
         
         if upper_hits.size > 0 and (lower_hits.size == 0 or price_df_values[upper_hits[0], 0] < price_df_values[lower_hits[0], 0]):
             #pct = close / prices[upper_hits[0]]
@@ -90,16 +93,16 @@ def calculate_barriers_R(df, lookback):
             pct = pip_close / end_pips
             
             
-            return 1, prices[upper_hits[0]], pct
+            return 1, prices[upper_hits[0]], pct, times[upper_hits[0]]
         elif lower_hits.size > 0 and (upper_hits.size == 0 or price_df_values[lower_hits[0], 0] < price_df_values[upper_hits[0], 0]):
             #pct = close / prices[lower_hits[0]]
             end_pips = prices[lower_hits[0]] *10000
             pct = pip_close / end_pips
 
-            return 0, prices[lower_hits[0]], pct
+            return 0, prices[lower_hits[0]], pct, times[lower_hits[0]]
 
     # Apply the price_barrier_check function to each row
-    df[['label', 'touch_price','pct', 'touch_time_unix', 'unix']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
+    df[['label', 'touch_price','pct', 'touch_time_unix']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
     
     end_time = time.time()
     runtime = end_time - start_time
