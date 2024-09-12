@@ -100,7 +100,7 @@ def trade_append(df, initial_balance, leverage, base_lot_size):
 
 # Main logic
 if __name__ == "__main__":
-    df = pd.read_csv('testfiles/test_result_EURUSD_0816-26.csv')
+    df = pd.read_csv('testfiles/test_result_EURUSD_0816-27.csv')
 
     # Set initial parameters
     initial_balance = 2000
