@@ -50,6 +50,10 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
 
     train_idx = train_datasets[-1]
     test_idx = test_datasets[-1]
+    
+    print('train index',train_idx)
+    print('test idx', test_idx)
+
 
     train_data = df.iloc[train_idx]
     test_data = df.iloc[test_idx]
