@@ -13,8 +13,9 @@ def run_email(model_num):
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
-   # file_path = f"test_result_{model_num}.csv"
-    file_path ='test2.zip'
+    #file_path = f"test_result_{model_num}.csv"
+    file_path = "test_result_EURUSD_0816-28.csv"
+   # file_path ='test2.zip'
     # Create the email message
     msg = EmailMessage()
     msg["From"] = sender_email
