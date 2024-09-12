@@ -31,7 +31,7 @@ def trade_dataframe_creator(df):
     # Set 'Accurate' based on whether the choice matches the true label
     selected_trades['Accurate'] = selected_trades['Choice'] == selected_trades['True_Label']
     selected_trades['scaled_proba'] = (selected_trades['major_proba'] - selected_trades['major_proba'].min()) / (selected_trades['major_proba'].max() - selected_trades['major_proba'].min())
-    selected_trades = selected_trades.query('Proba_Class_0 > 0.68 or Proba_Class_1 > 0.68')
+    selected_trades = selected_trades.query('Proba_Class_0 > 0.54 or Proba_Class_1 > 0.54')
     
     # Randomize Trading sequence
     random_trade = np.random.choice(len(selected_trades), len(selected_trades), replace=False)
@@ -100,7 +100,7 @@ def trade_append(df, initial_balance, leverage, base_lot_size):
 
 # Main logic
 if __name__ == "__main__":
-    df = pd.read_csv('testfiles/test_result_EURUSD_0816-25.csv')
+    df = pd.read_csv('testfiles/test_result_EURUSD_0816-26.csv')
 
     # Set initial parameters
     initial_balance = 2000
