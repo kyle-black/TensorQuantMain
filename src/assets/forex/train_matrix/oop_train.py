@@ -286,5 +286,5 @@ if __name__ == "__main__":
     
     e_df.to_csv('experiment_tracker.csv', index=False, header=False)
  
-    send_email.run_email(model_num)
+    #send_email.run_email(model_num)
     
