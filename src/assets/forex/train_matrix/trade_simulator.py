@@ -31,10 +31,10 @@ def trade_dataframe_creator(df):
     # Set 'Accurate' based on whether the choice matches the true label
     selected_trades['Accurate'] = selected_trades['Choice'] == selected_trades['True_Label']
     selected_trades['scaled_proba'] = (selected_trades['major_proba'] - selected_trades['major_proba'].min()) / (selected_trades['major_proba'].max() - selected_trades['major_proba'].min())
-    selected_trades = selected_trades.query('Proba_Class_0 > 0.50 or Proba_Class_1 > 0.50')
+    selected_trades = selected_trades.query('Proba_Class_0 > 0.58 or Proba_Class_1 > 0.58')
     
     # Randomize Trading sequence
-    random_trade = np.random.choice(len(selected_trades), len(selected_trades), replace=False)
+    random_trade = np.random.choice(len(selected_trades), 2000, replace=False)
     random_trade = np.sort(random_trade)
     selected_trades = selected_trades.iloc[random_trade].copy()
 
