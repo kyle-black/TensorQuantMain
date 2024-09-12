@@ -249,9 +249,9 @@ def train_data(df, asset,lookback,n_components,training_cols,model_num,learning_
 
 if __name__ == "__main__":
     #hyperparameter for experiment and model creation
-    model_num ='EURUSD_0816-26'
+    model_num ='EURUSD_0816-27'
     asset = "EURUSD"
-    dollar_amount =5000
+    dollar_amount =10000
     lookback =20
     n_components = 17
     learning_rate =.0001
