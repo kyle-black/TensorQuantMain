@@ -4,15 +4,13 @@ pd.set_option('display.float_format', '{:.2f}'.format)
 # Define the function to simulate trades
 def trade_dataframe_creator(df):
     # Filter the trades based on the probability classes
-    df = df.query('Proba_Class_0 > 0.60 or Proba_Class_1 > 0.60')
+    #df = df.query('Proba_Class_0 > 0.62 or Proba_Class_1 > 0.62')
 
-    # Randomize Trading sequence
-    random_trade = np.random.choice(len(df), size=len(df), replace=False)
-    random_trade = np.sort(random_trade)
+    
 
     # Select the randomized trades
-    selected_trades = df.iloc[random_trade].copy()
-
+   # selected_trades = df.iloc[random_trade].copy()
+    selected_trades =df.copy()
     # Calculate the percentage change
     selected_trades['pct_change'] = selected_trades['Close'] / selected_trades['touch_price']
 
@@ -32,6 +30,13 @@ def trade_dataframe_creator(df):
 
     # Set 'Accurate' based on whether the choice matches the true label
     selected_trades['Accurate'] = selected_trades['Choice'] == selected_trades['True_Label']
+    selected_trades['scaled_proba'] = (selected_trades['major_proba'] - selected_trades['major_proba'].min()) / (selected_trades['major_proba'].max() - selected_trades['major_proba'].min())
+    selected_trades = selected_trades.query('Proba_Class_0 > 0.65 or Proba_Class_1 > 0.65')
+    
+    # Randomize Trading sequence
+    random_trade = np.random.choice(len(selected_trades), len(selected_trades), replace=False)
+    random_trade = np.sort(random_trade)
+    selected_trades = selected_trades.iloc[random_trade].copy()
 
     return selected_trades
 
@@ -39,22 +44,24 @@ def trade_dataframe_creator(df):
 # Calculate trades and adjust based on the account balance
 def trade_calculate(df, leverage, base_lot_size):
     # Apply min-max scaling to probabilities
-    df['scaled_proba'] = (df['major_proba'] - df['major_proba'].min()) / (df['major_proba'].max() - df['major_proba'].min())
+    
 
     # Calculate adjusted lot size based on the scaled probability and base lot size
     df['adjusted_lot_size'] = df['scaled_proba'] * base_lot_size
-    
+    pip_movement = (df['touch_price'] - df['Close'])/ 0.0001
     # Calculate pip movement (difference between touch_price and Close)
-    df['pip_movement'] = (df['touch_price'] - df['Close']) / 0.0001  # 0.0001 represents 1 pip in forex
-    
+    df['abs_pip_movement'] = abs(pip_movement)  # 0.0001 represents 1 pip in forex
+    #df['net_pip_movement'] = df['touch_price'] - df['Close']/ 0.0001
+
+    df['net_pip_movement'] = np.where(df['Accurate'], pip_movement, -pip_movement)
     # Calculate the pip value based on the adjusted lot size and Close price
     df['pip_value'] = (0.0001 * df['adjusted_lot_size']) / df['Close']
     
     # Calculate profit or loss in real dollars (pip movement multiplied by pip value)
-    df['net_dollar_value'] = df['pip_movement'] * df['pip_value']
+    df['net_dollar_value'] = df['abs_pip_movement'] * df['pip_value']
     
     # Calculate Profit/Loss based on whether the trade was accurate
-    df['Profit_Loss'] = np.where(df['Accurate'], df['net_dollar_value'], df['net_dollar_value'])
+    df['Profit_Loss'] = np.where(df['Accurate'], df['net_dollar_value'], -df['net_dollar_value'])
 
     return df
 
@@ -96,7 +103,7 @@ if __name__ == "__main__":
     df = pd.read_csv('testfiles/test_result_EURUSD_0816-22.csv')
 
     # Set initial parameters
-    initial_balance = 1000
+    initial_balance = 2000
     leverage = 50
     base_lot_size = 10000
 
