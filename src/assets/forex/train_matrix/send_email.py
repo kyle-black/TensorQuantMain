@@ -7,7 +7,7 @@ import mimetypes
 
 
 def run_email(model_num):
-# Email setup
+# Email setup#########
     sender_email = "kpblack87@gmail.com"
     receiver_email = "kpblack87@gmail.com"
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
