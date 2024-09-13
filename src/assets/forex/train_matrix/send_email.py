@@ -14,7 +14,7 @@ def run_email(model_num):
     subject = "Test Data CSV"
     body = "Attached is the test_data.csv file."
     #file_path = f"test_result_{model_num}.csv"
-    file_path = "test_result_EURUSD_0816-28.csv"
+    file_path = "test_result_EURUSD_0816-31.csv"
    # file_path ='test2.zip'
     # Create the email message
     msg = EmailMessage()
