@@ -5,7 +5,7 @@ def time_series_split(data, n_splits=3):
     for train_index, test_index in tscv.split(data):
         yield train_index, test_index
 
-
+'''
 def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, gap=5, embargo_size=3):
     """
     ... [previous docstring content] ...
@@ -38,6 +38,34 @@ def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, 
             print("Reached the end of data; can't create more splits.")
             break
 
+'''
+def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, gap=5, embargo_size=3):
+    start_train = 0
+    start_test = initial_train_size
+    data_length = len(data)
+
+    while start_test + gap + test_size <= data_length:  # Ensure at least `test_size` is used
+        train_indices = list(range(start_train, start_test))
+        test_end = min(start_test + gap + test_size, data_length)  # Ensure we don't overshoot the data length
+        test_indices = list(range(start_test + gap, test_end))
+
+        # Ensure valid indices for both train and test sets
+        if not train_indices or not test_indices:
+            print("Not enough data points for a valid train/test split at this step.")
+            break
+
+        yield train_indices, test_indices
+        
+        start_test += test_size + embargo_size
+        
+        # Stop if the next test split would be smaller than required
+        if start_test + test_size + embargo_size > data_length:
+            # Include any remaining data in the last test set (if sufficient)
+            if start_test + gap < data_length:
+                test_end = data_length
+                test_indices = list(range(start_test + gap, test_end))
+                yield train_indices, test_indices
+            break
 '''
 def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, gap=5, embargo_size=3):
     """
@@ -79,7 +107,7 @@ def run_split_process(data):
     train_datasets = []
     test_datasets = []
     
-    for train, test in purged_walk_forward_split_with_embargo(data, initial_train_size=20, test_size=5000, gap=5, embargo_size=3):
+    for train, test in purged_walk_forward_split_with_embargo(data, initial_train_size=20, test_size=10000, gap=5, embargo_size=3):
         #train_data = data.iloc[train]
         #test_data = data.iloc[test]
 
