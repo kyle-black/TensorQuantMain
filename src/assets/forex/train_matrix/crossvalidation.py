@@ -39,7 +39,10 @@ def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, 
             break
 
 '''
-def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, gap=5, embargo_size=3):
+def purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=10000, gap=5, embargo_size=3):
+    """
+    Minimal initial_train_size since you're focusing on train[-1] and test[-1].
+    """
     start_train = 0
     start_test = initial_train_size
     data_length = len(data)
@@ -48,11 +51,6 @@ def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, 
         train_indices = list(range(start_train, start_test))
         test_end = min(start_test + gap + test_size, data_length)  # Ensure we don't overshoot the data length
         test_indices = list(range(start_test + gap, test_end))
-
-        # Ensure valid indices for both train and test sets
-        if not train_indices or not test_indices:
-            print("Not enough data points for a valid train/test split at this step.")
-            break
 
         yield train_indices, test_indices
         
