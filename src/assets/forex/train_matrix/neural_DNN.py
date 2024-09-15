@@ -45,11 +45,11 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-   # n_components = 20
+    n_components = 20
     scaler = StandardScaler()
 
-    train_idx = train_datasets[-1]
-    test_idx = test_datasets[-1]
+    train_idx = train_datasets[-2]
+    test_idx = test_datasets[-2]
     
     print('train index',train_idx)
     print('test idx', test_idx)
@@ -87,7 +87,7 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     y_test = tf.keras.utils.to_categorical(y_test, num_classes=2)
 
     model = models.Sequential()
-    model.add(layers.Dense(256, activation='relu', input_shape=(23,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dense(256, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
