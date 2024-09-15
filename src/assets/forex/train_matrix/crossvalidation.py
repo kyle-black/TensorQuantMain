@@ -39,7 +39,7 @@ def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, 
             break
 
 '''
-def purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=10000, gap=5, embargo_size=3):
+def purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=15000, gap=5, embargo_size=3):
     """
     Minimal initial_train_size since you're focusing on train[-1] and test[-1].
     """
