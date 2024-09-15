@@ -153,7 +153,7 @@ def run_model(df, asset, lookback,n_components,training_cols,model_num, learning
     joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
 
     # Save the PCA
-    joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
+   # joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
 
 
     model.save(f'../deploy/models/EURUSD/{model_num}.h5')
