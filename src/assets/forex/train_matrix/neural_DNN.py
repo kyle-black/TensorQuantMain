@@ -65,13 +65,13 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     y_test = test_data[target_col]
 
     # Apply PCA
-    pca = PCA(n_components=n_components)
-    X_train = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
+   # pca = PCA(n_components=n_components)
+    #X_train = pca.fit_transform(X_train)
+    #X_test = pca.transform(X_test)
 
     # Standardize the data
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
+   # X_train = scaler.fit_transform(X_train)
+    #X_test = scaler.transform(X_test)
 
     # Convert y_train and y_test to class labels (0 and 1)
     y_train_labels = y_train.values  # Assuming y_train is a pandas Series
@@ -125,35 +125,11 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     wrapped_model = ModelWrapper(model)
 
     # **Important**: Fit the wrapped model to set `classes_`
-    wrapped_model.fit(X_train, y_train_labels)
-
-
-    class_counts = np.bincount(y_train_labels)
-    print("Class counts:", class_counts)
-
-    # Ensure `classes_` is set
-    print("Classes in wrapped_model:", wrapped_model.classes_)
-
-    # Apply Isotonic Regression for calibration
-    calibrated_model = CalibratedClassifierCV(estimator=wrapped_model, method='isotonic', cv='prefit')
-
-    # Fit the calibration model using the training set
-    calibrated_model.fit(X_train, y_train_labels)
-
-    # Get the calibrated probabilities
-    y_pred_proba_calibrated = calibrated_model.predict_proba(X_test)[:, 1]
-
-    # Calculate log loss for the calibrated model
-    log_loss_value_calibrated = log_loss(y_test_labels, y_pred_proba_calibrated)
-    print(f'Log Loss (Calibrated): {log_loss_value_calibrated}')
-
-    # Calculate Brier score for the calibrated model
-    brier_score_calibrated = brier_score_loss(y_test_labels, y_pred_proba_calibrated)
-    print(f'Brier Score (Calibrated): {brier_score_calibrated}')
+    
 
     # Save the scaler, model, and PCA
     joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
     model.save(f'../deploy/models/EURUSD/{model_num}.h5')
     joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
 
-    return model, y_pred_proba_calibrated, y_test_labels
+    return model, y_pred_proba, y_test_labels
