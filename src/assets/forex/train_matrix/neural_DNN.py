@@ -122,6 +122,8 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     print(f'Test recall: {test_recall}')
     print(f'Test AUC: {test_auc}')
 
+    print('y_train:#######', y_train)
+    
     # Get predicted probabilities
     y_pred_proba = model.predict(X_test)
 
