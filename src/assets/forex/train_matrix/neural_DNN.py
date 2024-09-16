@@ -10,6 +10,7 @@ from sklearn.calibration import CalibratedClassifierCV
 import crossvalidation
 import joblib
 import random
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 # Ensure seed is set for reproducibility
 def set_seed(seed=42):
@@ -18,7 +19,7 @@ def set_seed(seed=42):
     random.seed(seed)
 
 # Custom wrapper to use neural network model with CalibratedClassifierCV
-class ModelWrapper:
+class ModelWrapper(BaseEstimator,ClassifierMixin):
     def __init__(self, model):
         self.model = model
         self.classes_ = None  # Add the classes_ attribute
