@@ -132,7 +132,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     calibrated_model = CalibratedClassifierCV(estimator=wrapped_model, method='isotonic', cv='prefit')
 
     # Fit the calibration model using the training set
-    calibrated_model.fit(X_train, np.argmax(y_train, axis=1))
+    calibrated_model.fit(X_train, y_train)
 
     # Get the calibrated probabilities
     y_pred_proba_calibrated = calibrated_model.predict_proba(X_test)[:, 1]
