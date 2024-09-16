@@ -267,7 +267,7 @@ if __name__ == "__main__":
        'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
        'chikou_span', 'Close_AUDUSD', 'Close','volatility','day_of_week']
     '''
-    training_cols = ['label','senkou_span_a', 'senkou_span_b','volatility','day_of_week', 'Log_Returns']
+    training_cols = ['label', 'day_of_week']
 
 
 
