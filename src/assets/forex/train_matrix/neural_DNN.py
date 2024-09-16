@@ -125,7 +125,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     wrapped_model = ModelWrapper(model)
 
     # Apply Isotonic Regression for calibration
-    calibrated_model = CalibratedClassifierCV(base_estimator=wrapped_model, method='isotonic', cv='prefit')
+    calibrated_model = CalibratedClassifierCV(estimator=wrapped_model, method='isotonic', cv='prefit')
 
     # Fit the calibration model using the training set
     calibrated_model.fit(X_train, np.argmax(y_train, axis=1))
