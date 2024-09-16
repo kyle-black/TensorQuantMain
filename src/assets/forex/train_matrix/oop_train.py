@@ -230,11 +230,11 @@ def prepare_data(dollar_amount, lookback):
     
 
     
-  
+    df['prices_in_range'] = df['prices_in_range'].apply(lambda x: json.dumps(x) if isinstance(x, list) else x)
 
     filtered_df =df
 
-    df['prices_in_range'] = df['prices_in_range'].apply(lambda x: json.dumps(x) if isinstance(x, list) else x)
+    
     filtered_df.to_parquet('final_df.parquet')
    
     
