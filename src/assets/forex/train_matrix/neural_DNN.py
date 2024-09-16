@@ -21,9 +21,12 @@ def set_seed(seed=42):
 class ModelWrapper:
     def __init__(self, model):
         self.model = model
+        self.classes_ = None  # Add the classes_ attribute
 
     def fit(self, X, y):
-        # This wrapper doesn't refit the model; it assumes the model is already trained
+        # Set the classes_ attribute from the unique labels in the target
+        self.classes_ = np.unique(y)
+        # Since the neural network is already trained, we don't need to retrain it here
         return self
 
     def predict_proba(self, X):
