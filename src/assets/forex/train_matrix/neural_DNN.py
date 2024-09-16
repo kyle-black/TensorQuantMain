@@ -33,8 +33,8 @@ class ModelWrapper(BaseEstimator, ClassifierMixin):
         # Ensure that this method returns the predicted probabilities
         return self.model.predict(X)
 
-# Model training function with isotonic regression
-def run_model(df, asset, lookback, n_components, training_cols, model_num, learning_rate=0.001, batch_size=128, epochs=300, seed=42):
+# Model training function with ExponentialDecay learning rate schedule
+def run_model(df, asset, lookback, n_components, training_cols, model_num, initial_learning_rate=0.001, batch_size=128, epochs=300, seed=42):
     set_seed(seed)
     startlookback = lookback * 10
 
@@ -70,9 +70,9 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     X_test = pca.transform(X_test)
 
     # Standardize the data
-   # X_train = scaler.fit_transform(X_train)
-    #X_test = scaler.transform(X_test)
-    #n_components = (len(training_cols) -1)
+    # X_train = scaler.fit_transform(X_train)
+    # X_test = scaler.transform(X_test)
+
     # Convert y_train and y_test to class labels (0 and 1)
     y_train_labels = y_train.values  # Assuming y_train is a pandas Series
     y_test_labels = y_test.values
@@ -80,6 +80,14 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     # One-hot encode for model training
     y_train_onehot = tf.keras.utils.to_categorical(y_train_labels, num_classes=2)
     y_test_onehot = tf.keras.utils.to_categorical(y_test_labels, num_classes=2)
+
+    # Define the ExponentialDecay learning rate schedule
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+        initial_learning_rate=initial_learning_rate,
+        decay_steps=1000,  # You may need to adjust this
+        decay_rate=0.96,
+        staircase=True
+    )
 
     # Build and train the neural network model
     model = models.Sequential()
@@ -101,25 +109,25 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
 
     model.add(layers.Dense(2, activation='softmax'))  # Use softmax for multi-class probabilities
 
-    initial_learning_rate = 0.001
-    lr_scheduler = tf.keras.optimizers.schedules.ExponentialDecay(
-    initial_learning_rate,
-    decay_steps=10000,
-    decay_rate=0.96,
-    staircase=True
-)
-    
-    
+    # Use the learning rate schedule in the optimizer
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
         loss='categorical_crossentropy',  # Use categorical_crossentropy with softmax
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
+    # Early stopping callback
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
-    #lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
-    model.fit(X_train, y_train_onehot, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler])
+    # Remove lr_scheduler from callbacks since ExponentialDecay is not a callback
+    model.fit(
+        X_train,
+        y_train_onehot,
+        epochs=epochs,
+        batch_size=batch_size,
+        validation_split=0.2,
+        callbacks=[early_stopping]  # Only include callbacks that are actual callback instances
+    )
 
     test_loss, test_acc, test_precision, test_recall, test_auc = model.evaluate(X_test, y_test_onehot)
     print(f'Test accuracy: {test_acc}')
@@ -134,7 +142,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     wrapped_model = ModelWrapper(model)
 
     # **Important**: Fit the wrapped model to set `classes_`
-    
+    wrapped_model.fit(X_train, y_train_labels)
 
     # Save the scaler, model, and PCA
     joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
