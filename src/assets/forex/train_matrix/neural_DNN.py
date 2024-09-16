@@ -123,7 +123,17 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     print(f'Test AUC: {test_auc}')
 
     print('y_train:#######', y_train)
+
     
+
+
+    y_train_labels = np.argmax(y_train, axis=1)
+    print(y_train_labels)
+
+   # assert y_train_labels is not None, "y_train_labels is None"
+   # assert y_train_labels.ndim == 1, "y_train_labels is not 1D"
+
+
     # Get predicted probabilities
     y_pred_proba = model.predict(X_test)
 
@@ -134,7 +144,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     calibrated_model = CalibratedClassifierCV(estimator=wrapped_model, method='isotonic', cv='prefit')
 
     # Fit the calibration model using the training set
-    calibrated_model.fit(X_train, y_train)
+    calibrated_model.fit(X_train, y_train_labels)
 
     # Get the calibrated probabilities
     y_pred_proba_calibrated = calibrated_model.predict_proba(X_test)[:, 1]
