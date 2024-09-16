@@ -53,6 +53,54 @@ def calculate_barriers_R(df, lookback):
     # Convert price_df to a numpy array
     price_df_values = price_df.values
 
+    def find_prices_in_range(start_unix, end_unix):
+        mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
+      #  mask = (price_df_values[:, 0])
+        return price_df_values[mask, :]
+
+    # Apply the function to each row
+    df['prices_in_range'] = df.parallel_apply(lambda row: find_prices_in_range(row['unix'], row['endbarrier_unix']), axis=1)
+
+    # Function to check if prices hit barriers and which hits first
+    def price_barrier_check(row):
+        lower_barrier = row['lower_barrier']
+        upper_barrier = row['upper_barrier']
+        prices_and_times = row['prices_in_range']  # This now includes both UNIX times and prices
+
+        if prices_and_times.size == 0:
+            return np.nan, np.nan, np.nan
+
+        # Extract UNIX times and prices separately
+        prices_unix_times = prices_and_times[:, 0]  # First column: UNIX times
+        prices = prices_and_times[:, 1]  # Second column: prices
+
+        # Find the hits on the barriers
+        upper_hits = np.where(prices > upper_barrier)[0]
+        lower_hits = np.where(prices < lower_barrier)[0]
+        
+        if upper_hits.size == 0 and lower_hits.size == 0:
+            print('prices end:', prices[-1])
+
+            end_pips = prices[-1] * 10000
+            pct = row['pips'] / end_pips
+            return np.nan, prices[-1], pct, np.nan
+
+        if upper_hits.size > 0 and (lower_hits.size == 0 or prices_unix_times[upper_hits[0]] < prices_unix_times[lower_hits[0]]):
+            # First upper hit happens before the first lower hit
+            end_pips = prices[-1] * 10000
+            pct = row['pips'] / end_pips
+            return 1, prices[upper_hits[0]], pct, prices_unix_times[upper_hits[0]]
+
+        if lower_hits.size > 0 and (upper_hits.size == 0 or prices_unix_times[lower_hits[0]] < prices_unix_times[upper_hits[0]]):
+            # First lower hit happens before the first upper hit
+            end_pips = prices[lower_hits[0]] * 10000
+            pct = row['pips'] / end_pips
+
+
+            return 0, prices[lower_hits[0]], pct, prices_unix_times[lower_hits[0]]
+
+
+    '''
     # Function to find prices between unix and endbarrier_unix
     def find_prices_in_range(start_unix, end_unix):
         mask = (price_df_values[:, 0] >= start_unix) & (price_df_values[:, 0] <= end_unix)
@@ -99,7 +147,8 @@ def calculate_barriers_R(df, lookback):
             return 0, prices[lower_hits[0]], pct
 
     # Apply the price_barrier_check function to each row
-    df[['label', 'touch_price','pct']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
+    '''
+    df[['label', 'touch_price','pct', 'touch_time_unix']] = df.parallel_apply(price_barrier_check, axis=1, result_type='expand')
     
     end_time = time.time()
     runtime = end_time - start_time
