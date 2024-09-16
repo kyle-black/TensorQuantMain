@@ -252,7 +252,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.5))
     
-    model.add(layers.Dense(2, activation='softmax'))
+    model.add(layers.Dense(2, activation='sigmoid'))
 
     model.compile(
         optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
