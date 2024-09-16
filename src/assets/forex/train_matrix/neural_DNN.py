@@ -50,7 +50,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-   # n_components = 17
+    n_components = 17
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -65,14 +65,14 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     y_test = test_data[target_col]
 
     # Apply PCA
-   # pca = PCA(n_components=n_components)
-    #X_train = pca.fit_transform(X_train)
-    #X_test = pca.transform(X_test)
+    pca = PCA(n_components=n_components)
+    X_train = pca.fit_transform(X_train)
+    X_test = pca.transform(X_test)
 
     # Standardize the data
    # X_train = scaler.fit_transform(X_train)
     #X_test = scaler.transform(X_test)
-    n_components = (len(training_cols) -1)
+    #n_components = (len(training_cols) -1)
     # Convert y_train and y_test to class labels (0 and 1)
     y_train_labels = y_train.values  # Assuming y_train is a pandas Series
     y_test_labels = y_test.values
@@ -108,7 +108,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     )
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=20, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train_onehot, epochs=epochs, batch_size=batch_size, validation_split=0.2, callbacks=[early_stopping, lr_scheduler])
 
