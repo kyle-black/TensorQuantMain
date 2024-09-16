@@ -232,7 +232,7 @@ def prepare_data(dollar_amount, lookback):
     
     #df['prices_in_range'] = df['prices_in_range'].apply(lambda x: json.dumps(x) if isinstance(x, list) else x)
 
-    df = df.drop('prices_in_range')
+    df = df.drop(columns =['prices_in_range'])
     filtered_df =df
 
     
