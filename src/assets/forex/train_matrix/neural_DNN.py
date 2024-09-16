@@ -181,8 +181,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     # Set seed at the start of the function to ensure consistency across runs
     set_seed(seed)
     
-    if asset is not None:
-        asset = asset
+   
 
     startlookback = lookback * 10
 
@@ -260,9 +259,9 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
     
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=20, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.25, callbacks=[early_stopping, lr_scheduler])
     
