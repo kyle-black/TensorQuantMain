@@ -127,6 +127,10 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     # **Important**: Fit the wrapped model to set `classes_`
     wrapped_model.fit(X_train, y_train_labels)
 
+
+    class_counts = np.bincount(y_train_labels)
+    print("Class counts:", class_counts)
+
     # Ensure `classes_` is set
     print("Classes in wrapped_model:", wrapped_model.classes_)
 
