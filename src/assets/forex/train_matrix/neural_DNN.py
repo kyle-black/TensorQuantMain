@@ -72,7 +72,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     # Standardize the data
    # X_train = scaler.fit_transform(X_train)
     #X_test = scaler.transform(X_test)
-    n_components = len(training_cols)
+    n_components = (len(training_cols) -1)
     # Convert y_train and y_test to class labels (0 and 1)
     y_train_labels = y_train.values  # Assuming y_train is a pandas Series
     y_test_labels = y_test.values
