@@ -48,7 +48,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 21
+    n_components = 8
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -74,10 +74,10 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     X_test = test_data[feature_cols]
     y_test = test_data[target_col]
 
-   # pca = PCA(n_components=n_components)
-   ## X_train = pca.fit_transform(X_train)
-  #  X_test = pca.transform(X_test)
-    n_components = len(feature_cols)
+    pca = PCA(n_components=n_components)
+    X_train = pca.fit_transform(X_train)
+    X_test = pca.transform(X_test)
+    #n_components = len(feature_cols)
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
