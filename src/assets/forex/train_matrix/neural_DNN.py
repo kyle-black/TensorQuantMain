@@ -70,8 +70,8 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, initi
     X_test = pca.transform(X_test)
 
     # Standardize the data
-    # X_train = scaler.fit_transform(X_train)
-    # X_test = scaler.transform(X_test)
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
 
     # Convert y_train and y_test to class labels (0 and 1)
     y_train_labels = y_train.values  # Assuming y_train is a pandas Series

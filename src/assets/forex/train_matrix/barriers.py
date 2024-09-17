@@ -26,8 +26,12 @@ def calculate_barriers_R(df, lookback):
 # Calculate rolling standard deviation (volatility)
     df['volatility'] = df['pct_change'].rolling(window=lookback).std()
 
+    df['volatility_norm'] = (df['volatility'] - df['volatility'].min()) / (df['volatility'].max() - df['volatilty'].min())
+
+
+
 # Fill NaN values (for the initial period where there's no rolling window data)
-    df['volatility'].fillna(method='backfill', inplace=True)
+    df['volatility_norm'].fillna(method='backfill', inplace=True)
 
     #print(volatility)
     
@@ -40,8 +44,8 @@ def calculate_barriers_R(df, lookback):
     # Add necessary columns
     df['Datetime'] = pd.to_datetime(df['Date'])
     df['unix'] = df['Datetime'].astype('int64') // 10**9
-    df['upper_barrier'] = df['Close'] * (1 + 4 * df['volatility'])
-    df['lower_barrier'] = df['Close'] * (1 - 4 * df['volatility'])
+    df['upper_barrier'] = df['Close'] * (1 + 4 * df['volatility_norm'])
+    df['lower_barrier'] = df['Close'] * (1 - 4 * df['volatility_norm'])
     
     # Calculate lookback in seconds
     lookback_seconds = (lookback*10) * 3600
