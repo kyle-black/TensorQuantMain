@@ -40,7 +40,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
 
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','prices_in_range']]
+    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
     df = df[training_cols]
     
     # Ensure the cross-validation split is consistent with the set seed
