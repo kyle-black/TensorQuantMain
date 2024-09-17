@@ -48,7 +48,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 8
+    n_components = 17
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -104,11 +104,11 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     model.add(layers.Dense(2, activation='softmax'))
     '''
     model = models.Sequential()
-    model.add(layers.Dense(32, activation='relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dense(32, activation='leaky_relu', input_shape=(n_components,), kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.3))
 
-    model.add(layers.Dense(16, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
+    model.add(layers.Dense(16, activation='leaky_relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)))
     model.add(layers.BatchNormalization())
     model.add(layers.Dropout(0.3))
 
