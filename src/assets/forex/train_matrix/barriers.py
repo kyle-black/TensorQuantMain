@@ -26,7 +26,7 @@ def calculate_barriers_R(df, lookback):
 # Calculate rolling standard deviation (volatility)
     df['volatility'] = df['pct_change'].rolling(window=lookback).std()
 
-    df['volatility_norm'] = (df['volatility'] - df['volatility'].min()) / (df['volatility'].max() - df['volatilty'].min())
+    df['volatility_norm'] = (df['volatility'] - df['volatility'].min()) / (df['volatility'].max() - df['volatility'].min())
 
 
 
