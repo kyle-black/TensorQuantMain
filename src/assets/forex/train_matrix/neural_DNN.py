@@ -74,10 +74,10 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     X_test = test_data[feature_cols]
     y_test = test_data[target_col]
 
-    pca = PCA(n_components=n_components)
-    X_train = pca.fit_transform(X_train)
-    X_test = pca.transform(X_test)
-
+   # pca = PCA(n_components=n_components)
+   ## X_train = pca.fit_transform(X_train)
+  #  X_test = pca.transform(X_test)
+    n_components = len(feature_cols) -1
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
@@ -146,6 +146,6 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
     model.save(f'../deploy/models/EURUSD/{model_num}.h5')
    # Save the PCA
-    joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
+   # joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
 
     return model, y_pred_proba, y_test, test_results
