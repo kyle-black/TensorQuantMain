@@ -12,7 +12,7 @@ import random
 
 
 
-def set_seed(seed=20):
+def set_seed(seed=10):
     np.random.seed(seed)
     tf.random.set_seed(seed)
     random.seed(seed)
