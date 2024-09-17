@@ -77,7 +77,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
    # pca = PCA(n_components=n_components)
    ## X_train = pca.fit_transform(X_train)
   #  X_test = pca.transform(X_test)
-    n_components = len(feature_cols) -1
+    n_components = len(feature_cols)
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
