@@ -32,7 +32,7 @@ def calculate_log_returns(prices):
     log_returns = np.append(log_returns, 0)  # Append a zero to match the length
     return log_returns
 
-def Hidden_Markov_Model(log_returns, n_components=3):
+def Hidden_Markov_Model(log_returns, n_components=2):
     log_returns = log_returns.reshape(-1, 1)  # Reshape for HMM
     hmm_model = GaussianHMM(n_components=n_components, covariance_type="diag", n_iter=1000)
     hmm_model.fit(log_returns)
@@ -69,13 +69,13 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     df['HMM_hidden_state'] = hidden_states
     df['HMM_low_vol_prob'] = state_probs[:, 0]  # Probability of being in low volatility state
     df['HMM_high_vol_prob'] = state_probs[:, 1]  # Probability of being in high volatility state
-    df['HHM_trending'] = state_probs[:,2]
+   # df['HHM_trending'] = state_probs[:,2]
     # Ensure the cross-validation split is consistent with the set seed
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 20
+    n_components = 14
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
