@@ -39,7 +39,7 @@ def purged_walk_forward_split_with_embargo(data, initial_train_size, test_size, 
             break
 
 '''
-def purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=30000, gap=5, embargo_size=3):
+def purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=8000, gap=5, embargo_size=3):
     """
     Minimal initial_train_size since you're focusing on train[-1] and test[-1].
     """
@@ -105,7 +105,7 @@ def run_split_process(data):
     train_datasets = []
     test_datasets = []
     
-    for train, test in purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=30000, gap=5, embargo_size=3):
+    for train, test in purged_walk_forward_split_with_embargo(data, initial_train_size=1, test_size=8000, gap=5, embargo_size=3):
         #train_data = data.iloc[train]
         #test_data = data.iloc[test]
 
