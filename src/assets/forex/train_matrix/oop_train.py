@@ -255,7 +255,7 @@ if __name__ == "__main__":
     #hyperparameter for experiment and model creation
     model_num ='EURUSD_0816-58'
     asset = "EURUSD"
-    dollar_amount =10000
+    dollar_amount =5000
     lookback =10
     n_components = 17
     learning_rate =.0001
