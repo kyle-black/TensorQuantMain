@@ -34,7 +34,7 @@ def calculate_log_returns(prices):
 
 def Hidden_Markov_Model(log_returns, n_components=2):
     log_returns = log_returns.reshape(-1, 1)  # Reshape for HMM
-    hmm_model = GaussianHMM(n_components=n_components, covariance_type="diag", n_iter=1000)
+    hmm_model = GaussianHMM(n_components=n_components, covariance_type="diag", n_iter=3000)
     hmm_model.fit(log_returns)
     
     # Predict the hidden states and return the state probabilities
@@ -129,8 +129,8 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_auc', patience=20, restore_best_weights=True)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_auc', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.25, callbacks=[early_stopping, lr_scheduler])
     
