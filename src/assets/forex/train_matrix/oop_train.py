@@ -259,7 +259,7 @@ if __name__ == "__main__":
     lookback = 10
     n_components = 17
     learning_rate =.0001
-    batch_size =64
+    batch_size =128
     epochs =200
     
     training_cols = ['label', 'Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
