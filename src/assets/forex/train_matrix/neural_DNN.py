@@ -34,7 +34,7 @@ def calculate_log_returns(prices):
 
 def Hidden_Markov_Model(log_returns, n_components=2):
     log_returns = log_returns.reshape(-1, 1)  # Reshape for HMM
-    hmm_model = GaussianHMM(n_components=n_components, covariance_type="diag", n_iter=3000)
+    hmm_model = GaussianHMM(n_components=n_components, covariance_type="diag", n_iter=500)
     hmm_model.fit(log_returns)
     
     # Predict the hidden states and return the state probabilities
