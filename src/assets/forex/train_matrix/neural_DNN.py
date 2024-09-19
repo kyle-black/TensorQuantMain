@@ -58,7 +58,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
 
     df = df[startlookback:]
     df['endbarrier_unix'] = pd.to_datetime(df['endbarrier_unix'], unit='s')
-    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct']]
+    prices = df[['Close', 'touch_price', 'Date', 'endbarrier_unix', 'upper_barrier', 'lower_barrier', 'pct','touch_time_unix']]
     df = df[training_cols]
     
     # Calculate log returns and fit HMM
@@ -94,6 +94,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
+    touchtime = prices['touch_time_unix'].ilox[test_idx]
 
     # Get the feature columns (including HMM hidden states or probabilities)
     X_train = train_data[feature_cols]
@@ -129,7 +130,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
         metrics=['accuracy', tf.keras.metrics.Precision(), tf.keras.metrics.Recall(), tf.keras.metrics.AUC()]
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.25, callbacks=[early_stopping, lr_scheduler])
@@ -156,6 +157,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     test_results['endbarrier_unix'] = enddate.reset_index(drop=True)
     test_results['upper_barrier'] = upperbarrier.reset_index(drop=True)
     test_results['lower_barrier'] = lowerbarrier.reset_index(drop=True)
+    test_results['tou']
 
     test_results.to_csv(f'test_result_{model_num}.csv')
     print(test_results)
