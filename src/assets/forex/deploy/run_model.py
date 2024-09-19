@@ -6,7 +6,7 @@ import features
 from dollar_bars import dollar_bar_creator as dbc
 import live_data
 import barriers
-from insertdb import insert_dataframe_to_mysql as idfmysql
+#from insertdb import insert_dataframe_to_mysql as idfmysql
 
 
 
@@ -35,7 +35,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
 
     df.to_csv('prediction.csv')
 
-    df['volatility'] = df['pct_change'].rolling(window=10).std()
+    df['volatility'] = df['pct_change'].rolling(window=window_length).std()
     df['pct_change'] = df['Close'].pct_change()
     df['upper_barrier'] = df['Close'] * (1 + 4 * df['volatility'])
     df['lower_barrier'] = df['Close'] * (1 - 4 * df['volatility'])
@@ -82,7 +82,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     preprediction_df.set_index('Date')
 
 
-    idfmysql(preprediction_df, 'EURUSD_Live')
+    #idfmysql(preprediction_df, 'EURUSD_Live')
 
     preprediction_df.to_csv('prediction_df.csv')
     preprediction_df.to_json('prediction/prediction_df.json', orient='records', lines=False)
@@ -106,13 +106,13 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
 
 if __name__ in "__main__":
     #Load TF model
-    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-18.h5')
+    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-55.h5')
 
     # Load scaler
-    scaler = joblib.load('models/EURUSD/EURUSD_0816-18_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/EURUSD_0816-55_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/EURUSD_0816-18_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_0816-55_pca.pkl')
    # pca =None
    # scaler =None
    # model =None
