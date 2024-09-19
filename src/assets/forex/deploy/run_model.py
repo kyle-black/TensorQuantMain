@@ -112,7 +112,7 @@ if __name__ in "__main__":
     scaler = joblib.load('models/EURUSD/EURUSD_0816-55_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/EURUSD_0816-55_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_0816-49_pca.pkl')
    # pca =None
    # scaler =None
    # model =None
