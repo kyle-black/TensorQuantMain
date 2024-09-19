@@ -157,7 +157,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     test_results['endbarrier_unix'] = enddate.reset_index(drop=True)
     test_results['upper_barrier'] = upperbarrier.reset_index(drop=True)
     test_results['lower_barrier'] = lowerbarrier.reset_index(drop=True)
-    test_results['tou']
+    test_results['touch_time_unix'] = touchtime.reset_index(drop=True)
 
     test_results.to_csv(f'test_result_{model_num}.csv')
     print(test_results)
