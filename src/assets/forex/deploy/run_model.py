@@ -56,7 +56,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     prediction_df.dropna(inplace=True)
     
     ##########  Hidden Markov Model Deployment #######################3
-    hmm_model = joblib.load('models/EURUSD/{model_num}_hmm_model.pkl')
+    hmm_model = joblib.load('models/EURUSD/EURUSD_0916-60_hmm_model.pkl')
 
 # Use the loaded HMM for predictions on new data
     log_returns = calculate_log_returns(prediction_df['Close'].values)
