@@ -41,7 +41,7 @@ def Hidden_Markov_Model(log_returns, n_components=2):
     hidden_states = hmm_model.predict(log_returns)
     state_probs = hmm_model.predict_proba(log_returns)
     
-    return hidden_states, state_probs
+    return hidden_states, state_probs, hmm_model
 
 
 def run_model(df, asset, lookback, n_components, training_cols, model_num, learning_rate=0.001, batch_size=128, epochs=300, seed=42):
@@ -63,7 +63,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     
     # Calculate log returns and fit HMM
     log_returns = calculate_log_returns(prices['Close'].values)
-    hidden_states, state_probs = Hidden_Markov_Model(log_returns)
+    hidden_states, state_probs, hmm_model = Hidden_Markov_Model(log_returns)
 
     # Add hidden states or state probabilities to the DataFrame
     df['HMM_hidden_state'] = hidden_states
@@ -131,7 +131,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     )
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
+    lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
 
     model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.25, callbacks=[early_stopping, lr_scheduler])
     
@@ -164,6 +164,10 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
 
     joblib.dump(scaler, f'../deploy/models/EURUSD/{model_num}_scaler.pkl')
     model.save(f'../deploy/models/EURUSD/{model_num}.h5')
+    # Save the PCA
+    joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
+
+    joblib.dump(hmm_model, f'../deploy/models/EURUSD/{model_num}_hmm_model.pkl')
 
     return model, y_pred_proba, y_test, test_results
 

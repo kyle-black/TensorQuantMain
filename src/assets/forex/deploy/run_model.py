@@ -10,7 +10,10 @@ import barriers
 
 
 
-
+def calculate_log_returns(prices):
+    log_returns = np.diff(np.log(prices))
+    log_returns = np.append(log_returns, 0)  # Append a zero to match the length
+    return log_returns
 
 
 
@@ -52,13 +55,33 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     # Drop rows with missing values
     prediction_df.dropna(inplace=True)
     
+    ##########  Hidden Markov Model Deployment #######################3
+    hmm_model = joblib.load('../deploy/models/EURUSD/{model_num}_hmm.pkl')
+
+# Use the loaded HMM for predictions on new data
+    log_returns = calculate_log_returns(prediction_df['Close'].values)
+    hidden_states = hmm_model.predict(log_returns)
+    state_probs = hmm_model.predict_proba(log_returns)
+########################################################################    
+    prediction_df['HMM_hidden_state'] = hidden_states
+    prediction_df['HMM_low_vol_prob'] = state_probs[:, 0]  # Probability of being in low volatility state
+    prediction_df['HMM_high_vol_prob'] = state_probs[:, 1] 
+    
+    
+   
+
+    
+    
     # Select only relevant columns for prediction
     prediction_df = prediction_df[['Middle_Band', 'Upper_Band', 'Lower_Band', 'Log_Returns', 'MACD', 'Signal_Line_MACD', 'RSI', 'Volume', '%K',
                                    '%D', 'daily_return', 'direction', 'volume_direction', 'OBV',
                                    'tenkan_sen', 'kijun_sen', 'senkou_span_a', 'senkou_span_b',
-                                   'chikou_span', 'Close_AUDUSD', 'Close', 'volatility', 'day_of_week']]
+                                   'chikou_span', 'Close_AUDUSD', 'Close', 'volatility', 'day_of_week', 'HMM_Hidden_state', 'HMM_low_prob_vol_prob', 'HMM_high_vol_prob']]
     
     print('prescaled ####', prediction_df[-200:])
+
+
+
     
     # Use the last 200 rows for prediction
     prediction_df = prediction_df[-200:]
