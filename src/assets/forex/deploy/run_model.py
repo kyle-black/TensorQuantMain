@@ -56,7 +56,7 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
     prediction_df.dropna(inplace=True)
     
     ##########  Hidden Markov Model Deployment #######################3
-    hmm_model = joblib.load('../deploy/models/EURUSD/{model_num}_hmm.pkl')
+    hmm_model = joblib.load('../deploy/models/EURUSD/{model_num}_hmm_model.pkl')
 
 # Use the loaded HMM for predictions on new data
     log_returns = calculate_log_returns(prediction_df['Close'].values)
@@ -129,13 +129,13 @@ def make_predictions(pca, scaler, model, dollar_threshold, asset, window_length,
 
 if __name__ in "__main__":
     #Load TF model
-    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0816-55.h5')
+    model = tf.keras.models.load_model('models/EURUSD/EURUSD_0916-60.h5')
 
     # Load scaler
-    scaler = joblib.load('models/EURUSD/EURUSD_0816-55_scaler.pkl')
+    scaler = joblib.load('models/EURUSD/EURUSD_0916-60_scaler.pkl')
 
     # Load PCA
-    pca = joblib.load('models/EURUSD/EURUSD_0816-49_pca.pkl')
+    pca = joblib.load('models/EURUSD/EURUSD_0916-60_pca.pkl')
    # pca =None
    # scaler =None
    # model =None
