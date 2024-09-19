@@ -75,7 +75,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 17
+    n_components = 20
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -94,7 +94,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     enddate = prices['endbarrier_unix'].iloc[test_idx]
     upperbarrier = prices['upper_barrier'].iloc[test_idx]
     lowerbarrier = prices['lower_barrier'].iloc[test_idx]
-    touchtime = prices['touch_time_unix'].ilox[test_idx]
+    touchtime = prices['touch_time_unix'].iloc[test_idx]
 
     # Get the feature columns (including HMM hidden states or probabilities)
     X_train = train_data[feature_cols]
