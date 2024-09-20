@@ -10,7 +10,7 @@ def upload_file_to_spaces(file_path, space_name, region, access_key, secret_key)
     # Create a client to interact with DigitalOcean Spaces
     client = session.client('s3',
                             region_name=region,
-                            endpoint_url=f'https://{space_name}.{region}.digitaloceanspaces.com',
+                            endpoint_url=f'https://financedata.{region}.digitaloceanspaces.com',
                             aws_access_key_id=access_key,
                             aws_secret_access_key=secret_key)
 
