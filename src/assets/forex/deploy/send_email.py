@@ -13,7 +13,7 @@ def run_email():
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
     subject=" model 61 attached"
     body = "."
-    file_path = "models/EURUSD/EURUSD_0916-61.h5"
+    file_path = "models/EURUSD/EURUSD_0916-61_pca.pkl"
 
     # Create the email message
     msg = EmailMessage()
