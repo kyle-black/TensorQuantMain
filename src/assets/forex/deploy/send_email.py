@@ -11,9 +11,9 @@ def run_email():
     sender_email = "kpblack87@gmail.com"
     receiver_email = "kpblack87@gmail.com"
     password = "tgmq pkpa oquz zhwi"  # Consider using a more secure authentication method
-    subject = "Test Data CSV"
-    body = "Attached is the test_data.csv file."
-    file_path = f"prediction_df.csv"
+    subject=" model 61 attached"
+    body = "."
+    file_path = "models/EURUSD/EURUSD_0916-61.h5"
 
     # Create the email message
     msg = EmailMessage()
