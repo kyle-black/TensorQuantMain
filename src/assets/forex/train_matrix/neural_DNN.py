@@ -62,20 +62,20 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     df = df[training_cols]
     
     # Calculate log returns and fit HMM
-    log_returns = calculate_log_returns(prices['Close'].values)
-    hidden_states, state_probs, hmm_model = Hidden_Markov_Model(log_returns)
+   # log_returns = calculate_log_returns(prices['Close'].values)
+   # hidden_states, state_probs, hmm_model = Hidden_Markov_Model(log_returns)
 
     # Add hidden states or state probabilities to the DataFrame
-    df['HMM_hidden_state'] = hidden_states
-    df['HMM_low_vol_prob'] = state_probs[:, 0]  # Probability of being in low volatility state
-    df['HMM_high_vol_prob'] = state_probs[:, 1]  # Probability of being in high volatility state
+   # df['HMM_hidden_state'] = hidden_states
+   # df['HMM_low_vol_prob'] = state_probs[:, 0]  # Probability of being in low volatility state
+   # df['HMM_high_vol_prob'] = state_probs[:, 1]  # Probability of being in high volatility state
    # df['HHM_trending'] = state_probs[:,2]
     # Ensure the cross-validation split is consistent with the set seed
     train_datasets, test_datasets = crossvalidation.run_split_process(df)
     feature_cols = df.drop('label', axis=1).columns
     target_col = 'label'
 
-    n_components = 20
+    n_components = 17
     scaler = StandardScaler()
 
     train_idx = train_datasets[-1]
@@ -167,7 +167,7 @@ def run_model(df, asset, lookback, n_components, training_cols, model_num, learn
     # Save the PCA
     joblib.dump(pca, f'../deploy/models/EURUSD/{model_num}_pca.pkl')
 
-    joblib.dump(hmm_model, f'../deploy/models/EURUSD/{model_num}_hmm_model.pkl')
+   # joblib.dump(hmm_model, f'../deploy/models/EURUSD/{model_num}_hmm_model.pkl')
 
     return model, y_pred_proba, y_test, test_results
 
